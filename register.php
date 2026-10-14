@@ -283,9 +283,9 @@ body{width:100%;height:100vh;font-family:"Poppins",sans-serif;overflow:hidden;ba
                         <div class="input-box"><i class="fa-solid fa-building"></i>
                             <select id="department" name="department" required>
                                 <option value="" disabled <?= $f['department'] === '' ? 'selected' : '' ?>>Select department</option>
-                                <option value="ආයතන"  <?= $f['department'] === 'ආයතන' ? 'selected' : '' ?>>ආයතන</option>
-                                <option value="සභා"    <?= $f['department'] === 'සභා' ? 'selected' : '' ?>>සභා</option>
-                                <option value="ගිණුම්" <?= $f['department'] === 'ගිණුම්' ? 'selected' : '' ?>>ගිණුම්</option>
+                                <option value="ආයතන"  <?= $f['department'] === 'ආයතන' ? 'selected' : '' ?>>ආයතන(Institutions)</option>
+                                <option value="සභා"    <?= $f['department'] === 'සභා' ? 'selected' : '' ?>>සභා(Councils)</option>
+                                <option value="ගිණුම්" <?= $f['department'] === 'ගිණුම්' ? 'selected' : '' ?>>ගිණුම්(Accounts)</option>
                             </select></div>
                     </div>
                 </div>
