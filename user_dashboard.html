@@ -1,0 +1,1512 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>User Dashboard - Archive Management System</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Noto+Sans+Sinhala:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet"
+ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --navy: #102c50;
+    --navy-light: #193c69;
+    --blue: #1475f5;
+    --blue-dark: #075bd0;
+    --background: #edf4fd;
+    --border: #d4e2f5;
+    --text: #102f60;
+    --muted: #6883ad;
+}
+
+body {
+    font-family: 'Poppins', 'Noto Sans Sinhala', sans-serif;
+    background: var(--background);
+    color: var(--text);
+    min-height: 100vh;
+}
+
+button, input, select {
+    font-family: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+.app {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* SIDEBAR */
+
+.sidebar {
+    width: 287px;
+    flex-shrink: 0;
+    background: linear-gradient(165deg, #102b4f, #0b2850 65%, #102c50);
+    color: white;
+    min-height: 100vh;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    z-index: 10;
+}
+
+.brand {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 20px 17px 24px;
+    position: relative;
+    z-index: 2;
+}
+
+.logo {
+    width: 55px;
+    height: 72px;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
+.brand-text {
+    min-width: 0;
+    padding-top: 2px;
+}
+
+.brand-text .sinhala {
+    font-family: 'Noto Sans Sinhala', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1.7;
+}
+
+.brand-text .english {
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.7;
+}
+
+.brand-text .system-name {
+    font-size: 12px;
+    color: #bdcee7;
+    line-height: 1.7;
+}
+
+.sidebar-menu {
+    padding: 0 13px;
+    position: relative;
+    z-index: 2;
+}
+
+.nav-link {
+    text-decoration: none;
+    color: #e7efff;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 14px 15px;
+    margin-bottom: 5px;
+    border-radius: 9px;
+    font-size: 14px;
+    font-weight: 500;
+    transition: 0.2s;
+}
+
+.nav-link i {
+    font-size: 19px;
+    width: 19px;
+    text-align: center;
+}
+
+.nav-link:hover,
+.nav-link.active {
+    background: linear-gradient(100deg, #245ca0, #24508a);
+    color: white;
+}
+
+.sidebar-bottom {
+    margin-top: auto;
+    min-height: 155px;
+    position: relative;
+    padding: 0 25px 30px;
+    display: flex;
+    align-items: flex-end;
+    overflow: hidden;
+}
+
+.sidebar-bottom::before,
+.sidebar-bottom::after {
+    content: "";
+    position: absolute;
+    left: -35px;
+    width: 370px;
+    height: 100px;
+    border: 1px solid rgba(75, 144, 221, 0.20);
+    border-radius: 50% 50% 0 0;
+    transform: rotate(-9deg);
+}
+
+.sidebar-bottom::before {
+    bottom: 36px;
+}
+
+.sidebar-bottom::after {
+    bottom: 18px;
+    left: -5px;
+}
+
+.sidebar-bottom p {
+    position: relative;
+    z-index: 2;
+    font-family: Georgia, serif;
+    font-style: italic;
+    color: #d0dcef;
+    font-size: 16px;
+    line-height: 1.7;
+}
+
+/* MAIN CONTENT */
+
+.main {
+    min-width: 0;
+    flex: 1;
+}
+
+.topbar {
+    height: 67px;
+    background: rgba(255,255,255,0.92);
+    border-bottom: 1px solid #dbe6f5;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 27px;
+    position: sticky;
+    top: 0;
+    z-index: 5;
+}
+
+.menu-toggle {
+    border: none;
+    background: transparent;
+    color: var(--navy);
+    font-size: 23px;
+    padding: 6px;
+}
+
+.profile {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    position: relative;
+}
+
+.profile-avatar {
+    width: 43px;
+    height: 43px;
+    background: #dce8fa;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #193a66;
+    font-size: 27px;
+}
+
+.profile-details strong {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.profile-details span {
+    font-size: 12px;
+    color: #5e79a1;
+}
+
+.profile-toggle {
+    background: none;
+    border: none;
+    color: var(--navy);
+    margin-left: 8px;
+}
+
+.content {
+    padding: 20px 24px 30px;
+}
+
+/* PAGE HEADING */
+
+.page-heading {
+    display: flex;
+    align-items: center;
+    gap: 17px;
+    margin: 0 0 14px 16px;
+}
+
+.heading-icon {
+    width: 62px;
+    height: 62px;
+    border-radius: 50%;
+    background: linear-gradient(145deg, #2787ff, #0060e7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 29px;
+    flex-shrink: 0;
+    box-shadow: 0 5px 15px rgba(20,117,245,.16);
+}
+
+.page-heading h1 {
+    font-size: 23px;
+    font-weight: 700;
+    line-height: 1.5;
+}
+
+.page-heading p {
+    font-size: 13px;
+    color: #365b91;
+}
+
+/* CARDS */
+
+.card {
+    background: rgba(255,255,255,.89);
+    border: 1px solid #dce7f6;
+    border-radius: 10px;
+    box-shadow: 0 4px 14px rgba(35,79,133,.055);
+    padding: 20px 17px;
+    margin-bottom: 15px;
+}
+
+.card-heading {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    margin-bottom: 17px;
+}
+
+.card-heading i {
+    font-size: 25px;
+    color: #126de8;
+}
+
+.card-heading h2 {
+    font-size: 18px;
+    font-weight: 700;
+}
+
+/* SEARCH FORM */
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.field {
+    min-width: 0;
+}
+
+.field label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 7px;
+    color: #15345f;
+}
+
+.input-wrap {
+    height: 39px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border: 1px solid #c8d9f1;
+    border-radius: 6px;
+    background: #fff;
+    padding: 0 11px;
+    transition: .2s;
+    min-width: 0;
+}
+
+.input-wrap:focus-within {
+    border-color: #3284f8;
+    box-shadow: 0 0 0 3px rgba(20,117,245,.09);
+}
+
+.input-wrap > i {
+    font-size: 16px;
+    color: #42618e;
+    flex-shrink: 0;
+}
+
+.input-wrap input,
+.input-wrap select {
+    border: none;
+    outline: none;
+    background: transparent;
+    width: 100%;
+    min-width: 0;
+    height: 100%;
+    color: #173b6f;
+    font-size: 12px;
+}
+
+.input-wrap input::placeholder {
+    color: #8198bd;
+}
+
+.input-wrap select {
+    cursor: pointer;
+}
+
+.search-actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 16px;
+}
+
+.btn {
+    border: 1px solid transparent;
+    border-radius: 6px;
+    min-height: 39px;
+    padding: 0 20px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    font-size: 12px;
+    font-weight: 600;
+    transition: .2s;
+}
+
+.btn-primary {
+    color: white;
+    background: linear-gradient(110deg, #1680ff, #0964e9);
+}
+
+.btn-primary:hover {
+    background: var(--blue-dark);
+}
+
+.btn-outline {
+    color: #244b80;
+    background: #fff;
+    border-color: #c8d9f1;
+}
+
+.btn-outline:hover {
+    background: #eff6ff;
+}
+
+.search-actions .btn {
+    min-width: 118px;
+}
+
+/* RESULTS */
+
+.results-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 15px;
+    margin-bottom: 13px;
+}
+
+.results-title {
+    display: flex;
+    gap: 13px;
+    align-items: flex-start;
+}
+
+.results-title > i {
+    font-size: 25px;
+    color: #1475f5;
+    margin-top: 1px;
+}
+
+.results-title h2 {
+    font-size: 18px;
+    line-height: 1.5;
+}
+
+.results-title p {
+    font-size: 12px;
+    color: #53729f;
+}
+
+.print-btn {
+    white-space: nowrap;
+}
+
+.table-wrapper {
+    overflow-x: auto;
+    border: 1px solid #e0eafa;
+    border-radius: 6px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    white-space: nowrap;
+    font-size: 12px;
+}
+
+thead {
+    background: #edf4fd;
+}
+
+th {
+    padding: 11px 10px;
+    text-align: left;
+    font-weight: 600;
+    color: #15345f;
+}
+
+td {
+    padding: 7px 10px;
+    border-top: 1px solid #e4edf9;
+    color: #254a7f;
+}
+
+tbody tr:hover {
+    background: #f5f9ff;
+}
+
+.file-name {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    color: #102f60;
+    font-weight: 500;
+}
+
+.file-icon {
+    font-size: 21px;
+}
+
+.file-icon.pdf {
+    color: #f04444;
+}
+
+.file-icon.doc {
+    color: #2879e9;
+}
+
+.file-icon.xls {
+    color: #168a59;
+}
+
+.file-badge {
+    color: white;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 7px;
+    border-radius: 4px;
+    display: inline-block;
+}
+
+.badge-pdf { background: #ef4545; }
+.badge-docx { background: #2681f6; }
+.badge-xlsx { background: #19885a; }
+
+.view-btn {
+    min-height: 30px;
+    padding: 0 14px;
+    background: #1675f5;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.view-btn:hover {
+    background: #075bd0;
+}
+
+.no-results {
+    padding: 24px;
+    text-align: center;
+    color: #7087aa;
+}
+
+.pagination {
+    display: flex;
+    gap: 7px;
+    margin-top: 12px;
+}
+
+.page-btn {
+    width: 33px;
+    height: 33px;
+    border-radius: 5px;
+    background: white;
+    color: #254a7f;
+    border: 1px solid #cdddf3;
+}
+
+.page-btn.active {
+    color: white;
+    background: #1475f5;
+    border-color: #1475f5;
+}
+
+/* SUBMIT FORM */
+
+.submit-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 15px 18px;
+}
+
+.submit-note {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    color: #53729f;
+    font-size: 11px;
+    margin-top: 17px;
+}
+
+.submit-note i {
+    color: #1475f5;
+    font-size: 15px;
+}
+
+.submit-actions {
+    display: flex;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 13px;
+}
+
+.submit-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.submit-bottom .submit-note {
+    margin-top: 13px;
+}
+
+.submit-bottom .submit-actions {
+    margin-top: 13px;
+}
+
+.submit-main-btn {
+    min-height: 40px;
+}
+
+/* MOBILE */
+
+@media (max-width: 1100px) {
+    .sidebar {
+        width: 245px;
+    }
+
+    .content {
+        padding: 18px 15px 25px;
+    }
+
+    .form-grid,
+    .submit-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 700px) {
+    .sidebar {
+        position: fixed;
+        left: -260px;
+        top: 0;
+        bottom: 0;
+        width: 250px;
+        transition: left .25s;
+        min-height: 100%;
+    }
+
+    .sidebar.open {
+        left: 0;
+    }
+
+    .topbar {
+        padding: 0 14px;
+    }
+
+    .content {
+        padding: 17px 11px 25px;
+    }
+
+    .page-heading {
+        margin-left: 2px;
+        gap: 12px;
+    }
+
+    .heading-icon {
+        width: 51px;
+        height: 51px;
+        font-size: 23px;
+    }
+
+    .page-heading h1 {
+        font-size: 19px;
+    }
+
+    .page-heading p {
+        font-size: 11px;
+    }
+
+    .card {
+        padding: 16px 12px;
+    }
+
+    .form-grid,
+    .submit-grid {
+        grid-template-columns: 1fr;
+        gap: 13px;
+    }
+
+    .results-heading {
+        align-items: flex-start;
+    }
+
+    .results-title h2,
+    .card-heading h2 {
+        font-size: 16px;
+    }
+
+    .print-btn {
+        padding: 0 11px;
+        font-size: 11px;
+    }
+
+    .profile-details strong {
+        font-size: 10px;
+    }
+
+    .profile-details span {
+        font-size: 10px;
+    }
+
+    .profile-avatar {
+        width: 36px;
+        height: 36px;
+        font-size: 22px;
+    }
+
+    .submit-bottom {
+        align-items: stretch;
+    }
+
+    .submit-bottom .submit-actions {
+        width: 100%;
+        flex-direction: column;
+    }
+
+    .submit-bottom .submit-actions .btn {
+        width: 100%;
+    }
+}
+
+/* PRINT RESULTS ONLY */
+
+@media print {
+    body {
+        background: white;
+    }
+
+    .sidebar,
+    .topbar,
+    .page-heading,
+    .search-card,
+    .submit-card,
+    .print-btn,
+    .pagination,
+    .view-btn {
+        display: none !important;
+    }
+
+    .app,
+    .main {
+        display: block;
+        width: 100%;
+    }
+
+    .content {
+        padding: 0;
+    }
+
+    .results-card {
+        border: none;
+        box-shadow: none;
+        padding: 0;
+    }
+
+    .results-heading {
+        margin-bottom: 15px;
+    }
+
+    .table-wrapper {
+        overflow: visible;
+        border: 1px solid #aaa;
+    }
+
+    table {
+        white-space: normal;
+        font-size: 10px;
+    }
+
+    th, td {
+        padding: 7px;
+        color: black;
+        border: 1px solid #ccc;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+
+        <div class="brand">
+
+            <!-- Put logo.webp in the same folder as this PHP file -->
+            <img src="logo.webp" alt="Council Logo" class="logo"
+                 onerror="this.style.display='none'">
+
+            <div class="brand-text">
+                <div class="sinhala">දකුණු පළාත් සභා<br>ලේකම් කාර්යාලය</div>
+                <div class="english">Southern Provincial Council Secretariat</div>
+                <div class="system-name">Archive Management System</div>
+            </div>
+
+        </div>
+
+        <nav class="sidebar-menu">
+
+            <a href="user_dashboard.php" class="nav-link active">
+                <i class="fa-solid fa-house"></i>
+                <span>Dashboard</span>
+            </a>
+
+            <a href="user_profile.php" class="nav-link">
+                <i class="fa-solid fa-user"></i>
+                <span>My Profile</span>
+            </a>
+
+            <a href="change_password.php" class="nav-link">
+                <i class="fa-solid fa-lock"></i>
+                <span>Change Password</span>
+            </a>
+
+            <a href="index.php" class="nav-link"
+               onclick="return confirm('Are you sure you want to logout?')">
+                <i class="fa-solid fa-right-from-bracket"></i>
+                <span>Logout</span>
+            </a>
+
+        </nav>
+
+        <div class="sidebar-bottom">
+            <p>Efficient Records<br>for a Better Tomorrow</p>
+        </div>
+
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main">
+
+        <!-- TOP BAR -->
+        <header class="topbar">
+
+            <button class="menu-toggle" id="menuToggle"
+                    aria-label="Toggle navigation">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+
+            <div class="profile">
+
+                <div class="profile-avatar">
+                    <i class="fa-solid fa-user"></i>
+                </div>
+
+                <div class="profile-details">
+                    <strong>P.G. Minasha Shenali</strong>
+                    <span>User</span>
+                </div>
+
+                <button class="profile-toggle" type="button"
+                        onclick="toggleProfileInfo()"
+                        aria-label="Profile information">
+                    <i class="fa-solid fa-chevron-down"></i>
+                </button>
+
+            </div>
+
+        </header>
+
+        <div class="content">
+
+            <!-- PAGE TITLE -->
+            <section class="page-heading">
+
+                <div class="heading-icon">
+                    <i class="fa-regular fa-folder-open"></i>
+                </div>
+
+                <div>
+                    <h1>User Dashboard</h1>
+                    <p>Search and submit archive files</p>
+                </div>
+
+            </section>
+
+            <!-- SEARCH ARCHIVE FILES -->
+            <section class="card search-card">
+
+                <div class="card-heading">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <h2>Search Archive Files</h2>
+                </div>
+
+                <form id="searchForm">
+
+                    <div class="form-grid">
+
+                        <div class="field">
+                            <label for="searchName">File Name</label>
+                            <div class="input-wrap">
+                                <i class="fa-regular fa-file-lines"></i>
+                                <input type="text" id="searchName"
+                                       placeholder="Enter file name or part of the name...">
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label for="searchDepartment">Department</label>
+                            <div class="input-wrap">
+                                <i class="fa-solid fa-building-columns"></i>
+                                <select id="searchDepartment">
+                                    <option value="">Select Department</option>
+                                    <option value="Institutions">ආයතන (Institutions)</option>
+                                    <option value="Councils">සභා (Councils)</option>
+                                    <option value="Accounts">ගිණුම් (Accounts)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label for="searchSubject">Subject Number</label>
+                            <div class="input-wrap">
+                                <i class="fa-regular fa-file-lines"></i>
+                                <input type="text" id="searchSubject"
+                                       placeholder="Enter subject number...">
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label for="searchArchive">Archive Number</label>
+                            <div class="input-wrap">
+                                <i class="fa-regular fa-folder-closed"></i>
+                                <input type="text" id="searchArchive"
+                                       placeholder="Enter archive number...">
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="search-actions">
+                        <button class="btn btn-primary" type="submit">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            Search
+                        </button>
+
+                        <button class="btn btn-outline" type="button"
+                                id="clearSearch">
+                            <i class="fa-solid fa-rotate"></i>
+                            Clear
+                        </button>
+                    </div>
+
+                </form>
+
+            </section>
+
+            <!-- SEARCH RESULTS -->
+            <section class="card results-card">
+
+                <div class="results-heading">
+
+                    <div class="results-title">
+                        <i class="fa-solid fa-box-archive"></i>
+
+                        <div>
+                            <h2>Search Results</h2>
+                            <p id="resultCount">12 files found</p>
+                        </div>
+                    </div>
+
+                    <button type="button" class="btn btn-primary print-btn"
+                            onclick="printResults()">
+                        <i class="fa-solid fa-print"></i>
+                        Print Results
+                    </button>
+
+                </div>
+
+                <div class="table-wrapper">
+
+                    <table id="resultsTable">
+
+                        <thead>
+                            <tr>
+                                <th>No.</th>
+                                <th>File Name</th>
+                                <th>Department</th>
+                                <th>Subject Number</th>
+                                <th>Archive Number</th>
+                                <th>Year</th>
+                                <th>File Type</th>
+                                <th>Added Date</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="resultsBody"></tbody>
+
+                    </table>
+
+                    <div class="no-results" id="noResults" hidden>
+                        <i class="fa-solid fa-folder-open"></i>
+                        <p>No matching archive files found.</p>
+                    </div>
+
+                </div>
+
+                <div class="pagination" id="pagination">
+                    <button class="page-btn" type="button"
+                            onclick="changePage(-1)" aria-label="Previous page">
+                        <i class="fa-solid fa-chevron-left"></i>
+                    </button>
+
+                    <button class="page-btn active" type="button"
+                            id="pageOne">1</button>
+
+                    <button class="page-btn" type="button"
+                            id="pageTwo">2</button>
+
+                    <button class="page-btn" type="button"
+                            onclick="changePage(1)" aria-label="Next page">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </button>
+                </div>
+
+            </section>
+
+            <!-- SUBMIT FILE -->
+            <section class="card submit-card">
+
+                <div class="card-heading">
+                    <i class="fa-solid fa-folder-plus"></i>
+                    <h2>Submit a File to Archive</h2>
+                </div>
+
+                <form id="submitForm">
+
+                    <div class="submit-grid">
+
+                        <div class="field">
+                            <label for="submissionDate">Date</label>
+                            <div class="input-wrap">
+                                <i class="fa-regular fa-calendar"></i>
+                                <input type="date" id="submissionDate" required>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label for="subjectNumber">Subject Number</label>
+                            <div class="input-wrap">
+                                <i class="fa-solid fa-id-card"></i>
+                                <input type="text" id="subjectNumber"
+                                       placeholder="Enter subject number..."
+                                       required>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label for="submitDepartment">Department</label>
+                            <div class="input-wrap">
+                                <i class="fa-solid fa-building-columns"></i>
+                                <select id="submitDepartment" required>
+                                    <option value="">Select Department</option>
+                                    <option value="Institutions">ආයතන (Institutions)</option>
+                                    <option value="Councils">සභා (Councils)</option>
+                                    <option value="Accounts">ගිණුම් (Accounts)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label for="fileNumber">File Number</label>
+                            <div class="input-wrap">
+                                <i class="fa-regular fa-file-lines"></i>
+                                <input type="text" id="fileNumber"
+                                       placeholder="Enter file number..." required>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label for="newFileName">File Name</label>
+                            <div class="input-wrap">
+                                <i class="fa-regular fa-file"></i>
+                                <input type="text" id="newFileName"
+                                       placeholder="Enter file name..." required>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label for="startDate">File Start Date</label>
+                            <div class="input-wrap">
+                                <i class="fa-regular fa-calendar-days"></i>
+                                <input type="date" id="startDate" required>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label for="endDate">File End Date</label>
+                            <div class="input-wrap">
+                                <i class="fa-regular fa-calendar-days"></i>
+                                <input type="date" id="endDate" required>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label for="pageCount">Number of Pages</label>
+                            <div class="input-wrap">
+                                <i class="fa-solid fa-hashtag"></i>
+                                <input type="number" id="pageCount"
+                                       min="1" step="1"
+                                       placeholder="Enter number of pages..."
+                                       required>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="submit-bottom">
+
+                        <div class="submit-note">
+                            <i class="fa-solid fa-circle-info"></i>
+                            <span>After saving, the submitted file will be available to the Subject Officer for review.</span>
+                        </div>
+
+                        <div class="submit-actions">
+
+                            <button type="submit"
+                                    class="btn btn-primary submit-main-btn">
+                                <i class="fa-regular fa-paper-plane"></i>
+                                Save and Submit to Subject Officer
+                            </button>
+
+                            <button type="reset" class="btn btn-outline">
+                                <i class="fa-solid fa-rotate"></i>
+                                Clear
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </form>
+
+            </section>
+
+        </div>
+
+    </main>
+
+</div>
+
+<script>
+/*
+  DEMO DATA
+  These records are examples for interface testing.
+  Replace this array with records from your MySQL database later.
+*/
+
+const archiveFiles = [
+    {
+        name: "Finance Report 2026",
+        department: "Accounts",
+        subject: "SUB-001",
+        archive: "ARC-001",
+        year: "2026",
+        type: "PDF",
+        date: "2026-06-15"
+    },
+    {
+        name: "Annual Budget Plan",
+        department: "Institutions",
+        subject: "SUB-002",
+        archive: "ARC-002",
+        year: "2026",
+        type: "DOCX",
+        date: "2026-06-10"
+    },
+    {
+        name: "Staff Details",
+        department: "Institutions",
+        subject: "SUB-015",
+        archive: "ARC-015",
+        year: "2025",
+        type: "XLSX",
+        date: "2025-12-01"
+    },
+    {
+        name: "Circular No. 07/2026",
+        department: "Councils",
+        subject: "SUB-021",
+        archive: "ARC-021",
+        year: "2026",
+        type: "PDF",
+        date: "2026-05-20"
+    },
+    {
+        name: "IT System Proposal",
+        department: "Institutions",
+        subject: "SUB-030",
+        archive: "ARC-030",
+        year: "2026",
+        type: "DOCX",
+        date: "2026-04-18"
+    },
+    {
+        name: "Project Report",
+        department: "Councils",
+        subject: "SUB-045",
+        archive: "ARC-045",
+        year: "2025",
+        type: "PDF",
+        date: "2025-11-25"
+    },
+    {
+        name: "Monthly Progress",
+        department: "Councils",
+        subject: "SUB-046",
+        archive: "ARC-046",
+        year: "2025",
+        type: "XLSX",
+        date: "2025-11-20"
+    },
+    {
+        name: "Meeting Minutes",
+        department: "Accounts",
+        subject: "SUB-058",
+        archive: "ARC-058",
+        year: "2026",
+        type: "DOCX",
+        date: "2026-03-15"
+    },
+    {
+        name: "Finance Circular",
+        department: "Accounts",
+        subject: "SUB-060",
+        archive: "ARC-060",
+        year: "2026",
+        type: "PDF",
+        date: "2026-02-12"
+    },
+    {
+        name: "Council Development Plan",
+        department: "Councils",
+        subject: "SUB-065",
+        archive: "ARC-065",
+        year: "2025",
+        type: "DOCX",
+        date: "2025-10-11"
+    },
+    {
+        name: "Employee Records",
+        department: "Institutions",
+        subject: "SUB-070",
+        archive: "ARC-070",
+        year: "2026",
+        type: "XLSX",
+        date: "2026-01-18"
+    },
+    {
+        name: "Annual Accounts",
+        department: "Accounts",
+        subject: "SUB-080",
+        archive: "ARC-080",
+        year: "2025",
+        type: "PDF",
+        date: "2025-09-20"
+    }
+];
+
+let filteredFiles = [...archiveFiles];
+let currentPage = 1;
+const rowsPerPage = 8;
+
+const resultsBody = document.getElementById("resultsBody");
+const resultCount = document.getElementById("resultCount");
+const noResults = document.getElementById("noResults");
+const resultsTable = document.getElementById("resultsTable");
+const pagination = document.getElementById("pagination");
+
+function escapeHTML(value) {
+    return String(value).replace(/[&<>"']/g, function(character) {
+        const entities = {
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            '"': "&quot;",
+            "'": "&#039;"
+        };
+        return entities[character];
+    });
+}
+
+function getFileIcon(type) {
+    if (type === "PDF") {
+        return '<i class="fa-solid fa-file-pdf file-icon pdf"></i>';
+    }
+
+    if (type === "XLSX") {
+        return '<i class="fa-solid fa-file-excel file-icon xls"></i>';
+    }
+
+    return '<i class="fa-solid fa-file-word file-icon doc"></i>';
+}
+
+function getBadge(type) {
+    const className = type === "PDF"
+        ? "badge-pdf"
+        : type === "XLSX"
+        ? "badge-xlsx"
+        : "badge-docx";
+
+    return `<span class="file-badge ${className}">${escapeHTML(type)}</span>`;
+}
+
+/* SEARCH: each entered field is applied as an AND filter */
+
+document.getElementById("searchForm").addEventListener("submit", function(event) {
+    event.preventDefault();
+
+    const name = document.getElementById("searchName").value.trim().toLowerCase();
+    const department = document.getElementById("searchDepartment").value;
+    const subject = document.getElementById("searchSubject").value.trim().toLowerCase();
+    const archive = document.getElementById("searchArchive").value.trim().toLowerCase();
+
+    filteredFiles = archiveFiles.filter(file => {
+        const matchesName = !name || file.name.toLowerCase().includes(name);
+        const matchesDepartment = !department || file.department === department;
+        const matchesSubject = !subject || file.subject.toLowerCase().includes(subject);
+        const matchesArchive = !archive || file.archive.toLowerCase().includes(archive);
+
+        return matchesName &&
+               matchesDepartment &&
+               matchesSubject &&
+               matchesArchive;
+    });
+
+    currentPage = 1;
+    renderResults();
+});
+
+document.getElementById("clearSearch").addEventListener("click", function() {
+    document.getElementById("searchForm").reset();
+    filteredFiles = [...archiveFiles];
+    currentPage = 1;
+    renderResults();
+});
+
+function renderResults() {
+    const total = filteredFiles.length;
+    const totalPages = Math.max(1, Math.ceil(total / rowsPerPage));
+
+    if (currentPage > totalPages) {
+        currentPage = totalPages;
+    }
+
+    const start = (currentPage - 1) * rowsPerPage;
+    const pageFiles = filteredFiles.slice(start, start + rowsPerPage);
+
+    resultCount.textContent = `${total} file${total === 1 ? "" : "s"} found`;
+
+    resultsBody.innerHTML = "";
+
+    if (total === 0) {
+        noResults.hidden = false;
+        resultsTable.style.display = "none";
+        pagination.style.display = "none";
+        return;
+    }
+
+    noResults.hidden = true;
+    resultsTable.style.display = "table";
+    pagination.style.display = "flex";
+
+    pageFiles.forEach((file, index) => {
+        const row = document.createElement("tr");
+
+        row.innerHTML = `
+            <td>${start + index + 1}</td>
+            <td>
+                <div class="file-name">
+                    ${getFileIcon(file.type)}
+                    <span>${escapeHTML(file.name)}</span>
+                </div>
+            </td>
+            <td>${escapeHTML(file.department)}</td>
+            <td>${escapeHTML(file.subject)}</td>
+            <td>${escapeHTML(file.archive)}</td>
+            <td>${escapeHTML(file.year)}</td>
+            <td>${getBadge(file.type)}</td>
+            <td>${escapeHTML(file.date)}</td>
+            <td>
+                <button type="button" class="view-btn"
+                    data-file-name="${escapeHTML(file.name)}"
+                    data-file-number="${escapeHTML(file.archive)}">
+                    <i class="fa-regular fa-eye"></i> View
+                </button>
+            </td>
+        `;
+
+        resultsBody.appendChild(row);
+    });
+
+    resultsBody.querySelectorAll(".view-btn").forEach(button => {
+        button.addEventListener("click", function() {
+            const name = this.dataset.fileName;
+            const number = this.dataset.fileNumber;
+
+            alert(
+                "File Name: " + name +
+                "\nArchive Number: " + number +
+                "\n\nThis is a demo record. Connect the file-view action to PHP/MySQL to open the actual archived file."
+            );
+        });
+    });
+
+    document.getElementById("pageOne").textContent = currentPage;
+    document.getElementById("pageTwo").textContent =
+        totalPages > 1 ? currentPage + 1 : "1";
+
+    document.getElementById("pageOne").classList.add("active");
+    document.getElementById("pageTwo").classList.remove("active");
+}
+
+function changePage(direction) {
+    const totalPages = Math.max(1, Math.ceil(filteredFiles.length / rowsPerPage));
+
+    currentPage += direction;
+
+    if (currentPage < 1) currentPage = 1;
+    if (currentPage > totalPages) currentPage = totalPages;
+
+    renderResults();
+}
+
+function printResults() {
+    if (filteredFiles.length === 0) {
+        alert("No search results available to print.");
+        return;
+    }
+
+    window.print();
+}
+
+/* SUBMIT FORM DEMO */
+
+document.getElementById("submissionDate").value =
+    new Date().toISOString().split("T")[0];
+
+document.getElementById("submitForm").addEventListener("submit", function(event) {
+    event.preventDefault();
+
+    const startDate = document.getElementById("startDate").value;
+    const endDate = document.getElementById("endDate").value;
+
+    if (endDate < startDate) {
+        alert("File End Date must be on or after File Start Date.");
+        return;
+    }
+
+    const submission = {
+        date: document.getElementById("submissionDate").value,
+        subjectNumber: document.getElementById("subjectNumber").value.trim(),
+        department: document.getElementById("submitDepartment").value,
+        fileNumber: document.getElementById("fileNumber").value.trim(),
+        fileName: document.getElementById("newFileName").value.trim(),
+        startDate: startDate,
+        endDate: endDate,
+        pages: document.getElementById("pageCount").value
+    };
+
+    /*
+      DEMO ONLY:
+      This does not save to the database or notify the Subject Officer.
+      The PHP/MySQL submission handler must be connected for that.
+    */
+
+    alert(
+        "Form validation successful!\n\n" +
+        "File Name: " + submission.fileName +
+        "\nFile Number: " + submission.fileNumber +
+        "\nDepartment: " + submission.department +
+        "\n\nThis is a demonstration. The file has NOT been saved to the database or sent to the Subject Officer yet."
+    );
+});
+
+/* SIDEBAR MOBILE TOGGLE */
+
+document.getElementById("menuToggle").addEventListener("click", function() {
+    document.getElementById("sidebar").classList.toggle("open");
+});
+
+/* PROFILE INFORMATION */
+
+function toggleProfileInfo() {
+    alert(
+        "User Profile\n\n" +
+        "Name: P.G. Minasha Shenali\n" +
+        "User Type: User\n\n" +
+        "Connect this section to your logged-in user's PHP session."
+    );
+}
+
+/* Initial display */
+
+renderResults();
+</script>
+
+</body>
+</html>
