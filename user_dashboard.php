@@ -33,7 +33,7 @@ button{cursor:pointer}
 .sidebar::before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at 50% 0,rgba(212,162,74,.16),transparent 55%)}
 
 /* Brand: transparent emblem, no white background */
-.brand{display:flex;flex-direction:column;align-items:center;text-align:center;gap:12px;padding:20px 20px 20px;position:relative;margin-bottom:8px}
+.brand{display:flex;flex-direction:column;align-items:center;text-align:center;gap:26px;padding:20px 20px 24px;position:relative;margin-bottom:8px}
 .brand::after{content:"";position:absolute;left:24px;right:24px;bottom:0;height:1px;background:linear-gradient(90deg,transparent,rgba(212,162,74,.55),transparent)}
 .logo-ring{width:36px;height:36px;position:relative;display:grid;place-items:center;flex-shrink:0}
 .logo-ring::before{content:"";position:absolute;inset:6px;border-radius:50%;background:radial-gradient(circle,rgba(212,162,74,.28),transparent 68%)}
@@ -54,10 +54,19 @@ button{cursor:pointer}
 .nav-link.logout-link{margin-top:16px;color:#f2b8bf}
 .nav-link.logout-link i{color:#ef8a96}
 .nav-link.logout-link:hover{background:rgba(239,90,110,.14);color:#fff}
-.sidebar-bottom{margin-top:auto;padding:18px;position:relative}
-.sidebar-quote{padding:14px 15px;border-radius:10px;border-left:3px solid var(--gold);background:rgba(255,255,255,.05)}
-.quote-top{display:flex;align-items:center;gap:8px;margin-bottom:6px;color:var(--gold-2);font-size:10px;font-weight:700;letter-spacing:1px}
-.sidebar-quote p{font-size:var(--fs-sm);line-height:1.7;color:#dbe5f5}
+
+/* Sidebar bottom quote (extra compact size) */
+.sidebar-bottom{margin-top:auto;padding:12px 38px;position:relative}
+.sidebar-quote{position:relative;overflow:hidden;padding:10px 10px 9px;border-radius:10px;text-align:center;
+    background:linear-gradient(160deg,rgba(212,162,74,.18),rgba(255,255,255,.04) 55%);border:1px solid rgba(212,162,74,.35);
+    box-shadow:0 4px 12px rgba(0,0,0,.25),inset 0 1px 0 rgba(255,255,255,.08)}
+.sidebar-quote::before{content:"";position:absolute;left:18%;right:18%;top:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+.quote-mark{position:absolute;right:8px;top:5px;font-size:16px;color:rgba(212,162,74,.18)}
+.quote-top{display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:5px;color:var(--gold-2);font-size:8px;font-weight:700;letter-spacing:1.2px}
+.quote-top::before,.quote-top::after{content:"";width:10px;height:1px;background:rgba(212,162,74,.6)}
+.sidebar-quote p{position:relative;font-size:10.5px;line-height:1.4;font-weight:600;color:#e8eefb}
+.sidebar-quote p strong{display:block;margin-top:1px;font-size:12px;font-weight:800;background:linear-gradient(90deg,var(--gold-2),var(--gold));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.quote-line{width:22px;height:2px;margin:7px auto 0;border-radius:3px;background:linear-gradient(90deg,var(--gold),var(--gold-2))}
 .sidebar-status{display:flex;align-items:center;gap:8px;margin-top:14px;padding:12px 3px 0;border-top:1px solid rgba(255,255,255,.08);color:#8ea6c9;font-size:var(--fs-xs)}
 .status-dot{width:7px;height:7px;border-radius:50%;background:#46d9a0;box-shadow:0 0 8px rgba(70,217,160,.7)}
 
@@ -271,6 +280,14 @@ td:first-child{color:#8a98b0;font-weight:700}
 .attach-cell{display:inline-flex;align-items:center;gap:8px;color:var(--ink);font-weight:600}
 @media (max-width:700px){.dropzone{padding:20px 12px}}
 
+/* ===== Scrollable results ===== */
+.results-scroll{max-height:520px;overflow-y:auto;overflow-x:auto;scrollbar-width:thin;scrollbar-color:#b4c3dc transparent}
+.results-scroll::-webkit-scrollbar{width:8px;height:8px}
+.results-scroll::-webkit-scrollbar-thumb{background:#b4c3dc;border-radius:8px}
+.results-scroll thead th{position:sticky;top:0;z-index:2;background:#e9eff8;box-shadow:0 1px 0 var(--line)}
+@media (max-width:700px){.results-scroll{max-height:440px}}
+@media print{.results-scroll{max-height:none;overflow:visible}}
+
 /* ===== Row print button ===== */
 .row-print-btn{display:inline-flex;align-items:center;gap:6px;height:30px;padding:0 12px;border-radius:8px;border:1px solid #d3dcea;background:#fff;color:#27487a;font-size:var(--fs-xs);font-weight:600;transition:.2s}
 .row-print-btn i{color:var(--gold);font-size:11px}
@@ -311,6 +328,114 @@ td:first-child{color:#8a98b0;font-weight:700}
     .doc-foot .btn{flex:1;padding:0 10px}
 }
 @media print{.doc-modal{display:none!important}}
+
+/* ===== UI POLISH ===== */
+::selection{background:rgba(212,162,74,.35);color:var(--navy)}
+html{scroll-behavior:smooth}
+body{-webkit-font-smoothing:antialiased}
+
+/* Entrance animation */
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes floatGlow{0%,100%{transform:translate(0,0)}50%{transform:translate(-18px,14px)}}
+.hero,.card{animation:fadeUp .55s cubic-bezier(.2,.7,.2,1) both}
+.search-card{animation-delay:.08s}.results-card{animation-delay:.16s}.submit-card{animation-delay:.24s}.submitted-card{animation-delay:.32s}
+
+/* Topbar */
+.topbar{box-shadow:0 4px 18px rgba(16,37,71,.05)}
+.topbar::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:2px;background:linear-gradient(90deg,transparent,rgba(212,162,74,.55) 50%,transparent)}
+.profile{box-shadow:0 2px 8px rgba(16,37,71,.06);transition:box-shadow .2s,border-color .2s}
+.profile:hover{border-color:#cdd8ea;box-shadow:0 6px 16px rgba(16,37,71,.1)}
+.profile-avatar{box-shadow:0 0 0 3px rgba(212,162,74,.22)}
+
+/* Sidebar nav */
+.nav-link{transition:background .2s,color .2s,transform .2s}
+.nav-link:hover{transform:translateX(4px)}
+.nav-link.active{background:linear-gradient(90deg,rgba(212,162,74,.18),rgba(255,255,255,.05));box-shadow:inset 0 0 0 1px rgba(212,162,74,.18)}
+.nav-link.active::before{box-shadow:0 0 12px rgba(212,162,74,.7)}
+
+/* Hero */
+.hero{background:linear-gradient(120deg,#0a1d3f 0%,#16386a 55%,#215596 100%)}
+.hero::after{animation:floatGlow 9s ease-in-out infinite}
+.hero h1{font-size:30px}
+.hero-date{backdrop-filter:blur(6px)}
+.stat-card{position:relative;overflow:hidden;background:linear-gradient(160deg,rgba(255,255,255,.14),rgba(255,255,255,.05))}
+.stat-card::before{content:"";position:absolute;left:0;top:0;right:0;height:3px;background:linear-gradient(90deg,var(--gold),var(--gold-2),transparent)}
+.stat-icon{box-shadow:0 8px 18px rgba(212,162,74,.35)}
+.stat-info h2{letter-spacing:-.5px;text-shadow:0 2px 12px rgba(0,0,0,.2)}
+
+/* Cards */
+.card{transition:box-shadow .3s,transform .3s}
+.card:hover{box-shadow:0 2px 4px rgba(16,37,71,.05),0 18px 40px rgba(16,37,71,.1)}
+.card-heading{padding-bottom:16px;border-bottom:1px solid var(--line);position:relative}
+.card-heading::after{content:"";position:absolute;left:0;bottom:-1px;width:64px;height:2px;border-radius:2px;background:linear-gradient(90deg,var(--gold),var(--gold-2))}
+.results-heading .card-heading{border-bottom:0;padding-bottom:0}
+.results-heading .card-heading::after{display:none}
+.section-icon{box-shadow:0 8px 18px rgba(13,37,71,.28),inset 0 1px 0 rgba(255,255,255,.18)}
+
+/* Forms */
+.field label{letter-spacing:.2px}
+.input-wrap{background:#f7f9fd;box-shadow:inset 0 1px 2px rgba(16,37,71,.04)}
+.input-wrap:focus-within{box-shadow:0 0 0 4px rgba(37,99,208,.12),0 6px 16px rgba(37,99,208,.08)}
+.input-wrap select{appearance:none;-webkit-appearance:none;padding-right:20px;
+    background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path d='M1 1l4 4 4-4' fill='none' stroke='%237a8ca8' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/></svg>") no-repeat right 2px center}
+
+/* Buttons */
+.btn{position:relative;overflow:hidden}
+.btn-primary::after{content:"";position:absolute;top:0;left:-70%;width:50%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.28),transparent);transform:skewX(-20deg);transition:left .6s}
+.btn-primary:hover::after{left:130%}
+.btn:active{transform:translateY(0) scale(.98)}
+.btn-outline:hover{border-color:var(--gold);color:var(--navy)}
+
+/* Count chip */
+.count-chip{background:linear-gradient(135deg,#fff6df,#fbeac0);box-shadow:0 3px 10px rgba(212,162,74,.18)}
+
+/* Tables */
+.table-wrapper{box-shadow:inset 0 0 0 1px var(--line),0 4px 14px rgba(16,37,71,.04)}
+thead{background:linear-gradient(180deg,#f1f5fb,#e4ebf6)}
+th{border-bottom:2px solid #d5deed;color:#26406b}
+.results-scroll thead th{background:#e9eff8}
+tbody tr{position:relative}
+tbody tr:hover{background:linear-gradient(90deg,#fff7e6,#f1f6ff 40%)}
+tbody tr:hover td:first-child{box-shadow:inset 3px 0 0 var(--gold)}
+td:first-child{color:var(--navy-2)}
+#resultsTable td:nth-child(6){font-weight:700;color:var(--navy-2);letter-spacing:.3px}
+#resultsTable td:nth-child(9){font-weight:600;color:#33466a}
+.file-icon.doc{background:#eaf1fd;padding:6px;border-radius:8px;font-size:13px;width:28px;height:28px;display:inline-grid;place-items:center}
+
+/* Department pills */
+.dept-pill{border:1px solid transparent}
+.dept-Institutions{background:#e8f0ff;color:#1f4fa8;border-color:#cfdffc}
+.dept-Councils{background:#fdf3dc;color:#8a6420;border-color:#f0dcb0}
+.dept-Accounts{background:#e3f6ee;color:#11704f;border-color:#c5ead9}
+
+/* Row buttons */
+.row-view-btn,.row-print-btn,.row-delete-btn{box-shadow:0 1px 2px rgba(16,37,71,.06)}
+.row-view-btn:hover,.row-print-btn:hover,.row-delete-btn:hover{transform:translateY(-1px);box-shadow:0 6px 12px rgba(16,37,71,.14)}
+
+/* Upload */
+.field label.dropzone{background:repeating-linear-gradient(135deg,#f8fafd 0 12px,#f3f7fc 12px 24px)}
+.field label.dropzone:hover .dropzone-icon{transform:translateY(-3px) scale(1.05)}
+.dropzone-icon{transition:transform .25s}
+.submit-note{background:linear-gradient(90deg,#fdf3dc,#fffaf0)}
+.file-chip{box-shadow:0 4px 12px rgba(23,148,106,.1)}
+
+/* Alerts */
+.alert-success{box-shadow:0 4px 14px rgba(23,148,106,.12);border-radius:12px}
+
+/* Viewer */
+.doc-dialog{animation:fadeUp .3s ease both}
+
+/* Scrollbars */
+.content{scrollbar-width:thin}
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-thumb{background:#c3cfe3;border-radius:10px;border:2px solid transparent;background-clip:content-box}
+
+/* Footer */
+.footer{margin-top:6px;padding-top:16px;border-top:1px solid var(--line)}
+
+@media (max-width:700px){.hero h1{font-size:23px}.card-heading{padding-bottom:12px}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media print{.hero,.card{animation:none}.topbar::after,.card-heading::after{display:none}}
 </style>
 </head>
 
@@ -347,12 +472,10 @@ td:first-child{color:#8a98b0;font-weight:700}
 
         <div class="sidebar-bottom">
             <div class="sidebar-quote">
-                <div class="quote-top"><i class="fa-solid fa-quote-left"></i><span>OUR COMMITMENT</span></div>
-                <p>Efficient Records for a <br>Better Tomorrow</p>
-            </div>
-            <div class="sidebar-status">
-                <span class="status-dot"></span>
-                <span>Archive System Interface</span>
+                <i class="fa-solid fa-quote-right quote-mark"></i>
+                <div class="quote-top"><span>OUR COMMITMENT</span></div>
+                <p>Efficient Records for a <strong>Better Tomorrow</strong></p>
+                <div class="quote-line"></div>
             </div>
         </div>
 
@@ -507,10 +630,6 @@ td:first-child{color:#8a98b0;font-weight:700}
                             </div>
                         </div>
                     </div>
-
-                    <button type="button" class="btn btn-primary print-btn" onclick="printResults()">
-                        <i class="fa-solid fa-print"></i> Print Results
-                    </button>
                 </div>
 
                 <div style="margin-bottom:14px">
@@ -520,7 +639,7 @@ td:first-child{color:#8a98b0;font-weight:700}
                     </span>
                 </div>
 
-                <div class="table-wrapper">
+                <div class="table-wrapper results-scroll" id="resultsScroll">
                     <table id="resultsTable">
                         <thead>
                             <tr>
@@ -546,13 +665,6 @@ td:first-child{color:#8a98b0;font-weight:700}
                         <p>No matching archive files found.</p>
                         <p style="font-size:11px;margin-top:4px">Try changing your search filters.</p>
                     </div>
-                </div>
-
-                <div class="pagination" id="pagination">
-                    <button class="page-btn" type="button" id="previousPage" aria-label="Previous page"><i class="fa-solid fa-chevron-left"></i></button>
-                    <button class="page-btn active" type="button" id="pageOne">1</button>
-                    <button class="page-btn" type="button" id="pageTwo">2</button>
-                    <button class="page-btn" type="button" id="nextPage" aria-label="Next page"><i class="fa-solid fa-chevron-right"></i></button>
                 </div>
 
                 <!-- Print version: ALL matching files, or ONE file when a row Print button is used -->
@@ -772,14 +884,12 @@ const deptLabels = {
 let activeFilters = [];
 
 let filteredFiles = [...archiveFiles];
-let currentPage = 1;
-const rowsPerPage = 8;
 
 const resultsBody = document.getElementById("resultsBody");
 const resultCount = document.getElementById("resultCount");
 const noResults = document.getElementById("noResults");
 const resultsTable = document.getElementById("resultsTable");
-const pagination = document.getElementById("pagination");
+const resultsScroll = document.getElementById("resultsScroll");
 
 /* ===== DATE ===== */
 const now = new Date();
@@ -796,7 +906,7 @@ function escapeHTML(value) {
 }
 
 function deptPill(dep) {
-    return `<span class="dept-pill">${escapeHTML(deptLabels[dep] || dep)}</span>`;
+    return `<span class="dept-pill dept-${escapeHTML(dep)}">${escapeHTML(deptLabels[dep] || dep)}</span>`;
 }
 
 /* ===== SEARCH ===== */
@@ -821,7 +931,6 @@ document.getElementById("searchForm").addEventListener("submit", function(e) {
         (!archive || file.archive.toLowerCase().includes(archive))
     );
 
-    currentPage = 1;
     renderResults();
 });
 
@@ -829,19 +938,16 @@ document.getElementById("clearSearch").addEventListener("click", function() {
     document.getElementById("searchForm").reset();
     activeFilters = [];
     filteredFiles = [...archiveFiles];
-    currentPage = 1;
     renderResults();
 });
 
 /* ===== RENDER RESULTS ===== */
 function renderResults() {
     const total = filteredFiles.length;
-    const totalPages = Math.max(1, Math.ceil(total / rowsPerPage));
+    const start = 0;
+    const pageFiles = filteredFiles;
 
-    currentPage = Math.max(1, Math.min(currentPage, totalPages));
-
-    const start = (currentPage - 1) * rowsPerPage;
-    const pageFiles = filteredFiles.slice(start, start + rowsPerPage);
+    resultsScroll.scrollTop = 0;
 
     resultCount.textContent = `${total} file${total === 1 ? "" : "s"} found`;
     document.getElementById("matchingFiles").textContent = total;
@@ -854,13 +960,11 @@ function renderResults() {
     if (total === 0) {
         noResults.hidden = false;
         resultsTable.style.display = "none";
-        pagination.style.display = "none";
         return;
     }
 
     noResults.hidden = true;
     resultsTable.style.display = "table";
-    pagination.style.display = totalPages > 1 ? "flex" : "none";
 
     pageFiles.forEach((file, index) => {
         const row = document.createElement("tr");
@@ -882,46 +986,7 @@ function renderResults() {
 
         resultsBody.appendChild(row);
     });
-
-    updatePagination(totalPages);
 }
-
-/* ===== PAGINATION ===== */
-function updatePagination(totalPages) {
-    const pageOne = document.getElementById("pageOne");
-    const pageTwo = document.getElementById("pageTwo");
-
-    pageOne.textContent = currentPage;
-    pageTwo.textContent = Math.min(currentPage + 1, totalPages);
-
-    pageOne.classList.add("active");
-    pageTwo.classList.remove("active");
-
-    pageOne.style.display = "";
-    pageTwo.style.display = totalPages > 1 ? "" : "none";
-
-    document.getElementById("previousPage").disabled = currentPage === 1;
-    document.getElementById("nextPage").disabled = currentPage === totalPages;
-}
-
-function changePage(direction) {
-    const totalPages = Math.max(1, Math.ceil(filteredFiles.length / rowsPerPage));
-    currentPage = Math.max(1, Math.min(currentPage + direction, totalPages));
-    renderResults();
-}
-
-document.getElementById("previousPage").addEventListener("click", () => changePage(-1));
-document.getElementById("nextPage").addEventListener("click", () => changePage(1));
-
-document.getElementById("pageOne").addEventListener("click", function() {
-    currentPage = Number(this.textContent);
-    renderResults();
-});
-
-document.getElementById("pageTwo").addEventListener("click", function() {
-    currentPage = Number(this.textContent);
-    renderResults();
-});
 
 /* ===== PRINT ===== */
 function printDate() {
@@ -945,21 +1010,6 @@ function printFiles(list, infoText) {
         </tr>`).join("");
 
     window.print();
-}
-
-/* Print ALL matching files (not only the current page) */
-function printResults() {
-    if (filteredFiles.length === 0) {
-        alert("No search results available to print.");
-        return;
-    }
-
-    printFiles(
-        filteredFiles,
-        "Printed on " + printDate() +
-        " | " + filteredFiles.length + " file" + (filteredFiles.length === 1 ? "" : "s") +
-        (activeFilters.length ? " | " + activeFilters.join(", ") : "")
-    );
 }
 
 /* Print ONE file (Print button in each row) */
