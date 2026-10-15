@@ -270,6 +270,47 @@ td:first-child{color:#8a98b0;font-weight:700}
 .chip-remove:hover{background:#c93636;color:#fff;border-color:#c93636}
 .attach-cell{display:inline-flex;align-items:center;gap:8px;color:var(--ink);font-weight:600}
 @media (max-width:700px){.dropzone{padding:20px 12px}}
+
+/* ===== Row print button ===== */
+.row-print-btn{display:inline-flex;align-items:center;gap:6px;height:30px;padding:0 12px;border-radius:8px;border:1px solid #d3dcea;background:#fff;color:#27487a;font-size:var(--fs-xs);font-weight:600;transition:.2s}
+.row-print-btn i{color:var(--gold);font-size:11px}
+.row-print-btn:hover{background:linear-gradient(135deg,var(--navy),var(--navy-2));border-color:var(--navy);color:#fff}
+.row-print-btn:hover i{color:var(--gold-2)}
+.row-view-btn{display:inline-flex;align-items:center;gap:6px;height:30px;padding:0 12px;border-radius:8px;border:1px solid #cfe0fa;background:#eef4ff;color:var(--blue);font-size:var(--fs-xs);font-weight:600;transition:.2s}
+.row-view-btn i{font-size:11px}
+.row-view-btn:hover{background:var(--blue);border-color:var(--blue);color:#fff}
+
+.row-delete-btn{display:inline-flex;align-items:center;gap:6px;height:30px;padding:0 12px;border-radius:8px;border:1px solid #e3c9cd;background:#fff;color:#c93636;font-size:var(--fs-xs);font-weight:600;transition:.2s}
+.row-delete-btn i{font-size:11px}
+.row-delete-btn:hover{background:#c93636;border-color:#c93636;color:#fff}
+
+/* ===== Document viewer ===== */
+.doc-modal{position:fixed;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(7,27,55,.6);backdrop-filter:blur(3px)}
+.doc-dialog{width:min(1000px,100%);height:min(90vh,840px);display:flex;flex-direction:column;overflow:hidden;background:#fff;border-radius:20px;box-shadow:0 24px 60px rgba(7,27,55,.4)}
+.doc-head{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:16px 20px;border-bottom:1px solid var(--line);position:relative}
+.doc-head::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:3px;background:linear-gradient(90deg,var(--navy),var(--navy-2) 60%,var(--gold))}
+.doc-title{display:flex;align-items:center;gap:12px;min-width:0}
+.doc-title h3{font-size:var(--fs-xl);font-weight:700;line-height:1.3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.doc-title p{font-size:var(--fs-xs);color:var(--muted)}
+.doc-close{width:36px;height:36px;flex-shrink:0;border:1px solid var(--line);border-radius:10px;background:#fff;color:#5e7290;transition:.2s}
+.doc-close:hover{background:#c93636;border-color:#c93636;color:#fff}
+.doc-meta{display:flex;flex-wrap:wrap;gap:8px;padding:12px 20px;background:#f8fafd;border-bottom:1px solid var(--line)}
+.doc-meta span{display:inline-flex;align-items:center;gap:6px;padding:4px 11px;border-radius:20px;background:#fff;border:1px solid var(--line);color:#33466a;font-size:var(--fs-xs);font-weight:600}
+.doc-meta span i{color:var(--gold)}
+.doc-body{flex:1;min-height:0;background:#e9eef6;display:flex;align-items:center;justify-content:center;overflow:auto}
+.doc-body object,.doc-body iframe{width:100%;height:100%;border:0;background:#fff}
+.doc-body img{max-width:100%;max-height:100%;object-fit:contain;display:block}
+.doc-fallback{max-width:380px;padding:30px 20px;text-align:center;color:var(--muted)}
+.doc-fallback i{font-size:40px;color:#a9b8d0;margin-bottom:12px}
+.doc-fallback p{font-size:var(--fs-md);margin-bottom:4px}
+.doc-foot{display:flex;justify-content:flex-end;flex-wrap:wrap;gap:10px;padding:14px 20px;border-top:1px solid var(--line)}
+.doc-foot a.btn{text-decoration:none}
+@media (max-width:700px){
+    .doc-modal{padding:0}
+    .doc-dialog{height:100%;border-radius:0}
+    .doc-foot .btn{flex:1;padding:0 10px}
+}
+@media print{.doc-modal{display:none!important}}
 </style>
 </head>
 
@@ -493,6 +534,8 @@ td:first-child{color:#8a98b0;font-weight:700}
                                 <th>End Date</th>
                                 <th>Pages</th>
                                 <th>Added Date</th>
+                                <th>Document</th>
+                                <th>Print</th>
                             </tr>
                         </thead>
                         <tbody id="resultsBody"></tbody>
@@ -511,7 +554,8 @@ td:first-child{color:#8a98b0;font-weight:700}
                     <button class="page-btn" type="button" id="pageTwo">2</button>
                     <button class="page-btn" type="button" id="nextPage" aria-label="Next page"><i class="fa-solid fa-chevron-right"></i></button>
                 </div>
-                <!-- Print version: ALL matching files -->
+
+                <!-- Print version: ALL matching files, or ONE file when a row Print button is used -->
                 <div class="print-only">
                     <h2>දකුණු පළාත් සභා ලේකම් කාර්යාලය - Archive Search Results</h2>
                     <p id="printInfo"></p>
@@ -658,6 +702,7 @@ td:first-child{color:#8a98b0;font-weight:700}
                                 <th>Pages</th>
                                 <th>Attachment</th>
                                 <th>Status</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody id="submittedBody"></tbody>
@@ -676,6 +721,29 @@ td:first-child{color:#8a98b0;font-weight:700}
     </main>
 </div>
 
+<!-- DOCUMENT VIEWER -->
+<div class="doc-modal" id="docViewer" hidden>
+    <div class="doc-dialog" role="dialog" aria-modal="true" aria-labelledby="docTitle">
+        <div class="doc-head">
+            <div class="doc-title">
+                <div class="section-icon"><i class="fa-solid fa-file-lines"></i></div>
+                <div style="min-width:0">
+                    <h3 id="docTitle"></h3>
+                    <p id="docSub"></p>
+                </div>
+            </div>
+            <button type="button" class="doc-close" id="docClose" aria-label="Close viewer"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="doc-meta" id="docMeta"></div>
+        <div class="doc-body" id="docBody"></div>
+        <div class="doc-foot">
+            <a class="btn btn-outline" id="docOpen" href="#" target="_blank" rel="noopener"><i class="fa-solid fa-up-right-from-square"></i> Open in New Tab</a>
+            <a class="btn btn-outline" id="docDownload" href="#" download><i class="fa-solid fa-download"></i> Download</a>
+            <button type="button" class="btn btn-primary" id="docCloseBtn"><i class="fa-solid fa-xmark"></i> Close</button>
+        </div>
+    </div>
+</div>
+
 <script>
 /* ===== SAMPLE ARCHIVE DATA (demonstration only) ===== */
 const archiveFiles = [
@@ -692,6 +760,10 @@ const archiveFiles = [
     {name:"Employee Records",department:"Institutions",subject:"SUB-070",fileNo:"FN-170",archive:"ARC-070",start:"2025-12-01",end:"2026-01-12",pages:210,date:"2026-01-18"},
     {name:"Annual Accounts",department:"Accounts",subject:"SUB-080",fileNo:"FN-180",archive:"ARC-080",start:"2025-01-01",end:"2025-09-12",pages:175,date:"2025-09-20"}
 ];
+/* Document path for each archive file.
+   Demo: uploads/<ArchiveNo>.pdf. Replace with the real stored path from the database (e.g. file.fileUrl from PHP). */
+archiveFiles.forEach(f => { f.fileUrl = "uploads/" + f.archive + ".pdf"; });
+
 const deptLabels = {
     Institutions:"ආයතන(Institutions)",
     Councils:"සභා(Councils)",
@@ -804,6 +876,8 @@ function renderResults() {
             <td>${escapeHTML(file.end)}</td>
             <td>${escapeHTML(file.pages)}</td>
             <td>${escapeHTML(file.date)}</td>
+            <td><button type="button" class="row-view-btn" data-view="${start + index}" aria-label="View ${escapeHTML(file.name)}"><i class="fa-solid fa-eye"></i> View</button></td>
+            <td><button type="button" class="row-print-btn" data-i="${start + index}" aria-label="Print ${escapeHTML(file.name)}"><i class="fa-solid fa-print"></i> Print</button></td>
         `;
 
         resultsBody.appendChild(row);
@@ -849,19 +923,15 @@ document.getElementById("pageTwo").addEventListener("click", function() {
     renderResults();
 });
 
-/* ===== PRINT (prints ALL matching files, not only the current page) ===== */
-function printResults() {
-    if (filteredFiles.length === 0) {
-        alert("No search results available to print.");
-        return;
-    }
+/* ===== PRINT ===== */
+function printDate() {
+    return new Date().toLocaleDateString("en-GB", {day:"2-digit", month:"short", year:"numeric"});
+}
 
-    document.getElementById("printInfo").textContent =
-        "Printed on " + new Date().toLocaleDateString("en-GB", {day:"2-digit", month:"short", year:"numeric"}) +
-        " | " + filteredFiles.length + " file" + (filteredFiles.length === 1 ? "" : "s") +
-        (activeFilters.length ? " | " + activeFilters.join(", ") : "");
+function printFiles(list, infoText) {
+    document.getElementById("printInfo").textContent = infoText;
 
-    document.getElementById("printBody").innerHTML = filteredFiles.map((file, i) => `
+    document.getElementById("printBody").innerHTML = list.map((file, i) => `
         <tr>
             <td>${i + 1}</td>
             <td>${escapeHTML(file.name)}</td>
@@ -876,6 +946,98 @@ function printResults() {
 
     window.print();
 }
+
+/* Print ALL matching files (not only the current page) */
+function printResults() {
+    if (filteredFiles.length === 0) {
+        alert("No search results available to print.");
+        return;
+    }
+
+    printFiles(
+        filteredFiles,
+        "Printed on " + printDate() +
+        " | " + filteredFiles.length + " file" + (filteredFiles.length === 1 ? "" : "s") +
+        (activeFilters.length ? " | " + activeFilters.join(", ") : "")
+    );
+}
+
+/* Print ONE file (Print button in each row) */
+resultsBody.addEventListener("click", function(e) {
+    const btn = e.target.closest(".row-print-btn");
+    if (!btn) return;
+
+    const file = filteredFiles[Number(btn.dataset.i)];
+    if (!file) return;
+
+    printFiles([file], "Printed on " + printDate() + " | Archive No: " + file.archive);
+});
+
+/* ===== DOCUMENT VIEWER ===== */
+const docViewer = document.getElementById("docViewer");
+const docBody = document.getElementById("docBody");
+
+function docFallback(message) {
+    return `<div class="doc-fallback"><i class="fa-regular fa-file-excel"></i>
+        <p><strong>Preview not available</strong></p>
+        <p>${escapeHTML(message)}</p></div>`;
+}
+
+function openViewer(file) {
+    const url = file.fileUrl || "";
+    const ext = fileExt(url);
+    const safeUrl = encodeURI(url);
+
+    document.getElementById("docTitle").textContent = file.name;
+    document.getElementById("docSub").textContent = (deptLabels[file.department] || file.department) + " | " + file.archive;
+
+    document.getElementById("docMeta").innerHTML = [
+        ["fa-hashtag", "Subject: " + file.subject],
+        ["fa-regular fa-file", "File No: " + file.fileNo],
+        ["fa-box-archive", "Archive No: " + file.archive],
+        ["fa-regular fa-calendar-days", file.start + " to " + file.end],
+        ["fa-copy", file.pages + " pages"],
+        ["fa-regular fa-clock", "Added: " + file.date]
+    ].map(m => `<span><i class="${m[0].startsWith("fa-regular") ? m[0] : "fa-solid " + m[0]}"></i>${escapeHTML(m[1])}</span>`).join("");
+
+    if (!url) {
+        docBody.innerHTML = docFallback("No document is attached to this archive record.");
+    } else if (ext === "pdf") {
+        docBody.innerHTML = `<object data="${safeUrl}" type="application/pdf">${docFallback("The PDF could not be loaded here. Use Open in New Tab or Download.")}</object>`;
+    } else if (["jpg", "jpeg", "png"].includes(ext)) {
+        docBody.innerHTML = `<img src="${safeUrl}" alt="${escapeHTML(file.name)}">`;
+        docBody.querySelector("img").onerror = () => { docBody.innerHTML = docFallback("The image could not be loaded."); };
+    } else {
+        docBody.innerHTML = docFallback("Word and Excel files cannot be previewed in the browser. Please download the file to open it.");
+    }
+
+    const openLink = document.getElementById("docOpen");
+    const downloadLink = document.getElementById("docDownload");
+    openLink.hidden = downloadLink.hidden = !url;
+    openLink.href = downloadLink.href = safeUrl || "#";
+
+    docViewer.hidden = false;
+    document.body.style.overflow = "hidden";
+}
+
+function closeViewer() {
+    if (docViewer.hidden) return;
+    docViewer.hidden = true;
+    docBody.innerHTML = "";
+    document.body.style.overflow = "";
+}
+
+resultsBody.addEventListener("click", function(e) {
+    const btn = e.target.closest(".row-view-btn");
+    if (!btn) return;
+
+    const file = filteredFiles[Number(btn.dataset.view)];
+    if (file) openViewer(file);
+});
+
+document.getElementById("docClose").addEventListener("click", closeViewer);
+document.getElementById("docCloseBtn").addEventListener("click", closeViewer);
+docViewer.addEventListener("click", e => { if (e.target === docViewer) closeViewer(); });
 
 /* ===== FILE UPLOAD (drag & drop or browse) ===== */
 const MAX_FILE_SIZE = 25 * 1024 * 1024;
@@ -1013,11 +1175,28 @@ function renderSubmissions() {
             <td>${escapeHTML(f.pages)}</td>
             <td>${f.fileName ? `<span class="attach-cell">${fileIcon(f.fileName)}${escapeHTML(f.fileName)}</span>` : "-"}</td>
             <td><span class="status-badge"><i class="fa-regular fa-clock"></i> Sent to Subject Officer</span></td>
+            <td><button type="button" class="row-delete-btn" data-del="${i}" aria-label="Delete ${escapeHTML(f.name)}"><i class="fa-solid fa-trash-can"></i> Delete</button></td>
         </tr>`).join("");
 
     empty.hidden = submissions.length > 0;
     table.style.display = submissions.length ? "table" : "none";
 }
+
+/* Delete a submitted file (document + its details) */
+document.getElementById("submittedBody").addEventListener("click", function(e) {
+    const btn = e.target.closest(".row-delete-btn");
+    if (!btn) return;
+
+    const index = Number(btn.dataset.del);
+    const item = submissions[index];
+    if (!item) return;
+
+    if (!confirm('Delete "' + item.name + '" and its uploaded document? This cannot be undone.')) return;
+
+    submissions.splice(index, 1);
+    saveSubmissions();
+    renderSubmissions();
+});
 
 document.getElementById("submitForm").addEventListener("submit", function(e) {
     e.preventDefault();
@@ -1111,6 +1290,7 @@ sidebarOverlay.addEventListener("click", closeSidebar);
 
 document.addEventListener("keydown", function(e) {
     if (e.key === "Escape") {
+        closeViewer();
         closeSidebar();
         closeProfilePopover();
     }
@@ -1155,4 +1335,3 @@ renderSubmissions();
 
 </body>
 </html>
-
