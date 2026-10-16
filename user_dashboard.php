@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>User Dashboard - Archive Management System</title>
+<title>User Dashboard - Archives File Management System</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -33,7 +33,7 @@ button{cursor:pointer}
 .sidebar::before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at 50% 0,rgba(212,162,74,.16),transparent 55%)}
 
 /* Brand: transparent emblem, no white background */
-.brand{display:flex;flex-direction:column;align-items:center;text-align:center;gap:26px;padding:20px 20px 24px;position:relative;margin-bottom:8px}
+.brand{display:flex;flex-direction:column;align-items:center;text-align:center;gap:26px;padding:20px 10px 24px;position:relative;margin-bottom:8px}
 .brand::after{content:"";position:absolute;left:24px;right:24px;bottom:0;height:1px;background:linear-gradient(90deg,transparent,rgba(212,162,74,.55),transparent)}
 .logo-ring{width:36px;height:36px;position:relative;display:grid;place-items:center;flex-shrink:0}
 .logo-ring::before{content:"";position:absolute;inset:6px;border-radius:50%;background:radial-gradient(circle,rgba(212,162,74,.28),transparent 68%)}
@@ -41,7 +41,7 @@ button{cursor:pointer}
 .logo{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 6px 14px rgba(0,0,0,.45))}
 .brand-text .sinhala{font-family:'Noto Sans Sinhala',sans-serif;font-size:14px;font-weight:700;line-height:1.7}
 .brand-text .english{font-size:10.5px;line-height:1.5;color:#aebfdc;margin-top:2px;letter-spacing:.3px}
-.brand-text .system-name{display:inline-flex;align-items:center;gap:6px;font-size:10px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;color:var(--gold-2);margin-top:12px;padding:5px 13px;border-radius:6px;border:1px solid rgba(212,162,74,.4);background:rgba(212,162,74,.08)}
+.brand-text .system-name{display:inline-flex;align-items:center;gap:6px;font-size:10px;font-weight:600;letter-spacing:.2px;white-space:nowrap;color:var(--gold-2);margin-top:12px;padding:5px 11px;border-radius:6px;border:1px solid rgba(212,162,74,.4);background:rgba(212,162,74,.08)}
 .sidebar-label{padding:16px 26px 10px;color:#7389ad;font-size:10px;font-weight:700;letter-spacing:1.8px;position:relative}
 .sidebar-menu{padding:0 14px;position:relative}
 .nav-link{display:flex;align-items:center;gap:14px;min-height:44px;padding:8px 14px;margin-bottom:4px;border-radius:8px;text-decoration:none;color:#b7c6df;font-weight:500;position:relative;transition:background .2s,color .2s}
@@ -436,6 +436,15 @@ td:first-child{color:var(--navy-2)}
 @media (max-width:700px){.hero h1{font-size:23px}.card-heading{padding-bottom:12px}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 @media print{.hero,.card{animation:none}.topbar::after,.card-heading::after{display:none}}
+
+/* Page Numbers group */
+.page-numbers{grid-column:1/-1;padding:16px 18px 18px;border:1px solid var(--line);border-radius:14px;background:linear-gradient(180deg,#f8fafd,#f3f7fc)}
+.page-numbers-title{display:flex;align-items:center;gap:8px;margin-bottom:14px;font-size:var(--fs-md);font-weight:700;color:var(--navy)}
+.page-numbers-title i{color:var(--gold)}
+.page-numbers-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.page-numbers .hint{display:block;margin-top:5px;font-size:var(--fs-xs);color:var(--muted)}
+#totalPages{font-weight:700;color:var(--navy-2)}
+@media (max-width:700px){.page-numbers{padding:14px 12px}.page-numbers-grid{grid-template-columns:1fr;gap:13px}}
 </style>
 </head>
 
@@ -457,7 +466,7 @@ td:first-child{color:var(--navy-2)}
             <div class="brand-text">
                 <div class="sinhala">දකුණු පළාත් සභා<br>ලේකම් කාර්යාලය</div>
                 <div class="english">Southern Provincial Council Secretariat</div>
-                <div class="system-name"><i class="fa-solid fa-box-archive"></i> Archive Management System</div>
+                <div class="system-name"><i class="fa-solid fa-box-archive"></i> Archives File Management System</div>
             </div>
         </div>
 
@@ -521,8 +530,8 @@ td:first-child{color:var(--navy-2)}
             <section class="hero">
                 <div>
                     <span class="hero-date"><i class="fa-regular fa-calendar"></i><span id="currentDate"></span></span>
-                    <h1>User Dashboard</h1>
-                    <p>Search, manage and submit archive files easily.</p>
+                    <h1>Archive Records Portal</h1>
+                    <p>Search, review and submit archive records securely and efficiently.</p>
                 </div>
 
                 <div class="hero-stats">
@@ -747,35 +756,33 @@ td:first-child{color:var(--navy-2)}
                             <div class="input-wrap"><i class="fa-regular fa-calendar-check"></i><input type="date" id="endDate" required></div>
                         </div>
 
-                        <div class="field">
-                            <label for="pageCount">Number of Pages</label>
-                            <div class="input-wrap"><i class="fa-solid fa-copy"></i><input type="number" id="pageCount" min="1" step="1" placeholder="Enter page count..." required></div>
-                        </div>
-                    </div>
+                        <div class="page-numbers">
+                            <div class="page-numbers-title"><i class="fa-solid fa-book-open"></i> Page Numbers</div>
+                            <div class="page-numbers-grid">
+                                <div class="field">
+                                    <label for="frontPage">Right Side</label>
+                                    <div class="input-wrap"><i class="fa-solid fa-arrow-right-long"></i><input type="number" id="frontPage" min="0" step="1" placeholder="Pages on right side (e.g. 60)" required></div>
+                                    <small class="hint">Number of pages on the right side</small>
+                                </div>
 
-                    <div class="field upload-field">
-                        <label for="fileUpload">Upload File</label>
-                        <label class="dropzone" id="dropzone" for="fileUpload">
-                            <input type="file" id="fileUpload" accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png">
-                            <span class="dropzone-icon"><i class="fa-solid fa-cloud-arrow-up"></i></span>
-                            <span class="dropzone-text">
-                                <strong>Drag and drop the file here, or <span>browse</span></strong>
-                                <small>PDF, DOC, DOCX, XLS, XLSX, JPG or PNG. Maximum size 25 MB.</small>
-                            </span>
-                        </label>
-                        <div class="file-chip" id="fileChip" hidden>
-                            <i class="fa-solid fa-file chip-icon" id="chipIcon"></i>
-                            <div class="chip-info">
-                                <strong id="chipName"></strong>
-                                <small id="chipSize"></small>
+                                <div class="field">
+                                    <label for="backPage">Left Side</label>
+                                    <div class="input-wrap"><i class="fa-solid fa-arrow-left-long"></i><input type="number" id="backPage" min="0" step="1" placeholder="Pages on left side (e.g. 40)" required></div>
+                                    <small class="hint">Number of pages on the left side</small>
+                                </div>
+
+                                <div class="field">
+                                    <label for="totalPages">Total Pages</label>
+                                    <div class="input-wrap"><i class="fa-solid fa-copy"></i><input type="number" id="totalPages" min="1" step="1" placeholder="Enter total pages (e.g. 100)" required></div>
+                                    <small class="hint">Total number of pages in the file</small>
+                                </div>
                             </div>
-                            <button type="button" class="chip-remove" id="chipRemove" aria-label="Remove file"><i class="fa-solid fa-xmark"></i></button>
                         </div>
                     </div>
 
                     <div class="submit-note">
                         <i class="fa-solid fa-circle-info"></i>
-                        <span>After you save, the uploaded file and its details are sent to the Subject Officer for review. It appears in the search results once the Subject Officer adds it to the archive.</span>
+                        <span>After you save, the file details are sent to the Subject Officer for review. It appears in the search results once the Subject Officer adds it to the archive.</span>
                     </div>
 
                     <div class="submit-bottom">
@@ -811,8 +818,9 @@ td:first-child{color:var(--navy-2)}
                                 <th>File Number</th>
                                 <th>Start Date</th>
                                 <th>End Date</th>
+                                <th>Right Side</th>
+                                <th>Left Side</th>
                                 <th>Pages</th>
-                                <th>Attachment</th>
                                 <th>Status</th>
                                 <th>Action</th>
                             </tr>
@@ -826,7 +834,7 @@ td:first-child{color:var(--navy-2)}
             <!-- FOOTER -->
             <footer class="footer">
                 <span>© <span id="footerYear">2026</span> Southern Provincial Council. All Rights Reserved.</span>
-                <span>Archive Management System</span>
+                <span>Archives File Management System</span>
             </footer>
 
         </div>
@@ -1089,106 +1097,10 @@ document.getElementById("docClose").addEventListener("click", closeViewer);
 document.getElementById("docCloseBtn").addEventListener("click", closeViewer);
 docViewer.addEventListener("click", e => { if (e.target === docViewer) closeViewer(); });
 
-/* ===== FILE UPLOAD (drag & drop or browse) ===== */
-const MAX_FILE_SIZE = 25 * 1024 * 1024;
-const ALLOWED_EXT = ["pdf", "doc", "docx", "xls", "xlsx", "jpg", "jpeg", "png"];
-
-const fileInput = document.getElementById("fileUpload");
-const dropzone = document.getElementById("dropzone");
-const fileChip = document.getElementById("fileChip");
-
+/* ===== HELPERS (file) ===== */
 function fileExt(name) {
     return name.split(".").pop().toLowerCase();
 }
-
-function fileIcon(name) {
-    const ext = fileExt(name);
-    if (ext === "pdf") return '<i class="fa-solid fa-file-pdf file-icon pdf"></i>';
-    if (ext === "xls" || ext === "xlsx") return '<i class="fa-solid fa-file-excel file-icon xls"></i>';
-    if (ext === "jpg" || ext === "jpeg" || ext === "png") return '<i class="fa-solid fa-file-image file-icon doc"></i>';
-    return '<i class="fa-solid fa-file-word file-icon doc"></i>';
-}
-
-function formatSize(bytes) {
-    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + " KB";
-    return (bytes / (1024 * 1024)).toFixed(2) + " MB";
-}
-
-function fileProblem(file) {
-    if (!ALLOWED_EXT.includes(fileExt(file.name))) {
-        return "This file type is not allowed. Please upload a PDF, DOC, DOCX, XLS, XLSX, JPG or PNG file.";
-    }
-    if (file.size > MAX_FILE_SIZE) {
-        return "The file is too large. Maximum size is 25 MB.";
-    }
-    if (file.size === 0) {
-        return "The selected file is empty.";
-    }
-    return "";
-}
-
-function updateFileChip() {
-    const file = fileInput.files[0];
-
-    if (!file) {
-        fileChip.hidden = true;
-        dropzone.hidden = false;
-        return;
-    }
-
-    document.getElementById("chipIcon").outerHTML =
-        fileIcon(file.name).replace('class="', 'id="chipIcon" class="chip-icon ');
-    document.getElementById("chipName").textContent = file.name;
-    document.getElementById("chipSize").textContent = formatSize(file.size) + " - ready to submit";
-
-    dropzone.hidden = true;
-    fileChip.hidden = false;
-}
-
-fileInput.addEventListener("change", function() {
-    const file = fileInput.files[0];
-    const problem = file ? fileProblem(file) : "";
-
-    if (problem) {
-        alert(problem);
-        fileInput.value = "";
-    }
-
-    updateFileChip();
-});
-
-["dragenter", "dragover"].forEach(type => {
-    dropzone.addEventListener(type, function(e) {
-        e.preventDefault();
-        dropzone.classList.add("dragover");
-    });
-});
-
-["dragleave", "drop"].forEach(type => {
-    dropzone.addEventListener(type, function(e) {
-        e.preventDefault();
-        dropzone.classList.remove("dragover");
-    });
-});
-
-dropzone.addEventListener("drop", function(e) {
-    const file = e.dataTransfer.files[0];
-    if (!file) return;
-
-    const problem = fileProblem(file);
-    if (problem) {
-        alert(problem);
-        return;
-    }
-
-    fileInput.files = e.dataTransfer.files;
-    updateFileChip();
-});
-
-document.getElementById("chipRemove").addEventListener("click", function() {
-    fileInput.value = "";
-    updateFileChip();
-});
 
 /* ===== FILE SUBMISSION =====
    Demo: saved files are kept in this browser (localStorage) until the database is connected. */
@@ -1222,8 +1134,9 @@ function renderSubmissions() {
             <td>${escapeHTML(f.fileNo)}</td>
             <td>${escapeHTML(f.start)}</td>
             <td>${escapeHTML(f.end)}</td>
-            <td>${escapeHTML(f.pages)}</td>
-            <td>${f.fileName ? `<span class="attach-cell">${fileIcon(f.fileName)}${escapeHTML(f.fileName)}</span>` : "-"}</td>
+            <td>${escapeHTML(f.front ?? "-")}</td>
+            <td>${escapeHTML(f.back ?? "-")}</td>
+            <td>${escapeHTML(f.pages ?? "-")}</td>
             <td><span class="status-badge"><i class="fa-regular fa-clock"></i> Sent to Subject Officer</span></td>
             <td><button type="button" class="row-delete-btn" data-del="${i}" aria-label="Delete ${escapeHTML(f.name)}"><i class="fa-solid fa-trash-can"></i> Delete</button></td>
         </tr>`).join("");
@@ -1241,7 +1154,7 @@ document.getElementById("submittedBody").addEventListener("click", function(e) {
     const item = submissions[index];
     if (!item) return;
 
-    if (!confirm('Delete "' + item.name + '" and its uploaded document? This cannot be undone.')) return;
+    if (!confirm('Delete "' + item.name + '" and its details? This cannot be undone.')) return;
 
     submissions.splice(index, 1);
     saveSubmissions();
@@ -1254,7 +1167,9 @@ document.getElementById("submitForm").addEventListener("submit", function(e) {
     const startDate = document.getElementById("startDate").value;
     const endDate = document.getElementById("endDate").value;
     const submission = document.getElementById("submissionDate").value;
-    const pageCount = Number(document.getElementById("pageCount").value);
+    const frontPage = Number(document.getElementById("frontPage").value);
+    const backPage = Number(document.getElementById("backPage").value);
+    const totalPages = Number(document.getElementById("totalPages").value);
 
     if (endDate < startDate) {
         alert("File End Date must be on or after File Start Date.");
@@ -1266,15 +1181,18 @@ document.getElementById("submitForm").addEventListener("submit", function(e) {
         return;
     }
 
-    if (!Number.isInteger(pageCount) || pageCount < 1) {
-        alert("Please enter a valid number of pages.");
+    if (!Number.isInteger(frontPage) || frontPage < 0) {
+        alert("Please enter a valid number of pages for the Right Side (0 or more).");
         return;
     }
 
-    const uploaded = fileInput.files[0];
-    if (!uploaded) {
-        alert("Please upload the file you want to submit.");
-        dropzone.scrollIntoView({behavior: "smooth", block: "center"});
+    if (!Number.isInteger(backPage) || backPage < 0) {
+        alert("Please enter a valid number of pages for the Left Side (0 or more).");
+        return;
+    }
+
+    if (!Number.isInteger(totalPages) || totalPages < 1) {
+        alert("Please enter a valid Total Pages number (1 or more).");
         return;
     }
 
@@ -1286,9 +1204,9 @@ document.getElementById("submitForm").addEventListener("submit", function(e) {
         name: document.getElementById("newFileName").value.trim(),
         start: startDate,
         end: endDate,
-        pages: pageCount,
-        fileName: uploaded.name,
-        fileSize: uploaded.size
+        front: frontPage,
+        back: backPage,
+        pages: totalPages
     });
 
     saveSubmissions();
@@ -1302,7 +1220,6 @@ document.getElementById("submitForm").addEventListener("submit", function(e) {
 
 document.getElementById("submitForm").addEventListener("reset", function() {
     setTimeout(() => {
-        updateFileChip();
         document.getElementById("submissionDate").value = localToday;
     }, 0);
 });
