@@ -474,7 +474,6 @@ td:first-child{color:var(--navy-2)}
 
         <nav class="sidebar-menu">
             <a href="user_dashboard.php" class="nav-link active"><i class="fa-solid fa-house"></i><span>Dashboard</span></a>
-            <a href="user_profile.php" class="nav-link"><i class="fa-solid fa-circle-user"></i><span>My Profile</span></a>
             <a href="change_password.php" class="nav-link"><i class="fa-solid fa-shield-halved"></i><span>Change Password</span></a>
             <a href="index.php" class="nav-link logout-link" onclick="return confirm('Are you sure you want to logout?')"><i class="fa-solid fa-right-from-bracket"></i><span>Logout</span></a>
         </nav>
@@ -517,7 +516,6 @@ td:first-child{color:var(--navy-2)}
                 <div class="profile-popover" id="profilePopover" hidden>
                     <strong>P.G. Minasha Shenali</strong>
                     <p><i class="fa-solid fa-user-tag"></i> User Account</p>
-                    <a href="user_profile.php"><i class="fa-solid fa-user-pen"></i> View My Profile</a>
                     <a href="change_password.php"><i class="fa-solid fa-lock"></i> Change Password</a>
                     <a href="index.php" onclick="return confirm('Are you sure you want to logout?')"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
                 </div>
