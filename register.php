@@ -19,10 +19,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!in_array($f['role'], ['user', 'admin', 'subject'], true)) $errors[] = 'Please select a user type.';
     if (!in_array($f['department'], DEPARTMENTS, true))            $errors[] = 'Please select a department.';
     if (!preg_match('/^[A-Za-z0-9_.]{4,30}$/', $f['username']))    $errors[] = 'Username must be 4-30 characters (letters, numbers, _ or .).';
-    if (strlen($password) < 6)                        $errors[] = 'Password must contain at least 6 characters.';
+    $passwordTooShort = strlen($password) < 6;   /* shown in red under the password box */
     if ($password !== $confirm)                       $errors[] = 'Password and Confirm Password do not match.';
 
-    if (!$errors) {
+    if (!$errors && !$passwordTooShort) {
         $chk = $pdo->prepare('SELECT username, nic, email FROM users WHERE username = ? OR nic = ? OR email = ?');
         $chk->execute([$f['username'], $f['nic'], $f['email']]);
         foreach ($chk->fetchAll() as $row) {
@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors = array_values(array_unique($errors));
     }
 
-    if (!$errors) {
+    if (!$errors && !$passwordTooShort) {
         $ins = $pdo->prepare(
             'INSERT INTO users (full_name, nic, email, designation, subject_number, role, department, username, password_hash, status)
              VALUES (?,?,?,?,?,?,?,?,?, "pending")'
@@ -43,6 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         header('Location: index.php?registered=1'); exit;
     }
 }
+$passwordTooShort = $passwordTooShort ?? false;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -131,11 +132,18 @@ body{width:100%;height:100vh;font-family:"Poppins",sans-serif;overflow:hidden;ba
 #department,#department option{font-family:"Noto Sans Sinhala","Poppins",sans-serif;font-size:13.5px;font-weight:500}
 #department option{color:#173f64;padding:8px}
 .input-box:focus-within{background:#fff;border-color:#2a6a9f;box-shadow:0 0 0 3px rgba(32,103,153,.10)}
-.two-column-row{width:100%;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.two-column-row{width:100%;display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:start}
 .password-box{position:relative}
 .password-box input{padding-right:34px}
 .toggle-password{position:absolute;right:11px;width:auto!important;color:#507092!important;cursor:pointer;font-size:13px!important;transition:.2s}
 .toggle-password:hover{color:#315f8c!important}
+
+/* Inline field error (red message under the box) */
+.field-error{display:block;margin-top:4px;font-size:11px;line-height:1.4;font-weight:500;color:#d32f2f}
+.field-error[hidden]{display:none}
+.field-error i{margin-right:3px;font-size:10.5px}
+.input-box.invalid{border-color:#e05a4f;background:#fff8f7}
+.input-box.invalid:focus-within{border-color:#d32f2f;box-shadow:0 0 0 3px rgba(211,47,47,.12)}
 
 /* BUTTONS */
 .button-area{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:clamp(14px,2.4vh,24px)}
@@ -299,11 +307,12 @@ body{width:100%;height:100vh;font-family:"Poppins",sans-serif;overflow:hidden;ba
                 <div class="two-column-row">
                     <div class="input-group">
                         <label for="password">Password</label>
-                        <div class="input-box password-box"><i class="fa-solid fa-lock"></i>
-                            <input type="password" id="password" name="password" placeholder="Enter password" autocomplete="new-password" required>
+                        <div class="input-box password-box<?= $passwordTooShort ? ' invalid' : '' ?>" id="passwordBox"><i class="fa-solid fa-lock"></i>
+                            <input type="password" id="password" name="password" placeholder="Enter password" autocomplete="new-password" aria-describedby="passwordError" required>
                             <i class="fa-solid fa-eye-slash toggle-password" role="button" tabindex="0" aria-label="Show password"
                                onclick="togglePassword('password', this)"
                                onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();togglePassword('password',this)}"></i></div>
+                        <small class="field-error" id="passwordError" role="alert"<?= $passwordTooShort ? '' : ' hidden' ?>><i class="fa-solid fa-circle-exclamation"></i>Password must contain at least 6 characters.</small>
                     </div>
                     <div class="input-group">
                         <label for="confirmPassword">Confirm Password</label>
@@ -351,10 +360,32 @@ function togglePassword(inputId, icon) {
         icon.setAttribute("aria-label", "Show password");
     }
 }
+
+/* Password length check: red message right under the password box */
+const pwInput = document.getElementById("password");
+const pwBox   = document.getElementById("passwordBox");
+const pwError = document.getElementById("passwordError");
+
+function showPwError(show) {
+    pwError.hidden = !show;
+    pwBox.classList.toggle("invalid", show);
+}
+
+/* While typing: show the message only when something is typed and it is under 6 characters */
+pwInput.addEventListener("input", function () {
+    showPwError(pwInput.value.length > 0 && pwInput.value.length < 6);
+});
+
 document.getElementById("registerForm").addEventListener("submit", function (e) {
-    const p = document.getElementById("password").value, c = document.getElementById("confirmPassword").value;
-    if (p !== c) { e.preventDefault(); alert("Password and Confirm Password do not match."); return; }
-    if (p.length < 6) { e.preventDefault(); alert("Password must contain at least 6 characters."); }
+    const p = pwInput.value, c = document.getElementById("confirmPassword").value;
+
+    if (p.length < 6) {
+        e.preventDefault();
+        showPwError(true);
+        pwInput.focus();
+        return;
+    }
+    if (p !== c) { e.preventDefault(); alert("Password and Confirm Password do not match."); }
 });
 </script>
 </body>
