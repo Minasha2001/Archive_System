@@ -1186,6 +1186,7 @@ document.getElementById("submittedBody").addEventListener("click", function(e) {
     if (!item) return;
 
     if (!confirm('Delete "' + item.name + '" and its details? This cannot be undone.')) return;
+    
 
     submissions.splice(index, 1);
     saveSubmissions();
