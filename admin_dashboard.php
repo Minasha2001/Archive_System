@@ -1,5 +1,34 @@
+
 <?php
 require_once __DIR__ . '/auth.php';
+require_page_login(['admin']);
+
+/* Get the logged-in administrator's name */
+$adminName = 'System Administrator';
+
+if (!empty($_SESSION['full_name'])) {
+    $adminName = $_SESSION['full_name'];
+} elseif (!empty($_SESSION['name'])) {
+    $adminName = $_SESSION['name'];
+} elseif (!empty($_SESSION['user']) && is_array($_SESSION['user'])) {
+    if (!empty($_SESSION['user']['full_name'])) {
+        $adminName = $_SESSION['user']['full_name'];
+    } elseif (!empty($_SESSION['user']['name'])) {
+        $adminName = $_SESSION['user']['name'];
+    } elseif (!empty($_SESSION['user']['username'])) {
+        $adminName = $_SESSION['user']['username'];
+    }
+} elseif (!empty($_SESSION['username'])) {
+    $adminName = $_SESSION['username'];
+}
+
+$adminName = htmlspecialchars(
+    (string)$adminName,
+    ENT_QUOTES,
+    'UTF-8'
+);
+?>
+ire_once __DIR__ . '/auth.php';
 require_page_login(['admin']);
 ?>
 <!DOCTYPE html>
@@ -384,16 +413,17 @@ td:first-child{color:var(--navy-2);font-weight:700}
 
             <div class="profile">
                 <div class="profile-avatar"><i class="fa-solid fa-user-shield"></i></div>
+               
                 <div class="profile-details">
-                    <strong>System Administrator</strong>
-                    <span>Admin Account</span>
+                <strong><?= $adminName ?></strong>
+                <span>Admin Account</span>
                 </div>
+
                 <button class="profile-toggle" id="profileToggle" type="button" aria-label="Profile menu" aria-expanded="false">
                     <i class="fa-solid fa-chevron-down"></i>
-                </button>
-
-                <div class="profile-popover" id="profilePopover" hidden>
-                    <strong>System Administrator</strong>
+                </button>    
+                    <div class="profile-popover" id="profilePopover" hidden>
+                        <strong><?= $adminName ?></strong>
                     <p><i class="fa-solid fa-user-tag"></i> Admin Account</p>
                     <a href="admin_change_password.php"><i class="fa-solid fa-lock"></i> Change Password</a>
                     <a href="index.php" onclick="return confirm('Are you sure you want to logout?')"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>

@@ -1,6 +1,27 @@
 <?php
+// Check that the user is logged in before showing the dashboard.
 require_once __DIR__ . '/auth.php';
 require_page_login();
+
+// Read the logged-in user's name from the session.
+$sessionUser = $_SESSION['user'] ?? [];
+if (!is_array($sessionUser)) {
+    $sessionUser = [];
+}
+
+$userName = $_SESSION['full_name']
+    ?? $_SESSION['name']
+    ?? $sessionUser['full_name']
+    ?? $sessionUser['name']
+    ?? $_SESSION['username']
+    ?? $sessionUser['username']
+    ?? 'User';
+
+$userName = trim((string)$userName);
+if ($userName === '') {
+    $userName = 'User';
+}
+$userName = htmlspecialchars($userName, ENT_QUOTES, 'UTF-8');
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -454,10 +475,6 @@ td:first-child{color:var(--navy-2)}
 .page-numbers .hint{display:block;margin-top:5px;font-size:var(--fs-xs);color:var(--muted)}
 #totalPages{font-weight:700;color:var(--navy-2)}
 @media (max-width:700px){.page-numbers{padding:14px 12px}.page-numbers-grid{grid-template-columns:1fr;gap:13px}}
-
-/* ===== Sync badge (shown only when the database is not connected) ===== */
-.sync-badge{position:fixed;left:16px;bottom:16px;z-index:70;display:flex;align-items:center;gap:8px;max-width:calc(100vw - 32px);padding:8px 14px;border-radius:20px;background:#fff7e6;border:1px solid #f0dcb0;color:#8a6420;font-size:11px;font-weight:600;box-shadow:0 8px 22px rgba(16,37,71,.15)}
-@media print{.sync-badge{display:none!important}}
 </style>
 </head>
 
@@ -522,7 +539,7 @@ td:first-child{color:var(--navy-2)}
             <div class="profile">
                 <div class="profile-avatar"><i class="fa-solid fa-user"></i></div>
                 <div class="profile-details">
-                    <strong>P.G. Minasha Shenali</strong>
+                    <strong><?= $userName ?></strong>
                     <span>User Account</span>
                 </div>
                 <button class="profile-toggle" id="profileToggle" type="button" aria-label="Profile menu" aria-expanded="false">
@@ -530,7 +547,7 @@ td:first-child{color:var(--navy-2)}
                 </button>
 
                 <div class="profile-popover" id="profilePopover" hidden>
-                    <strong>P.G. Minasha Shenali</strong>
+                    <strong><?= $userName ?></strong>
                     <p><i class="fa-solid fa-user-tag"></i> User Account</p>
                     <a href="change_password.php"><i class="fa-solid fa-lock"></i> Change Password</a>
                     <a href="index.php" onclick="return confirm('Are you sure you want to logout?')"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
@@ -552,7 +569,7 @@ td:first-child{color:var(--navy-2)}
                     <div class="stat-card">
                         <div class="stat-icon"><i class="fa-solid fa-box-archive"></i></div>
                         <div class="stat-info">
-                            <h2 id="totalFiles">0</h2>
+                            <h2 id="totalFiles">12</h2>
                             <span>Available Archive Files</span>
                             <small>Files added to the archive</small>
                         </div>
@@ -561,7 +578,7 @@ td:first-child{color:var(--navy-2)}
                     <div class="stat-card">
                         <div class="stat-icon"><i class="fa-solid fa-building-columns"></i></div>
                         <div class="stat-info">
-                            <h2 id="totalDepartments">0</h2>
+                            <h2 id="totalDepartments">3</h2>
                             <span>Departments</span>
                             <small>Departments represented</small>
                         </div>
@@ -570,7 +587,7 @@ td:first-child{color:var(--navy-2)}
                     <div class="stat-card">
                         <div class="stat-icon"><i class="fa-solid fa-magnifying-glass"></i></div>
                         <div class="stat-info">
-                            <h2 id="matchingFiles">0</h2>
+                            <h2 id="matchingFiles">12</h2>
                             <span>Matching Results</span>
                             <small>Files matching your search</small>
                         </div>
@@ -658,7 +675,7 @@ td:first-child{color:var(--navy-2)}
                 <div style="margin-bottom:14px">
                     <span class="count-chip">
                         <i class="fa-solid fa-folder"></i>
-                        <span id="resultCount">0 files found</span>
+                        <span id="resultCount">12 files found</span>
                     </span>
                 </div>
 
@@ -855,8 +872,6 @@ td:first-child{color:var(--navy-2)}
     </main>
 </div>
 
-<div class="sync-badge" id="syncBadge" hidden><i class="fa-solid fa-plug-circle-exclamation"></i><span>Demo mode: database not connected. Changes are shared only inside this browser.</span></div>
-
 <!-- DOCUMENT VIEWER -->
 <div class="doc-modal" id="docViewer" hidden>
     <div class="doc-dialog" role="dialog" aria-modal="true" aria-labelledby="docTitle">
@@ -881,16 +896,33 @@ td:first-child{color:var(--navy-2)}
 </div>
 
 <script>
-/* ===== ARCHIVE DATA (loaded from the database through api.php) =====
-   Files the admin deletes are removed automatically; a deleted user is logged out. */
-const API = "api.php";
+/* ===== SAMPLE ARCHIVE DATA (demonstration only) ===== */
+const archiveFiles = [
+    {name:"Finance Report 2026",department:"Accounts",subject:"SUB-001",fileNo:"FN-101",archive:"ARC-001",start:"2026-01-02",end:"2026-06-10",pages:120,date:"2026-06-15"},
+    {name:"Annual Budget Plan",department:"Institutions",subject:"SUB-002",fileNo:"FN-102",archive:"ARC-002",start:"2026-01-05",end:"2026-06-05",pages:85,date:"2026-06-10"},
+    {name:"Staff Details",department:"Institutions",subject:"SUB-015",fileNo:"FN-115",archive:"ARC-015",start:"2025-01-03",end:"2025-11-28",pages:64,date:"2025-12-01"},
+    {name:"Circular No. 07/2026",department:"Councils",subject:"SUB-021",fileNo:"FN-121",archive:"ARC-021",start:"2026-03-01",end:"2026-05-15",pages:12,date:"2026-05-20"},
+    {name:"IT System Proposal",department:"Institutions",subject:"SUB-030",fileNo:"FN-130",archive:"ARC-030",start:"2026-02-10",end:"2026-04-12",pages:40,date:"2026-04-18"},
+    {name:"Project Report",department:"Councils",subject:"SUB-045",fileNo:"FN-145",archive:"ARC-045",start:"2025-03-01",end:"2025-11-20",pages:96,date:"2025-11-25"},
+    {name:"Monthly Progress",department:"Councils",subject:"SUB-046",fileNo:"FN-146",archive:"ARC-046",start:"2025-01-01",end:"2025-11-15",pages:58,date:"2025-11-20"},
+    {name:"Meeting Minutes",department:"Accounts",subject:"SUB-058",fileNo:"FN-158",archive:"ARC-058",start:"2026-01-08",end:"2026-03-10",pages:30,date:"2026-03-15"},
+    {name:"Finance Circular",department:"Accounts",subject:"SUB-060",fileNo:"FN-160",archive:"ARC-060",start:"2026-01-15",end:"2026-02-08",pages:9,date:"2026-02-12"},
+    {name:"Council Development Plan",department:"Councils",subject:"SUB-065",fileNo:"FN-165",archive:"ARC-065",start:"2025-02-01",end:"2025-10-05",pages:150,date:"2025-10-11"},
+    {name:"Employee Records",department:"Institutions",subject:"SUB-070",fileNo:"FN-170",archive:"ARC-070",start:"2025-12-01",end:"2026-01-12",pages:210,date:"2026-01-18"},
+    {name:"Annual Accounts",department:"Accounts",subject:"SUB-080",fileNo:"FN-180",archive:"ARC-080",start:"2025-01-01",end:"2025-09-12",pages:175,date:"2025-09-20"}
+];
+/* Document path for each archive file.
+   Demo: uploads/<ArchiveNo>.pdf. Replace with the real stored path from the database (e.g. file.fileUrl from PHP). */
+archiveFiles.forEach(f => { f.fileUrl = "uploads/" + f.archive + ".pdf"; });
+
 const deptLabels = {
     Institutions:"ආයතන(Institutions)",
     Councils:"සභා(Councils)",
     Accounts:"ගිණුම්(Accounts)"
 };
-let archiveFiles = [];
-let filteredFiles = [];
+let activeFilters = [];
+
+let filteredFiles = [...archiveFiles];
 
 const resultsBody = document.getElementById("resultsBody");
 const resultCount = document.getElementById("resultCount");
@@ -909,97 +941,27 @@ document.getElementById("submissionDate").value = localToday;
 
 /* ===== HELPERS ===== */
 function escapeHTML(value) {
-    return String(value ?? "").replace(/[&<>"']/g, ch => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[ch]));
+    return String(value).replace(/[&<>"']/g, ch => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[ch]));
 }
 
 function deptPill(dep) {
     return `<span class="dept-pill dept-${escapeHTML(dep)}">${escapeHTML(deptLabels[dep] || dep)}</span>`;
 }
 
-/* ===== LOAD FROM DATABASE (or demo storage) + AUTO REFRESH ===== */
-const LS_DELETED = "archiveDeletedFiles", LS_USERS = "archiveUsers", LS_DELUSERS = "archiveDeletedUsers", LS_PING = "archiveSyncPing";
-function lsLoad(key, fallback) {
-    try { const v = JSON.parse(localStorage.getItem(key)); return Array.isArray(v) ? v : fallback; }
-    catch (err) { return fallback; }
-}
-function lsSave(key, value) {
-    try { localStorage.setItem(key, JSON.stringify(value)); } catch (err) { /* storage unavailable */ }
-}
-// Tells every other open dashboard in this browser to refresh right now
-function notifyOthers() {
-    try { localStorage.setItem(LS_PING, String(Date.now())); } catch (err) { /* ignore */ }
-}
-function setBadge(show) { document.getElementById("syncBadge").hidden = !show; }
-
-/* Demo mode only: username of the person using this dashboard (replace when the database is connected) */
-const DEMO_USERNAME = "minasha";
-const demoFiles = [
-    {name:"Finance Report 2026",department:"Accounts",subject:"SUB-001",fileNo:"FN-101",archive:"ARC-001",start:"2026-01-02",end:"2026-06-10",pages:120,date:"2026-06-15"},
-    {name:"Annual Budget Plan",department:"Institutions",subject:"SUB-002",fileNo:"FN-102",archive:"ARC-002",start:"2026-01-05",end:"2026-06-05",pages:85,date:"2026-06-10"},
-    {name:"Staff Details",department:"Institutions",subject:"SUB-015",fileNo:"FN-115",archive:"ARC-015",start:"2025-01-03",end:"2025-11-28",pages:64,date:"2025-12-01"},
-    {name:"Circular No. 07/2026",department:"Councils",subject:"SUB-021",fileNo:"FN-121",archive:"ARC-021",start:"2026-03-01",end:"2026-05-15",pages:12,date:"2026-05-20"},
-    {name:"IT System Proposal",department:"Institutions",subject:"SUB-030",fileNo:"FN-130",archive:"ARC-030",start:"2026-02-10",end:"2026-04-12",pages:40,date:"2026-04-18"},
-    {name:"Project Report",department:"Councils",subject:"SUB-045",fileNo:"FN-145",archive:"ARC-045",start:"2025-03-01",end:"2025-11-20",pages:96,date:"2025-11-25"},
-    {name:"Monthly Progress",department:"Councils",subject:"SUB-046",fileNo:"FN-146",archive:"ARC-046",start:"2025-01-01",end:"2025-11-15",pages:58,date:"2025-11-20"},
-    {name:"Meeting Minutes",department:"Accounts",subject:"SUB-058",fileNo:"FN-158",archive:"ARC-058",start:"2026-01-08",end:"2026-03-10",pages:30,date:"2026-03-15"},
-    {name:"Finance Circular",department:"Accounts",subject:"SUB-060",fileNo:"FN-160",archive:"ARC-060",start:"2026-01-15",end:"2026-02-08",pages:9,date:"2026-02-12"},
-    {name:"Council Development Plan",department:"Councils",subject:"SUB-065",fileNo:"FN-165",archive:"ARC-065",start:"2025-02-01",end:"2025-10-05",pages:150,date:"2025-10-11"},
-    {name:"Employee Records",department:"Institutions",subject:"SUB-070",fileNo:"FN-170",archive:"ARC-070",start:"2025-12-01",end:"2026-01-12",pages:210,date:"2026-01-18"},
-    {name:"Annual Accounts",department:"Accounts",subject:"SUB-080",fileNo:"FN-180",archive:"ARC-080",start:"2025-01-01",end:"2025-09-12",pages:175,date:"2025-09-20"}
-];
-demoFiles.forEach(f => { f.fileUrl = "uploads/" + f.archive + ".pdf"; });
-
-let demoMode = false;
-let kicked = false;
-
-function kickOut(message) {
-    if (kicked) return;
-    kicked = true;
-    alert(message || "Please log in again.");
-    window.location.href = "index.php";
-}
-
-async function loadFiles() {
-    if (kicked) return;
-
-    if (!demoMode) {
-        try {
-            const res = await fetch(API + "?action=state", {credentials: "same-origin"});
-            let data = null;
-            try { data = await res.json(); } catch (err) { /* not JSON */ }
-
-            // Not logged in, or the admin deleted this account -> back to login
-            if (data && data.logout) { kickOut(data.error); return; }
-
-            if (res.ok && data && Array.isArray(data.files)) {
-                archiveFiles = data.files.map(f => ({...f, pages: Number(f.pages)}));
-                setBadge(false);
-                runSearch();
-                return;
-            }
-            demoMode = true;          // api.php not available -> demo mode
-        } catch (err) {
-            demoMode = true;
-        }
-    }
-
-    // Demo mode: read what the admin saved in this browser
-    if (lsLoad(LS_DELUSERS, []).some(u => u.username === DEMO_USERNAME)) {
-        kickOut("Your account has been removed by the administrator.");
-        return;
-    }
-    const deleted = lsLoad(LS_DELETED, []);
-    archiveFiles = demoFiles.filter(f => !deleted.some(d => d.archive === f.archive));
-    setBadge(true);
-    runSearch();
-}
-
 /* ===== SEARCH ===== */
-function runSearch() {
+document.getElementById("searchForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+
     const name = document.getElementById("searchName").value.trim().toLowerCase();
     const department = document.getElementById("searchDepartment").value;
     const subject = document.getElementById("searchSubject").value.trim().toLowerCase();
     const archive = document.getElementById("searchArchive").value.trim().toLowerCase();
+
+    activeFilters = [];
+    if (name) activeFilters.push("File Name: " + document.getElementById("searchName").value.trim());
+    if (department) activeFilters.push("Department: " + department);
+    if (subject) activeFilters.push("Subject No: " + document.getElementById("searchSubject").value.trim());
+    if (archive) activeFilters.push("Archive No: " + document.getElementById("searchArchive").value.trim());
 
     filteredFiles = archiveFiles.filter(file =>
         (!name || file.name.toLowerCase().includes(name)) &&
@@ -1009,21 +971,22 @@ function runSearch() {
     );
 
     renderResults();
-}
-
-document.getElementById("searchForm").addEventListener("submit", function(e) {
-    e.preventDefault();
-    runSearch();
 });
 
 document.getElementById("clearSearch").addEventListener("click", function() {
     document.getElementById("searchForm").reset();
-    runSearch();
+    activeFilters = [];
+    filteredFiles = [...archiveFiles];
+    renderResults();
 });
 
 /* ===== RENDER RESULTS ===== */
 function renderResults() {
     const total = filteredFiles.length;
+    const start = 0;
+    const pageFiles = filteredFiles;
+
+    resultsScroll.scrollTop = 0;
 
     resultCount.textContent = `${total} file${total === 1 ? "" : "s"} found`;
     document.getElementById("matchingFiles").textContent = total;
@@ -1042,11 +1005,11 @@ function renderResults() {
     noResults.hidden = true;
     resultsTable.style.display = "table";
 
-    filteredFiles.forEach((file, index) => {
+    pageFiles.forEach((file, index) => {
         const row = document.createElement("tr");
 
         row.innerHTML = `
-            <td>${index + 1}</td>
+            <td>${start + index + 1}</td>
             <td><div class="file-name"><i class="fa-solid fa-file-lines file-icon doc"></i><span>${escapeHTML(file.name)}</span></div></td>
             <td>${deptPill(file.department)}</td>
             <td>${escapeHTML(file.subject)}</td>
@@ -1056,8 +1019,8 @@ function renderResults() {
             <td>${escapeHTML(file.end)}</td>
             <td>${escapeHTML(file.pages)}</td>
             <td>${escapeHTML(file.date)}</td>
-            <td><button type="button" class="row-view-btn" data-view="${index}" aria-label="View ${escapeHTML(file.name)}"><i class="fa-solid fa-eye"></i> View</button></td>
-            <td><button type="button" class="row-print-btn" data-i="${index}" aria-label="Print ${escapeHTML(file.name)}"><i class="fa-solid fa-print"></i> Print</button></td>
+            <td><button type="button" class="row-view-btn" data-view="${start + index}" aria-label="View ${escapeHTML(file.name)}"><i class="fa-solid fa-eye"></i> View</button></td>
+            <td><button type="button" class="row-print-btn" data-i="${start + index}" aria-label="Print ${escapeHTML(file.name)}"><i class="fa-solid fa-print"></i> Print</button></td>
         `;
 
         resultsBody.appendChild(row);
@@ -1171,7 +1134,7 @@ function fileExt(name) {
 }
 
 /* ===== FILE SUBMISSION =====
-   Demo: saved files are kept in this browser (localStorage) until the submission table is connected to the database. */
+   Demo: saved files are kept in this browser (localStorage) until the database is connected. */
 const STORAGE_KEY = "archiveSubmissions";
 let submissions = [];
 
@@ -1363,18 +1326,9 @@ profileToggle.addEventListener("click", function(e) {
 profilePopover.addEventListener("click", e => e.stopPropagation());
 document.addEventListener("click", closeProfilePopover);
 
-/* ===== INITIAL DISPLAY + AUTO REFRESH ===== */
+/* ===== INITIAL DISPLAY ===== */
 renderResults();
 renderSubmissions();
-loadFiles();
-
-// 1) Instant: the admin changed something in another tab of this browser
-window.addEventListener("storage", e => {
-    if (e.key === null || [LS_PING, LS_DELETED, LS_DELUSERS].includes(e.key)) loadFiles();
-});
-// 2) Every 5 seconds from the database (admin on another computer), and when this tab is shown again
-setInterval(() => { if (!document.hidden) loadFiles(); }, 5000);
-document.addEventListener("visibilitychange", () => { if (!document.hidden) loadFiles(); });
 </script>
 
 </body>
