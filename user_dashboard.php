@@ -76,8 +76,11 @@ button{cursor:pointer}
 .topbar-left{display:flex;align-items:center;gap:14px;min-width:0}
 .menu-toggle{width:40px;height:40px;flex-shrink:0;display:grid;place-items:center;background:#fff;border:1px solid var(--line);border-radius:12px;color:var(--navy);font-size:14px;transition:.2s}
 .menu-toggle:hover{color:#fff;background:var(--navy)}
-.topbar-greeting strong{display:block;font-size:var(--fs-lg);font-weight:700}
-.topbar-greeting span{font-size:var(--fs-xs);color:var(--muted)}
+.topbar-title{display:flex;align-items:center;gap:12px;min-width:0}
+.title-icon{width:42px;height:42px;flex-shrink:0;display:grid;place-items:center;border-radius:13px;background:linear-gradient(135deg,var(--navy),var(--navy-2));color:var(--gold-2);font-size:17px;box-shadow:0 8px 18px rgba(13,37,71,.28),inset 0 1px 0 rgba(255,255,255,.18)}
+.title-text{min-width:0;padding-left:14px;border-left:2px solid var(--gold)}
+.title-text h1{font-size:21px;font-weight:800;line-height:1.2;letter-spacing:.2px;color:var(--navy)}
+.title-text>span{display:block;font-size:var(--fs-xs);color:var(--muted);margin-top:2px}
 .profile{display:flex;align-items:center;gap:10px;position:relative;flex-shrink:0;padding:5px 8px 5px 5px;background:#fff;border:1px solid var(--line);border-radius:40px}
 .profile-avatar{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;color:var(--navy);background:linear-gradient(135deg,var(--gold-2),var(--gold));font-size:14px}
 .profile-details strong{display:block;font-size:var(--fs-sm);font-weight:700;line-height:1.3}
@@ -197,8 +200,10 @@ td:first-child{color:#8a98b0;font-weight:700}
     .topbar{min-height:58px;padding:8px 12px}
     .topbar-left{gap:10px}
     .menu-toggle{width:36px;height:36px}
-    .topbar-greeting strong{font-size:var(--fs-sm)}
-    .topbar-greeting span{font-size:10px}
+    .title-icon{width:34px;height:34px;font-size:14px;border-radius:10px}
+    .title-text{padding-left:10px}
+    .title-text h1{font-size:16px}
+    .title-text>span{display:none}
     .profile{gap:6px}
     .profile-avatar{width:32px;height:32px}
     .profile-details strong{font-size:var(--fs-xs);max-width:90px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -497,9 +502,12 @@ td:first-child{color:var(--navy-2)}
                 <button class="menu-toggle" id="menuToggle" type="button" aria-label="Toggle menu" aria-expanded="true">
                     <i class="fa-solid fa-bars"></i>
                 </button>
-                <div class="topbar-greeting">
-                    <strong>Welcome to Archive System</strong>
-                    <span>Southern Provincial Council Secretariat</span>
+                <div class="topbar-title">
+                    <div class="title-icon"><i class="fa-solid fa-user"></i></div>
+                    <div class="title-text">
+                        <h1>User</h1>
+                        <span>Southern Provincial Council Secretariat</span>
+                    </div>
                 </div>
             </div>
 
