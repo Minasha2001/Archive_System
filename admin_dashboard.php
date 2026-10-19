@@ -91,7 +91,7 @@ button{cursor:pointer}
 .content{max-width:1560px;margin:0 auto;padding:24px 28px 30px}
 
 /* Hero */
-.hero{position:relative;overflow:hidden;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.5fr);gap:28px;align-items:center;padding:30px 32px;margin-bottom:24px;border-radius:22px;color:#fff;
+.hero{position:relative;overflow:hidden;display:grid;grid-template-columns:1fr;gap:18px;align-items:center;padding:22px 24px;margin-bottom:24px;border-radius:22px;color:#fff;
     background:linear-gradient(120deg,#0a1d3f 0%,#16386a 55%,#215596 100%);box-shadow:0 18px 40px rgba(13,37,71,.25)}
 .hero::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.045) 1px,transparent 1px);background-size:36px 36px;mask-image:linear-gradient(90deg,transparent 10%,#000 90%);-webkit-mask-image:linear-gradient(90deg,transparent 10%,#000 90%)}
 .hero::after{content:"";position:absolute;width:320px;height:320px;right:-110px;top:-160px;border-radius:50%;border:1px solid rgba(212,162,74,.4);box-shadow:0 0 0 40px rgba(212,162,74,.05)}
@@ -99,14 +99,14 @@ button{cursor:pointer}
 .hero-date{display:inline-flex;align-items:center;gap:8px;padding:5px 13px;border-radius:20px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.14);font-size:var(--fs-xs);color:#e0e9f8}
 .hero h1{font-size:30px;font-weight:800;letter-spacing:-.4px;line-height:1.3;margin:14px 0 4px;background:linear-gradient(90deg,#fff,var(--gold-2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
 .hero p{font-size:var(--fs-md);color:#bccbe3;max-width:420px}
-.hero-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
-.stat-card{position:relative;overflow:hidden;padding:18px;border-radius:16px;background:linear-gradient(160deg,rgba(255,255,255,.14),rgba(255,255,255,.05));border:1px solid rgba(255,255,255,.15);backdrop-filter:blur(6px);transition:background .2s,transform .2s}
+.hero-stats{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
+.stat-card{position:relative;overflow:hidden;padding:12px;border-radius:16px;background:linear-gradient(160deg,rgba(255,255,255,.14),rgba(255,255,255,.05));border:1px solid rgba(255,255,255,.15);backdrop-filter:blur(6px);transition:background .2s,transform .2s}
 .stat-card::before{content:"";position:absolute;left:0;top:0;right:0;height:3px;background:linear-gradient(90deg,var(--gold),var(--gold-2),transparent)}
 .stat-card:hover{background:rgba(255,255,255,.15);transform:translateY(-3px)}
-.stat-icon{width:38px;height:38px;display:grid;place-items:center;border-radius:11px;background:linear-gradient(135deg,var(--gold-2),var(--gold));color:#1b1203;font-size:15px;margin-bottom:12px;box-shadow:0 8px 18px rgba(212,162,74,.35)}
-.stat-info h2{font-size:28px;line-height:1.1;font-weight:800;letter-spacing:-.5px}
-.stat-info span{display:block;font-size:var(--fs-sm);font-weight:600;color:#e4ecf8;margin-top:6px}
-.stat-info small{display:block;font-size:var(--fs-xs);color:#9fb3d3;line-height:1.4;margin-top:2px}
+.stat-icon{width:30px;height:30px;display:grid;place-items:center;border-radius:9px;background:linear-gradient(135deg,var(--gold-2),var(--gold));color:#1b1203;font-size:12px;margin-bottom:8px;box-shadow:0 8px 18px rgba(212,162,74,.35)}
+.stat-info h2{font-size:22px;line-height:1.1;font-weight:800;letter-spacing:-.4px}
+.stat-info span{display:block;font-size:11px;font-weight:600;color:#e4ecf8;margin-top:5px;line-height:1.4}
+.stat-info small{display:block;font-size:10px;color:#9fb3d3;line-height:1.35;margin-top:3px}
 
 /* Cards */
 .card{position:relative;overflow:hidden;padding:24px 26px;background:var(--card);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);margin-bottom:24px}
@@ -250,7 +250,9 @@ td:first-child{color:var(--navy-2);font-weight:700}
     .sidebar{width:248px}
     .content{padding:20px 18px 28px}
     .topbar{padding:10px 18px}
-    .hero{grid-template-columns:1fr;gap:20px;padding:24px}
+    .hero{grid-template-columns:1fr;gap:16px;padding:20px}
+    .hero-stats{grid-template-columns:repeat(3,minmax(0,1fr))}
+    .stat-card{padding:12px}
     .form-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
 .sidebar-overlay{display:none}
@@ -270,11 +272,12 @@ td:first-child{color:var(--navy-2);font-weight:700}
     .content{padding:16px 12px 24px}
     .hero{padding:20px 16px;border-radius:16px;margin-bottom:16px}
     .hero h1{font-size:23px}
-    .hero-stats{grid-template-columns:1fr;gap:10px}
-    .stat-card{display:flex;align-items:center;gap:12px;padding:12px 14px}
-    .stat-icon{margin-bottom:0}
-    .stat-info h2{font-size:20px}
-    .stat-info span{margin-top:0}
+    .hero-stats{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+    .stat-card{display:flex;align-items:center;gap:10px;padding:10px}
+    .stat-icon{width:28px;height:28px;flex-shrink:0;margin-bottom:0}
+    .stat-info h2{font-size:18px}
+    .stat-info span{font-size:10px;margin-top:2px}
+    .stat-info small{font-size:9px}
     .card{padding:18px 13px;border-radius:16px;margin-bottom:16px}
     .card-heading{margin-bottom:16px;padding-bottom:12px}
     .card-heading h2{font-size:var(--fs-lg)}
@@ -292,6 +295,9 @@ td:first-child{color:var(--navy-2);font-weight:700}
     .modal.center-sm{padding:12px}
     .dialog-foot .btn{flex:1;padding:0 10px}
     .footer{justify-content:center;text-align:center;font-size:10px}
+}
+@media (max-width:380px){
+    .hero-stats{grid-template-columns:1fr}
 }
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 
@@ -396,14 +402,31 @@ td:first-child{color:var(--navy-2);font-weight:700}
                     <h1>Archive Administration</h1>
                     <p>Search archive records, remove files with a recorded reason, and manage registered users.</p>
                 </div>
-
                 <div class="hero-stats">
                     <div class="stat-card">
                         <div class="stat-icon"><i class="fa-solid fa-box-archive"></i></div>
                         <div class="stat-info">
-                            <h2 id="statFiles">0</h2>
-                            <span>Active Archive Files</span>
-                            <small>Files currently in the archive</small>
+                            <h2 id="totalFiles">12</h2>
+                            <span>Available Archive Files</span>
+                            <small>Files added to the archive</small>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fa-solid fa-building-columns"></i></div>
+                        <div class="stat-info">
+                            <h2 id="totalDepartments">3</h2>
+                            <span>Departments</span>
+                            <small>Departments represented</small>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fa-solid fa-magnifying-glass"></i></div>
+                        <div class="stat-info">
+                            <h2 id="matchingFiles">12</h2>
+                            <span>Matching Results</span>
+                            <small>Files matching your search</small>
                         </div>
                     </div>
 
@@ -803,7 +826,6 @@ function toast(message, isError) {
     clearTimeout(toast.timer);
     toast.timer = setTimeout(() => { t.hidden = true; }, 4000);
 }
-
 const now = new Date();
 const localToday = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
 $("currentDate").textContent = now.toLocaleDateString("en-GB", {day:"2-digit", month:"short", year:"numeric"});
