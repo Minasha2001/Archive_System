@@ -337,7 +337,7 @@ td:first-child{color:var(--navy-2);font-weight:700}
             <button type="button" class="nav-link" data-section="deleted"><i class="fa-solid fa-trash-can-arrow-up"></i><span>Deleted Files</span></button>
             <button type="button" class="nav-link" data-section="users"><i class="fa-solid fa-users"></i><span>Manage Users</span></button>
             <button type="button" class="nav-link" data-section="delusers"><i class="fa-solid fa-user-slash"></i><span>Deleted Users</span></button>
-            <a href="change_password.php" class="nav-link"><i class="fa-solid fa-shield-halved"></i><span>Change Password</span></a>
+            <a href="admin_change_password.php" class="nav-link"><i class="fa-solid fa-key"></i><span>Change Password</span></a>
             <a href="index.php" class="nav-link logout-link" onclick="return confirm('Are you sure you want to logout?')"><i class="fa-solid fa-right-from-bracket"></i><span>Logout</span></a>
         </nav>
 
@@ -381,7 +381,7 @@ td:first-child{color:var(--navy-2);font-weight:700}
                 <div class="profile-popover" id="profilePopover" hidden>
                     <strong>System Administrator</strong>
                     <p><i class="fa-solid fa-user-tag"></i> Admin Account</p>
-                    <a href="change_password.php"><i class="fa-solid fa-lock"></i> Change Password</a>
+                    <a href="admin_change_password.php"><i class="fa-solid fa-lock"></i> Change Password</a>
                     <a href="index.php" onclick="return confirm('Are you sure you want to logout?')"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
                 </div>
             </div>

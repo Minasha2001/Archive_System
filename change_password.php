@@ -641,8 +641,8 @@ td:first-child{color:var(--navy-2)}
             <section class="hero hero-slim">
                 <div>
                     <span class="hero-date"><i class="fa-solid fa-shield-halved"></i> Account Security</span>
-                    <h1>Change Password</h1>
-                    <p>Update your account password to keep your archive account secure.</p>
+                    <h1>User Change Password</h1>
+                    <p>Update your user account password to keep your archive account secure.</p>
                 </div>
             </section>
 
