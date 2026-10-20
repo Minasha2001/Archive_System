@@ -1,4 +1,3 @@
-
 <?php
 require_once __DIR__ . '/auth.php';
 require_page_login(['admin']);
@@ -27,9 +26,6 @@ $adminName = htmlspecialchars(
     ENT_QUOTES,
     'UTF-8'
 );
-?>
-ire_once __DIR__ . '/auth.php';
-require_page_login(['admin']);
 ?>
 <!DOCTYPE html>
 <html lang="en">

@@ -1,3 +1,20 @@
+<?php
+require_once __DIR__ . '/auth.php';
+
+// Subject officer ta witharak
+require_page_login(['subject']);
+
+// Login karapu officer ge name eka database eken
+$officerName = 'Subject Officer';
+$uid = current_user_id();
+if ($uid) {
+    $st = $pdo->prepare('SELECT * FROM users WHERE id = ?');
+    $st->execute([$uid]);
+    if ($u = $st->fetch()) {
+        $officerName = $u['full_name'] ?? $u['name'] ?? $u['username'] ?? $officerName;
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -531,19 +548,6 @@ section[id]{scroll-margin-top:84px}
 @media (max-width:380px){
     .hero-stats,.hero-stats-6{grid-template-columns:1fr}
 }
-
-/* ===== Print results (button + print sheet) ===== */
-.results-heading{flex-wrap:wrap}
-.results-heading .card-heading{margin-bottom:0}
-@media print{
-    body{background:#fff}
-    .app,.doc-modal{display:none!important}
-    .print-only{display:block;padding:10px}
-    .print-only h2{font-size:16px;margin-bottom:2px}
-    .print-only p{font-size:11px;margin-bottom:6px;color:#333}
-    .print-only table{min-width:0;white-space:normal;font-size:10px}
-    .print-only th,.print-only td{border:1px solid #999;padding:5px 6px;color:#000;background:none}
-}
 </style>
 </head>
 
@@ -578,7 +582,7 @@ section[id]{scroll-margin-top:84px}
             <a href="#issueSection" class="nav-link"><i class="fa-solid fa-file-export"></i><span>Issue a File</span></a>
             <a href="#loansSection" class="nav-link"><i class="fa-solid fa-clipboard-list"></i><span>Issued Files List</span></a>
             <a href="change_password.php" class="nav-link"><i class="fa-solid fa-shield-halved"></i><span>Change Password</span></a>
-            <a href="index.php" class="nav-link logout-link" onclick="return confirm('Are you sure you want to logout?')"><i class="fa-solid fa-right-from-bracket"></i><span>Logout</span></a>
+            <a href="logout.php" class="nav-link logout-link" onclick="return confirm('Are you sure you want to logout?')"></a>
         </nav>
 
         <div class="sidebar-bottom">
@@ -609,22 +613,21 @@ section[id]{scroll-margin-top:84px}
                 </div>
             </div>
 
-            <div class="profile">
+                <div class="profile">
                 <div class="profile-avatar"><i class="fa-solid fa-user"></i></div>
                 <div class="profile-details">
-                    <strong>Subject Officer</strong>
-                    <span>Subject Officer Account</span>
-                </div>
+                <strong title="<?= htmlspecialchars($officerName, ENT_QUOTES, 'UTF-8') ?>"><?= htmlspecialchars($officerName, ENT_QUOTES, 'UTF-8') ?></strong>
+                <span>Subject Officer Account</span>
+                </div>  
                 <button class="profile-toggle" id="profileToggle" type="button" aria-label="Profile menu" aria-expanded="false">
                     <i class="fa-solid fa-chevron-down"></i>
                 </button>
 
-                <div class="profile-popover" id="profilePopover" hidden>
-                    <strong>Subject Officer</strong>
-                    <p><i class="fa-solid fa-user-tag"></i> Subject Officer Account</p>
-                    <a href="subject_profile.php"><i class="fa-solid fa-user-pen"></i> View My Profile</a>
-                    <a href="change_password.php"><i class="fa-solid fa-lock"></i> Change Password</a>
-                    <a href="index.php" onclick="return confirm('Are you sure you want to logout?')"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+               <div class="profile-popover" id="profilePopover" hidden>
+                <strong><?= htmlspecialchars($officerName, ENT_QUOTES, 'UTF-8') ?></strong>
+                <p><i class="fa-solid fa-user-tag"></i> Subject Officer Account</p>
+                <a href="change_password.php"><i class="fa-solid fa-lock"></i> Change Password</a>
+                <a href="logout.php" onclick="return confirm('Are you sure you want to logout?')"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
                 </div>
             </div>
         </header>
@@ -787,17 +790,14 @@ section[id]{scroll-margin-top:84px}
 
             <!-- ARCHIVE RESULTS -->
             <section class="card results-card" id="resultsSection">
-                <div class="results-heading">
-                    <div class="card-heading">
-                        <div class="card-heading-left">
-                            <div class="section-icon"><i class="fa-solid fa-table-list"></i></div>
-                            <div>
-                                <h2>Archive Search Results</h2>
-                                <p>All files added to the archive. You can print, edit the details or issue a file.</p>
-                            </div>
+                <div class="card-heading">
+                    <div class="card-heading-left">
+                        <div class="section-icon"><i class="fa-solid fa-table-list"></i></div>
+                        <div>
+                            <h2>Archive Search Results</h2>
+                            <p>All files added to the archive. You can edit the details or issue a file.</p>
                         </div>
                     </div>
-                    <button type="button" class="btn btn-outline" id="printAll"><i class="fa-solid fa-print"></i> Print Results</button>
                 </div>
 
                 <div style="margin-bottom:14px">
@@ -1033,16 +1033,6 @@ section[id]{scroll-margin-top:84px}
     </div>
 </div>
 
-<!-- PRINT AREA -->
-<div class="print-only">
-    <h2>දකුණු පළාත් සභා ලේකම් කාර්යාලය - <span id="printTitle">Archive Search Results</span></h2>
-    <p id="printInfo"></p>
-    <table>
-        <thead id="printHead"></thead>
-        <tbody id="printBody"></tbody>
-    </table>
-</div>
-
 <script>
 /* =====================================================================
    SUBJECT OFFICER DASHBOARD  (demonstration data)
@@ -1255,7 +1245,6 @@ function renderResults() {
             <td>${out ? '<span class="badge badge-out"><i class="fa-solid fa-file-export"></i> Issued</span>'
                       : '<span class="badge badge-in"><i class="fa-solid fa-box-archive"></i> In Archive</span>'}</td>
             <td><div class="action-cell">
-                <button type="button" class="row-print-btn" data-print="${escapeHTML(r.id)}"><i class="fa-solid fa-print"></i> Print</button>
                 <button type="button" class="row-edit-btn" data-edit="${escapeHTML(r.id)}"><i class="fa-solid fa-pen-to-square"></i> Edit</button>
                 <button type="button" class="row-print-btn" data-issue="${escapeHTML(r.id)}" ${out ? "disabled" : ""}><i class="fa-solid fa-file-export"></i> Issue</button>
             </div></td>
@@ -1493,13 +1482,6 @@ $("pendingBody").addEventListener("click", function(e) {
 });
 
 $("resultsBody").addEventListener("click", function(e) {
-    const prt = e.target.closest("[data-print]");
-    if (prt) {
-        const rec = recordById(prt.dataset.print);
-        if (rec) printFiles([rec], "Printed on " + printDate() + " | Archive No: " + rec.archive);
-        return;
-    }
-
     const edit = e.target.closest("[data-edit]");
     if (edit) {
         const rec = recordById(edit.dataset.edit);
@@ -1518,22 +1500,6 @@ $("resultsBody").addEventListener("click", function(e) {
 $("loansBody").addEventListener("click", function(e) {
     const btn = e.target.closest("[data-return]");
     if (btn) openReturn(btn.dataset.return);
-});
-
-/* ===== PRINT ===== */
-function printDate() {
-    return new Date().toLocaleDateString("en-GB", {day:"2-digit", month:"short", year:"numeric"});
-}
-function printFiles(list, infoText) {
-    $("printTitle").textContent = "Archive Search Results";
-    $("printInfo").textContent = infoText;
-    $("printHead").innerHTML = "<tr><th>No.</th><th>File Name</th><th>Department</th><th>Subject No.</th><th>File No.</th><th>Archive No.</th><th>Archive Tree No.</th><th>Start Date</th><th>End Date</th><th>Right Side</th><th>Left Side</th><th>Pages</th><th>Status</th></tr>";
-    $("printBody").innerHTML = list.map((r, i) => `<tr><td>${i + 1}</td><td>${escapeHTML(r.name)}</td><td>${escapeHTML(deptLabels[r.department] || r.department)}</td><td>${escapeHTML(r.subject)}</td><td>${escapeHTML(r.fileNo)}</td><td>${escapeHTML(r.archive)}</td><td>${escapeHTML(r.rack)}</td><td>${escapeHTML(r.start)}</td><td>${escapeHTML(r.end)}</td><td>${escapeHTML(r.right ?? "-")}</td><td>${escapeHTML(r.left ?? "-")}</td><td>${escapeHTML(r.pages)}</td><td>${openLoan(r.id) ? "Issued" : "In Archive"}</td></tr>`).join("");
-    window.print();
-}
-$("printAll").addEventListener("click", function() {
-    if (!filteredRecords.length) { alert("There are no results to print."); return; }
-    printFiles(filteredRecords, "Printed on " + printDate() + " | " + filteredRecords.length + " file(s)");
 });
 
 /* ===== SEARCH ===== */
