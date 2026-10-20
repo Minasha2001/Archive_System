@@ -17,6 +17,7 @@ if ($uid) {
 ?>
 <!DOCTYPE html>
 <html lang="en">
+    
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -581,7 +582,7 @@ section[id]{scroll-margin-top:84px}
             <a href="#resultsSection" class="nav-link"><i class="fa-solid fa-box-archive"></i><span>Archive Files</span></a>
             <a href="#issueSection" class="nav-link"><i class="fa-solid fa-file-export"></i><span>Issue a File</span></a>
             <a href="#loansSection" class="nav-link"><i class="fa-solid fa-clipboard-list"></i><span>Issued Files List</span></a>
-            <a href="change_password.php" class="nav-link"><i class="fa-solid fa-shield-halved"></i><span>Change Password</span></a>
+            <a href="subject_change_password.php" class="nav-link"><i class="fa-solid fa-shield-halved"></i><span>Change Password</span></a>
             <a href="logout.php" class="nav-link logout-link" onclick="return confirm('Are you sure you want to logout?')"></a>
         </nav>
 
@@ -626,7 +627,7 @@ section[id]{scroll-margin-top:84px}
                <div class="profile-popover" id="profilePopover" hidden>
                 <strong><?= htmlspecialchars($officerName, ENT_QUOTES, 'UTF-8') ?></strong>
                 <p><i class="fa-solid fa-user-tag"></i> Subject Officer Account</p>
-                <a href="change_password.php"><i class="fa-solid fa-lock"></i> Change Password</a>
+                <a href="subject_change_password.php"><i class="fa-solid fa-lock"></i> Change Password</a>
                 <a href="logout.php" onclick="return confirm('Are you sure you want to logout?')"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
                 </div>
             </div>
