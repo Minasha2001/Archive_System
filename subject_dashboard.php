@@ -489,26 +489,34 @@ section[id]{scroll-margin-top:84px}
     .list-toolbar{align-items:flex-start}
 }
 
-/* ===== Compact top boxes (6) ===== */
-.hero{padding:22px 28px}
-.hero h1{font-size:26px;margin:10px 0 4px}
-.hero-stats-6{grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
-.hero-stats-6 .stat-card{display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:12px}
-.hero-stats-6 .stat-card:hover{transform:translateY(-2px)}
-.hero-stats-6 .stat-card::before{height:2px}
-.hero-stats-6 .stat-icon{width:32px;height:32px;margin-bottom:0;font-size:13px;border-radius:9px;flex-shrink:0;box-shadow:0 4px 10px rgba(212,162,74,.3)}
-.hero-stats-6 .stat-info h2{font-size:20px;line-height:1.1}
-.hero-stats-6 .stat-info span{font-size:11px;margin-top:1px;line-height:1.3}
-.hero-stats-6 .stat-info small{display:none}
-@media (max-width:1150px){.hero{padding:20px 22px}}
+/* ===== Top boxes (same size as Admin dashboard) ===== */
+.hero{grid-template-columns:1fr;gap:18px;padding:22px 24px}
+.hero h1{font-size:30px;margin:14px 0 4px}
+.hero-stats,.hero-stats-6{grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
+.hero-stats .stat-card,.hero-stats-6 .stat-card{display:block;padding:12px;border-radius:16px}
+.hero-stats .stat-card:hover{transform:translateY(-3px)}
+.hero-stats .stat-card::before{height:3px}
+.hero-stats .stat-icon{width:30px;height:30px;margin-bottom:8px;font-size:12px;border-radius:9px;box-shadow:0 8px 18px rgba(212,162,74,.35)}
+.hero-stats .stat-info h2{font-size:22px;line-height:1.1;letter-spacing:-.4px}
+.hero-stats .stat-info span{font-size:11px;margin-top:5px;line-height:1.4}
+.hero-stats .stat-info small{display:block;font-size:10px;line-height:1.35;margin-top:3px}
+
+@media (max-width:1150px){
+    .hero{padding:20px;gap:16px}
+    .hero-stats,.hero-stats-6{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
 @media (max-width:700px){
-    .hero{padding:18px 14px}
-    .hero h1{font-size:22px}
-    .hero-stats-6{grid-template-columns:repeat(2,minmax(0,1fr))}
-    .hero-stats-6 .stat-card{padding:9px 10px;gap:9px}
-    .hero-stats-6 .stat-icon{width:28px;height:28px;font-size:12px}
-    .hero-stats-6 .stat-info h2{font-size:17px}
-    .hero-stats-6 .stat-info span{font-size:10px}
+    .hero{padding:20px 16px}
+    .hero h1{font-size:23px}
+    .hero-stats,.hero-stats-6{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+    .hero-stats .stat-card,.hero-stats-6 .stat-card{display:flex;align-items:center;gap:10px;padding:10px}
+    .hero-stats .stat-icon{width:28px;height:28px;margin-bottom:0;flex-shrink:0}
+    .hero-stats .stat-info h2{font-size:18px}
+    .hero-stats .stat-info span{font-size:10px;margin-top:2px}
+    .hero-stats .stat-info small{font-size:9px}
+}
+@media (max-width:380px){
+    .hero-stats,.hero-stats-6{grid-template-columns:1fr}
 }
 </style>
 </head>
@@ -539,11 +547,10 @@ section[id]{scroll-margin-top:84px}
 
         <nav class="sidebar-menu">
             <a href="subject_dashboard.php" class="nav-link active"><i class="fa-solid fa-house"></i><span>Dashboard</span></a>
-            <a href="#pendingSection" class="nav-link"><i class="fa-solid fa-inbox"></i><span>Files from Users</span><em class="nav-count" id="navPending">0</em></a>
+            <a href="#pendingSection" class="nav-link"><i class="fa-solid fa-inbox"></i><span>Files from Users</span></a>
             <a href="#resultsSection" class="nav-link"><i class="fa-solid fa-box-archive"></i><span>Archive Files</span></a>
             <a href="#issueSection" class="nav-link"><i class="fa-solid fa-file-export"></i><span>Issue a File</span></a>
             <a href="#loansSection" class="nav-link"><i class="fa-solid fa-clipboard-list"></i><span>Issued Files List</span></a>
-            <a href="subject_profile.php" class="nav-link"><i class="fa-solid fa-circle-user"></i><span>My Profile</span></a>
             <a href="change_password.php" class="nav-link"><i class="fa-solid fa-shield-halved"></i><span>Change Password</span></a>
             <a href="index.php" class="nav-link logout-link" onclick="return confirm('Are you sure you want to logout?')"><i class="fa-solid fa-right-from-bracket"></i><span>Logout</span></a>
         </nav>
@@ -567,8 +574,8 @@ section[id]{scroll-margin-top:84px}
                 <button class="menu-toggle" id="menuToggle" type="button" aria-label="Toggle menu" aria-expanded="true">
                     <i class="fa-solid fa-bars"></i>
                 </button>
-                <div class="topbar-greeting">
-                    <strong>Welcome to Archive System</strong>
+                <div class="title-text">
+                        <h1>Subject Officer</h1>
                     <span>Southern Provincial Council Secretariat</span>
                 </div>
             </div>
@@ -642,14 +649,6 @@ section[id]{scroll-margin-top:84px}
                         </div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-icon"><i class="fa-solid fa-box-archive"></i></div>
-                        <div class="stat-info">
-                            <h2 id="statArchived">0</h2>
-                            <span>Archive Files</span>
-                            <small>Files added to the archive</small>
-                        </div>
-                    </div>
-                    <div class="stat-card">
                         <div class="stat-icon"><i class="fa-solid fa-file-export"></i></div>
                         <div class="stat-info">
                             <h2 id="statIssued">0</h2>
@@ -703,8 +702,8 @@ section[id]{scroll-margin-top:84px}
                         </div>
 
                         <div class="field">
-                            <label for="searchRack">Rack Number</label>
-                            <div class="input-wrap"><i class="fa-solid fa-table-cells-large"></i><input type="text" id="searchRack" placeholder="Enter rack number..."></div>
+                            <label for="searchRack">Archive Tree Number</label>
+                            <div class="input-wrap"><i class="fa-solid fa-table-cells-large"></i><input type="text" id="searchRack" placeholder="Enter Archive Tree Number..."></div>
                         </div>
 
                         <div class="field">
@@ -734,7 +733,7 @@ section[id]{scroll-margin-top:84px}
                         <div class="section-icon"><i class="fa-solid fa-inbox"></i></div>
                         <div>
                             <h2>Files Sent by Users</h2>
-                            <p>Review the details, correct them if needed, then add the Archive Number and Rack Number to add the file to the archive.</p>
+                            <p>Review the details, correct them if needed, then add the Archive Number and Archive Tree Number to add the file to the archive.</p>
                         </div>
                     </div>
                 </div>
@@ -865,7 +864,7 @@ section[id]{scroll-margin-top:84px}
                     <table id="loansTable">
                         <thead>
                             <tr>
-                                <th>No.</th><th>File Name</th><th>Archive Number</th><th>Rack Number</th><th>Taken By</th><th>Date Taken</th><th>Date Returned</th><th>Status</th><th>Action</th>
+                                <th>No.</th><th>File Name</th><th>Archive Number</th><th>Archive Tree Number</th><th>Taken By</th><th>Date Taken</th><th>Date Returned</th><th>Status</th><th>Action</th>
                             </tr>
                         </thead>
                         <tbody id="loansBody"></tbody>
@@ -954,7 +953,7 @@ section[id]{scroll-margin-top:84px}
                             <div class="input-wrap"><i class="fa-solid fa-box-archive"></i><input type="text" id="eArchive" placeholder="e.g. ARC-090"></div>
                         </div>
                         <div class="field">
-                            <label for="eRack">Rack Number *</label>
+                            <label for="eRack">Archive Tree Number*</label>
                             <div class="input-wrap"><i class="fa-solid fa-table-cells-large"></i><input type="text" id="eRack" placeholder="e.g. RK-05"></div>
                         </div>
                     </div>
@@ -1129,10 +1128,7 @@ function flash(message) {
 function renderStats() {
     const issued = loans.filter(l => !l.returnDate).length;
     $("statPending").textContent = pending.length;
-    $("statArchived").textContent = records.length;
     $("statIssued").textContent = issued;
-    $("navPending").textContent = pending.length;
-    $("navPending").hidden = pending.length === 0;
     $("totalFiles").textContent = records.length;
     $("totalDepartments").textContent = new Set(records.map(r => r.department)).size;
 }

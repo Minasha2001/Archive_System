@@ -437,7 +437,7 @@ td:first-child{color:var(--navy-2);font-weight:700}
             <section class="hero">
                 <div>
                     <span class="hero-date"><i class="fa-regular fa-calendar"></i><span id="currentDate"></span></span>
-                    <h1>Archive Administration</h1>
+                    <h1>Administration Portal</h1>
                     <p>Search archive records, remove files with a recorded reason, and manage registered users.</p>
                 </div>
                 <div class="hero-stats">

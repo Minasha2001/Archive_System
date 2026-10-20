@@ -561,7 +561,7 @@ td:first-child{color:var(--navy-2)}
             <section class="hero">
                 <div>
                     <span class="hero-date"><i class="fa-regular fa-calendar"></i><span id="currentDate"></span></span>
-                    <h1>Archive Records Portal</h1>
+                    <h1>User Portal</h1>
                     <p>Search, review and submit archive records securely and efficiently.</p>
                 </div>
 
