@@ -1,31 +1,27 @@
 <?php
+// Check that the user is logged in and is an administrator.
 require_once __DIR__ . '/auth.php';
 require_page_login(['admin']);
 
-/* Get the logged-in administrator's name */
-$adminName = 'System Administrator';
-
-if (!empty($_SESSION['full_name'])) {
-    $adminName = $_SESSION['full_name'];
-} elseif (!empty($_SESSION['name'])) {
-    $adminName = $_SESSION['name'];
-} elseif (!empty($_SESSION['user']) && is_array($_SESSION['user'])) {
-    if (!empty($_SESSION['user']['full_name'])) {
-        $adminName = $_SESSION['user']['full_name'];
-    } elseif (!empty($_SESSION['user']['name'])) {
-        $adminName = $_SESSION['user']['name'];
-    } elseif (!empty($_SESSION['user']['username'])) {
-        $adminName = $_SESSION['user']['username'];
-    }
-} elseif (!empty($_SESSION['username'])) {
-    $adminName = $_SESSION['username'];
+// Read the logged-in administrator's name from the session.
+$sessionUser = $_SESSION['user'] ?? [];
+if (!is_array($sessionUser)) {
+    $sessionUser = [];
 }
 
-$adminName = htmlspecialchars(
-    (string)$adminName,
-    ENT_QUOTES,
-    'UTF-8'
-);
+$adminName = $_SESSION['full_name']
+    ?? $_SESSION['name']
+    ?? $sessionUser['full_name']
+    ?? $sessionUser['name']
+    ?? $_SESSION['username']
+    ?? $sessionUser['username']
+    ?? 'System Administrator';
+
+$adminName = trim((string)$adminName);
+if ($adminName === '') {
+    $adminName = 'System Administrator';
+}
+$adminName = htmlspecialchars($adminName, ENT_QUOTES, 'UTF-8');
 ?>
 <!DOCTYPE html>
 <html lang="en">
