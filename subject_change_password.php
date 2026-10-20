@@ -1246,8 +1246,7 @@ button { cursor:pointer; }
                             <div class="input-wrap">
                                 <i class="fa-solid fa-lock"></i>
 
-                                <!-- Password visible by default -->
-                                <input type="text" id="current_password"
+                                <input type="password" id="current_password"
                                        name="current_password"
                                        placeholder="Enter current password"
                                        autocomplete="current-password"
@@ -1256,8 +1255,8 @@ button { cursor:pointer; }
 
                                 <button type="button" class="eye"
                                         data-target="current_password"
-                                        aria-label="Hide password"
-                                        title="Hide password">
+                                        aria-label="Show password"
+                                        title="Show password">
                                     <i class="fa-regular fa-eye"></i>
                                 </button>
                             </div>
@@ -1269,8 +1268,7 @@ button { cursor:pointer; }
                             <div class="input-wrap">
                                 <i class="fa-solid fa-key"></i>
 
-                                <!-- Password visible by default -->
-                                <input type="text" id="password"
+                                <input type="password" id="password"
                                        name="password"
                                        placeholder="Enter new password"
                                        autocomplete="new-password"
@@ -1279,8 +1277,8 @@ button { cursor:pointer; }
 
                                 <button type="button" class="eye"
                                         data-target="password"
-                                        aria-label="Hide password"
-                                        title="Hide password">
+                                        aria-label="Show password"
+                                        title="Show password">
                                     <i class="fa-regular fa-eye"></i>
                                 </button>
                             </div>
@@ -1303,8 +1301,7 @@ button { cursor:pointer; }
                             <div class="input-wrap" id="confirm_passwordWrap">
                                 <i class="fa-solid fa-key"></i>
 
-                                <!-- Password visible by default -->
-                                <input type="text" id="confirm_password"
+                                <input type="password" id="confirm_password"
                                        name="confirm_password"
                                        placeholder="Confirm new password"
                                        autocomplete="new-password"
@@ -1313,8 +1310,8 @@ button { cursor:pointer; }
 
                                 <button type="button" class="eye"
                                         data-target="confirm_password"
-                                        aria-label="Hide password"
-                                        title="Hide password">
+                                        aria-label="Show password"
+                                        title="Show password">
                                     <i class="fa-regular fa-eye"></i>
                                 </button>
                             </div>
@@ -1481,7 +1478,7 @@ window.addEventListener("resize", function () {
 });
 
 /* ===== SHOW / HIDE PASSWORD ===== */
-/* Default: text visible. Click eye to hide; click again to show. */
+/* Passwords are hidden by default. Click the eye to show/hide. */
 document.querySelectorAll(".eye").forEach(function (btn) {
     btn.addEventListener("click", function () {
         const input = document.getElementById(btn.dataset.target);
@@ -1489,23 +1486,19 @@ document.querySelectorAll(".eye").forEach(function (btn) {
 
         if (!input || !icon) return;
 
-        if (input.type === "text") {
-            input.type = "password";
+        const isHidden = input.type === "password";
 
-            icon.classList.remove("fa-eye");
-            icon.classList.add("fa-eye-slash");
+        input.type = isHidden ? "text" : "password";
 
-            btn.setAttribute("aria-label", "Show password");
-            btn.title = "Show password";
-        } else {
-            input.type = "text";
+        icon.classList.toggle("fa-eye", !isHidden);
+        icon.classList.toggle("fa-eye-slash", isHidden);
 
-            icon.classList.remove("fa-eye-slash");
-            icon.classList.add("fa-eye");
+        btn.setAttribute(
+            "aria-label",
+            isHidden ? "Hide password" : "Show password"
+        );
 
-            btn.setAttribute("aria-label", "Hide password");
-            btn.title = "Hide password";
-        }
+        btn.title = isHidden ? "Hide password" : "Show password";
     });
 });
 
@@ -1584,23 +1577,26 @@ document.querySelectorAll(".eye").forEach(function (btn) {
 
     cf.addEventListener("input", updateMatch);
 
+    /* Clear form and restore hidden password fields */
     document.getElementById("cpReset").addEventListener("click", function () {
         setTimeout(function () {
-            updateStrength();
-            updateMatch();
-
             document.querySelectorAll(".eye").forEach(function (btn) {
                 const input = document.getElementById(btn.dataset.target);
                 const icon = btn.querySelector("i");
 
-                if (input && icon) {
-                    input.type = "text";
-                    icon.classList.remove("fa-eye-slash");
-                    icon.classList.add("fa-eye");
-                    btn.setAttribute("aria-label", "Hide password");
-                    btn.title = "Hide password";
-                }
+                if (!input || !icon) return;
+
+                input.type = "password";
+
+                icon.classList.remove("fa-eye-slash");
+                icon.classList.add("fa-eye");
+
+                btn.setAttribute("aria-label", "Show password");
+                btn.title = "Show password";
             });
+
+            updateStrength();
+            updateMatch();
         }, 0);
     });
 
