@@ -33,7 +33,7 @@ button{cursor:pointer}
 .sidebar::before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at 50% 0,rgba(212,162,74,.16),transparent 55%)}
 
 /* Brand: transparent emblem, no white background */
-.brand{display:flex;flex-direction:column;align-items:center;text-align:center;gap:26px;padding:20px 10px 24px;position:relative;margin-bottom:8px}
+.brand{display:flex;flex-direction:column;align-items:center;text-align:center;gap:14px;padding:14px 10px 16px;position:relative;margin-bottom:2px}
 .brand::after{content:"";position:absolute;left:24px;right:24px;bottom:0;height:1px;background:linear-gradient(90deg,transparent,rgba(212,162,74,.55),transparent)}
 .logo-ring{width:36px;height:36px;position:relative;display:grid;place-items:center;flex-shrink:0}
 .logo-ring::before{content:"";position:absolute;inset:6px;border-radius:50%;background:radial-gradient(circle,rgba(212,162,74,.28),transparent 68%)}
@@ -42,16 +42,16 @@ button{cursor:pointer}
 .brand-text .sinhala{font-family:'Noto Sans Sinhala',sans-serif;font-size:14px;font-weight:700;line-height:1.7}
 .brand-text .english{font-size:10.5px;line-height:1.5;color:#aebfdc;margin-top:2px;letter-spacing:.3px}
 .brand-text .system-name{display:inline-flex;align-items:center;gap:6px;font-size:10px;font-weight:600;letter-spacing:.2px;white-space:nowrap;color:var(--gold-2);margin-top:12px;padding:5px 11px;border-radius:6px;border:1px solid rgba(212,162,74,.4);background:rgba(212,162,74,.08)}
-.sidebar-label{padding:16px 26px 10px;color:#7389ad;font-size:10px;font-weight:700;letter-spacing:1.8px;position:relative}
+.sidebar-label{padding:10px 26px 6px;color:#7389ad;font-size:10px;font-weight:700;letter-spacing:1.8px;position:relative}
 .sidebar-menu{padding:0 14px;position:relative}
-.nav-link{display:flex;align-items:center;gap:14px;min-height:44px;padding:8px 14px;margin-bottom:4px;border-radius:8px;text-decoration:none;color:#b7c6df;font-weight:500;position:relative;transition:background .2s,color .2s}
+.nav-link{display:flex;align-items:center;gap:14px;width:100%;min-height:36px;padding:4px 14px;margin-bottom:0;border:0;border-radius:8px;background:transparent;text-align:left;text-decoration:none;color:#b7c6df;font-weight:500;position:relative;transition:background .2s,color .2s}
 .nav-link i{width:20px;text-align:center;font-size:14px;color:#7f9bc6;transition:color .2s}
 .nav-link:hover{color:#fff;background:rgba(255,255,255,.06)}
 .nav-link:hover i{color:#fff}
 .nav-link.active{color:#fff;font-weight:600;background:rgba(255,255,255,.09)}
 .nav-link.active i{color:var(--gold)}
 .nav-link.active::before{content:"";position:absolute;left:-14px;top:8px;bottom:8px;width:4px;border-radius:0 4px 4px 0;background:var(--gold)}
-.nav-link.logout-link{margin-top:16px;color:#f2b8bf}
+.nav-link.logout-link{margin-top:0;color:#f2b8bf}
 .nav-link.logout-link i{color:#ef8a96}
 .nav-link.logout-link:hover{background:rgba(239,90,110,.14);color:#fff}
 
@@ -65,7 +65,7 @@ button{cursor:pointer}
 .quote-top{display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:5px;color:var(--gold-2);font-size:8px;font-weight:700;letter-spacing:1.2px}
 .quote-top::before,.quote-top::after{content:"";width:10px;height:1px;background:rgba(212,162,74,.6)}
 .sidebar-quote p{position:relative;font-size:10.5px;line-height:1.4;font-weight:600;color:#e8eefb}
-.sidebar-quote p strong{display:block;margin-top:1px;font-size:12px;font-weight:800;background:linear-gradient(90deg,var(--gold-2),var(--gold));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.sidebar-quote p strong{display:block;margin-top:1px;padding-bottom:3px;margin-bottom:-3px;font-size:12px;font-weight:800;background:linear-gradient(90deg,var(--gold-2),var(--gold));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
 .quote-line{width:22px;height:2px;margin:7px auto 0;border-radius:3px;background:linear-gradient(90deg,var(--gold),var(--gold-2))}
 .sidebar-status{display:flex;align-items:center;gap:8px;margin-top:14px;padding:12px 3px 0;border-top:1px solid rgba(255,255,255,.08);color:#8ea6c9;font-size:var(--fs-xs)}
 .status-dot{width:7px;height:7px;border-radius:50%;background:#46d9a0;box-shadow:0 0 8px rgba(70,217,160,.7)}
@@ -489,6 +489,19 @@ section[id]{scroll-margin-top:84px}
     .list-toolbar{align-items:flex-start}
 }
 
+/* ===== Topbar title + icon (same as Admin dashboard) ===== */
+.topbar-title{display:flex;align-items:center;gap:12px;min-width:0}
+.title-icon{width:42px;height:42px;flex-shrink:0;display:grid;place-items:center;border-radius:13px;background:linear-gradient(135deg,var(--navy),var(--navy-2));color:var(--gold-2);font-size:17px;box-shadow:0 8px 18px rgba(13,37,71,.28),inset 0 1px 0 rgba(255,255,255,.18)}
+.title-text{min-width:0;padding-left:14px;border-left:2px solid var(--gold)}
+.title-text h1{font-size:21px;font-weight:800;line-height:1.2;letter-spacing:.2px;color:var(--navy)}
+.title-text>span{display:block;font-size:var(--fs-xs);color:var(--muted);margin-top:2px}
+@media (max-width:700px){
+    .title-icon{width:34px;height:34px;font-size:14px;border-radius:10px}
+    .title-text{padding-left:10px}
+    .title-text h1{font-size:16px}
+    .title-text>span{display:none}
+}
+
 /* ===== Top boxes (same size as Admin dashboard) ===== */
 .hero{grid-template-columns:1fr;gap:18px;padding:22px 24px}
 .hero h1{font-size:30px;margin:14px 0 4px}
@@ -517,6 +530,19 @@ section[id]{scroll-margin-top:84px}
 }
 @media (max-width:380px){
     .hero-stats,.hero-stats-6{grid-template-columns:1fr}
+}
+
+/* ===== Print results (button + print sheet) ===== */
+.results-heading{flex-wrap:wrap}
+.results-heading .card-heading{margin-bottom:0}
+@media print{
+    body{background:#fff}
+    .app,.doc-modal{display:none!important}
+    .print-only{display:block;padding:10px}
+    .print-only h2{font-size:16px;margin-bottom:2px}
+    .print-only p{font-size:11px;margin-bottom:6px;color:#333}
+    .print-only table{min-width:0;white-space:normal;font-size:10px}
+    .print-only th,.print-only td{border:1px solid #999;padding:5px 6px;color:#000;background:none}
 }
 </style>
 </head>
@@ -574,9 +600,12 @@ section[id]{scroll-margin-top:84px}
                 <button class="menu-toggle" id="menuToggle" type="button" aria-label="Toggle menu" aria-expanded="true">
                     <i class="fa-solid fa-bars"></i>
                 </button>
-                <div class="title-text">
+                <div class="topbar-title">
+                    <div class="title-icon"><i class="fa-solid fa-user-tie"></i></div>
+                    <div class="title-text">
                         <h1>Subject Officer</h1>
-                    <span>Southern Provincial Council Secretariat</span>
+                        <span>Southern Provincial Council Secretariat</span>
+                    </div>
                 </div>
             </div>
 
@@ -758,14 +787,17 @@ section[id]{scroll-margin-top:84px}
 
             <!-- ARCHIVE RESULTS -->
             <section class="card results-card" id="resultsSection">
-                <div class="card-heading">
-                    <div class="card-heading-left">
-                        <div class="section-icon"><i class="fa-solid fa-table-list"></i></div>
-                        <div>
-                            <h2>Archive Search Results</h2>
-                            <p>All files added to the archive. You can edit the details or issue a file.</p>
+                <div class="results-heading">
+                    <div class="card-heading">
+                        <div class="card-heading-left">
+                            <div class="section-icon"><i class="fa-solid fa-table-list"></i></div>
+                            <div>
+                                <h2>Archive Search Results</h2>
+                                <p>All files added to the archive. You can print, edit the details or issue a file.</p>
+                            </div>
                         </div>
                     </div>
+                    <button type="button" class="btn btn-outline" id="printAll"><i class="fa-solid fa-print"></i> Print Results</button>
                 </div>
 
                 <div style="margin-bottom:14px">
@@ -776,7 +808,7 @@ section[id]{scroll-margin-top:84px}
                     <table id="resultsTable">
                         <thead>
                             <tr>
-                                <th>No.</th><th>File Name</th><th>Department</th><th>Subject Number</th><th>File Number</th><th>Archive Number</th><th>Rack Number</th>
+                                <th>No.</th><th>File Name</th><th>Department</th><th>Subject Number</th><th>File Number</th><th>Archive Number</th><th>Archive Tree Number</th>
                                 <th>Start Date</th><th>End Date</th><th>Right Side</th><th>Left Side</th><th>Pages</th><th>Added Date</th><th>Status</th><th>Action</th>
                             </tr>
                         </thead>
@@ -1001,6 +1033,16 @@ section[id]{scroll-margin-top:84px}
     </div>
 </div>
 
+<!-- PRINT AREA -->
+<div class="print-only">
+    <h2>දකුණු පළාත් සභා ලේකම් කාර්යාලය - <span id="printTitle">Archive Search Results</span></h2>
+    <p id="printInfo"></p>
+    <table>
+        <thead id="printHead"></thead>
+        <tbody id="printBody"></tbody>
+    </table>
+</div>
+
 <script>
 /* =====================================================================
    SUBJECT OFFICER DASHBOARD  (demonstration data)
@@ -1213,6 +1255,7 @@ function renderResults() {
             <td>${out ? '<span class="badge badge-out"><i class="fa-solid fa-file-export"></i> Issued</span>'
                       : '<span class="badge badge-in"><i class="fa-solid fa-box-archive"></i> In Archive</span>'}</td>
             <td><div class="action-cell">
+                <button type="button" class="row-print-btn" data-print="${escapeHTML(r.id)}"><i class="fa-solid fa-print"></i> Print</button>
                 <button type="button" class="row-edit-btn" data-edit="${escapeHTML(r.id)}"><i class="fa-solid fa-pen-to-square"></i> Edit</button>
                 <button type="button" class="row-print-btn" data-issue="${escapeHTML(r.id)}" ${out ? "disabled" : ""}><i class="fa-solid fa-file-export"></i> Issue</button>
             </div></td>
@@ -1450,6 +1493,13 @@ $("pendingBody").addEventListener("click", function(e) {
 });
 
 $("resultsBody").addEventListener("click", function(e) {
+    const prt = e.target.closest("[data-print]");
+    if (prt) {
+        const rec = recordById(prt.dataset.print);
+        if (rec) printFiles([rec], "Printed on " + printDate() + " | Archive No: " + rec.archive);
+        return;
+    }
+
     const edit = e.target.closest("[data-edit]");
     if (edit) {
         const rec = recordById(edit.dataset.edit);
@@ -1468,6 +1518,22 @@ $("resultsBody").addEventListener("click", function(e) {
 $("loansBody").addEventListener("click", function(e) {
     const btn = e.target.closest("[data-return]");
     if (btn) openReturn(btn.dataset.return);
+});
+
+/* ===== PRINT ===== */
+function printDate() {
+    return new Date().toLocaleDateString("en-GB", {day:"2-digit", month:"short", year:"numeric"});
+}
+function printFiles(list, infoText) {
+    $("printTitle").textContent = "Archive Search Results";
+    $("printInfo").textContent = infoText;
+    $("printHead").innerHTML = "<tr><th>No.</th><th>File Name</th><th>Department</th><th>Subject No.</th><th>File No.</th><th>Archive No.</th><th>Archive Tree No.</th><th>Start Date</th><th>End Date</th><th>Right Side</th><th>Left Side</th><th>Pages</th><th>Status</th></tr>";
+    $("printBody").innerHTML = list.map((r, i) => `<tr><td>${i + 1}</td><td>${escapeHTML(r.name)}</td><td>${escapeHTML(deptLabels[r.department] || r.department)}</td><td>${escapeHTML(r.subject)}</td><td>${escapeHTML(r.fileNo)}</td><td>${escapeHTML(r.archive)}</td><td>${escapeHTML(r.rack)}</td><td>${escapeHTML(r.start)}</td><td>${escapeHTML(r.end)}</td><td>${escapeHTML(r.right ?? "-")}</td><td>${escapeHTML(r.left ?? "-")}</td><td>${escapeHTML(r.pages)}</td><td>${openLoan(r.id) ? "Issued" : "In Archive"}</td></tr>`).join("");
+    window.print();
+}
+$("printAll").addEventListener("click", function() {
+    if (!filteredRecords.length) { alert("There are no results to print."); return; }
+    printFiles(filteredRecords, "Printed on " + printDate() + " | " + filteredRecords.length + " file(s)");
 });
 
 /* ===== SEARCH ===== */
