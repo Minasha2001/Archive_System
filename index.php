@@ -31,7 +31,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $st = $pdo->prepare('SELECT * FROM users WHERE username = ?');
         $st->execute([$username]);
         $u = $st->fetch();
-
         if (!$u || !password_verify($password, $u['password_hash'])) {
             $_SESSION['fails'] = ($_SESSION['fails'] ?? 0) + 1;
             if ($_SESSION['fails'] >= 5) { $_SESSION['lock_until'] = time() + 300; $_SESSION['fails'] = 0; }
@@ -308,8 +307,6 @@ body{font-family:"Poppins",sans-serif;min-height:100vh;overflow:hidden;backgroun
         <div class="footer-divider"></div>
         <span>Archive Management System</span>
     </div>
-</div>
-
 <script>
 function selectUser(button) {
     document.querySelectorAll(".user-type").forEach(function (b) { b.classList.remove("active"); });
