@@ -155,9 +155,27 @@ body{font-family:"Poppins",sans-serif;min-height:100vh;overflow:hidden;backgroun
 .forgot:hover{text-decoration:underline}
 
 /* BUTTONS */
-.login-button{width:100%;height:clamp(44px,5.4vh,54px);border:none;border-radius:11px;background:linear-gradient(135deg,#0b5390,#0a3d6b);color:#fff;font-family:"Poppins",sans-serif;font-size:clamp(14px,1.55vh,15.5px);font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:11px;box-shadow:0 8px 16px rgba(4,57,97,.22);transition:.25s}
+.login-button{
+  position:relative;
+  width:100%;
+  height:clamp(44px,5.4vh,54px);
+  border:none;
+  border-radius:11px;
+  background:linear-gradient(135deg,#0b5390,#0a3d6b);
+  color:#fff;
+  font-family:"Poppins",sans-serif;
+  font-size:clamp(14px,1.55vh,15.5px);
+  font-weight:600;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;          /* "Login" text eka hariyatama madata */
+  box-shadow:0 8px 16px rgba(4,57,97,.22);
+  transition:.25s;
+}
 .login-button:hover{transform:translateY(-2px);box-shadow:0 11px 22px rgba(4,57,97,.28)}
-.login-button i{font-size:17px}
+.login-button span{position:relative}                          /* text eka madata, icon eka eyata anuwa */
+.login-button span i{font-size:17px;position:absolute;right:100%;top:50%;transform:translateY(-50%);margin-right:10px}  /* icon eka text eka langama (left) */
 .register-divider{display:flex;align-items:center;gap:14px;margin:clamp(14px,2.6vh,26px) 0}
 .register-divider span{flex:1;height:1px;background:#b4cadc}
 .register-divider p{color:#0b477c;white-space:nowrap;font-size:11.5px}
@@ -264,7 +282,7 @@ body{font-family:"Poppins",sans-serif;min-height:100vh;overflow:hidden;backgroun
             </div>
 
             <button type="submit" class="login-button">
-                <i class="fa-solid fa-arrow-right-to-bracket"></i><span>Login</span>
+                <span><i class="fa-solid fa-arrow-right-to-bracket"></i>Login</span>
             </button>
         </form>
 
