@@ -17,7 +17,7 @@ if ($uid) {
 ?>
 <!DOCTYPE html>
 <html lang="en">
-    
+
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -619,7 +619,7 @@ section[id]{scroll-margin-top:84px}
                 <div class="profile-details">
                 <strong title="<?= htmlspecialchars($officerName, ENT_QUOTES, 'UTF-8') ?>"><?= htmlspecialchars($officerName, ENT_QUOTES, 'UTF-8') ?></strong>
                 <span>Subject Officer Account</span>
-                </div>  
+                </div>
                 <button class="profile-toggle" id="profileToggle" type="button" aria-label="Profile menu" aria-expanded="false">
                     <i class="fa-solid fa-chevron-down"></i>
                 </button>
@@ -705,7 +705,7 @@ section[id]{scroll-margin-top:84px}
                 </div>
 
                 <form id="searchForm">
-                    <div class="form-grid cols-3">
+                    <div class="form-grid">
                         <div class="field">
                             <label for="searchName">File Name</label>
                             <div class="input-wrap"><i class="fa-regular fa-file-lines"></i><input type="text" id="searchName" placeholder="Enter file name or part of it..."></div>
@@ -732,23 +732,6 @@ section[id]{scroll-margin-top:84px}
                         <div class="field">
                             <label for="searchArchive">Archive Number</label>
                             <div class="input-wrap"><i class="fa-solid fa-box-archive"></i><input type="text" id="searchArchive" placeholder="Enter archive number..."></div>
-                        </div>
-
-                        <div class="field">
-                            <label for="searchRack">Archive Tree Number</label>
-                            <div class="input-wrap"><i class="fa-solid fa-table-cells-large"></i><input type="text" id="searchRack" placeholder="Enter Archive Tree Number..."></div>
-                        </div>
-
-                        <div class="field">
-                            <label for="searchStatus">Status</label>
-                            <div class="input-wrap">
-                                <i class="fa-solid fa-circle-half-stroke"></i>
-                                <select id="searchStatus">
-                                    <option value="">All</option>
-                                    <option value="in">In Archive</option>
-                                    <option value="out">Issued</option>
-                                </select>
-                            </div>
                         </div>
                     </div>
 
@@ -1195,18 +1178,13 @@ function applySearch() {
     const dept = $("searchDepartment").value;
     const subject = $("searchSubject").value.trim().toLowerCase();
     const archive = $("searchArchive").value.trim().toLowerCase();
-    const rack = $("searchRack").value.trim().toLowerCase();
-    const status = $("searchStatus").value;
 
-    filteredRecords = records.filter(r => {
-        const out = !!openLoan(r.id);
-        return (!name || r.name.toLowerCase().includes(name))
-            && (!dept || r.department === dept)
-            && (!subject || String(r.subject).toLowerCase().includes(subject))
-            && (!archive || String(r.archive).toLowerCase().includes(archive))
-            && (!rack || String(r.rack).toLowerCase().includes(rack))
-            && (!status || (status === "out" ? out : !out));
-    });
+    filteredRecords = records.filter(r =>
+        (!name || r.name.toLowerCase().includes(name))
+        && (!dept || r.department === dept)
+        && (!subject || String(r.subject).toLowerCase().includes(subject))
+        && (!archive || String(r.archive).toLowerCase().includes(archive))
+    );
 }
 
 function renderResults() {

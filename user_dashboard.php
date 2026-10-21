@@ -32,7 +32,7 @@ $userName = htmlspecialchars($userName, ENT_QUOTES, 'UTF-8');
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+Sinhala:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+Sinhala:wght@400;500;600;700&family=Libre+Baskerville:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
 <style>
@@ -475,6 +475,167 @@ td:first-child{color:var(--navy-2)}
 .page-numbers .hint{display:block;margin-top:5px;font-size:var(--fs-xs);color:var(--muted)}
 #totalPages{font-weight:700;color:var(--navy-2)}
 @media (max-width:700px){.page-numbers{padding:14px 12px}.page-numbers-grid{grid-template-columns:1fr;gap:13px}}
+
+/* =====================================================================
+   DESIGN LAYER: archive look
+   Theme: records office. Serif headings, index-card stats, ledger rows with a
+   department colour edge, a bookmark ribbon on page numbers, red "received" stamp.
+   ===================================================================== */
+
+:root{
+    --serif:'Libre Baskerville',Georgia,'Noto Sans Sinhala',serif;
+    --ink-inst:#2f6fe0; --ink-coun:#c98a1b; --ink-acct:#17946a;
+}
+
+/* ----- Page: faint dot grid, like ledger paper ----- */
+body{
+    background-image:
+        radial-gradient(rgba(22,56,106,.075) 1px,transparent 1.2px),
+        radial-gradient(900px 420px at 100% 0,rgba(212,162,74,.12),transparent 60%),
+        radial-gradient(800px 500px at 30% -10%,rgba(37,99,208,.10),transparent 60%);
+    background-size:22px 22px,auto,auto;
+}
+
+/* ----- Typography: serif for headings, sans for data ----- */
+.title-text h1,.hero h1,.card-heading h2,.doc-title h3{font-family:var(--serif)}
+.title-text h1{font-size:19px;font-weight:700;letter-spacing:0}
+.hero h1{font-size:28px;font-weight:700;letter-spacing:0;line-height:1.35}
+.card-heading h2{font-size:16px;font-weight:700}
+.card-heading p{max-width:62ch}
+
+/* Table headings in sentence case (easier to read than all caps) */
+th{text-transform:none;letter-spacing:.2px;font-size:12px;font-weight:700}
+.sidebar-label{letter-spacing:.6px;font-size:11px}
+
+/* ----- One page-load moment only: hero. Cards no longer animate in. ----- */
+.card{animation:none}
+
+/* ----- Sidebar: faint shelf lines ----- */
+.sidebar::after{
+    content:"";position:absolute;inset:0;pointer-events:none;
+    background:repeating-linear-gradient(0deg,transparent 0 55px,rgba(255,255,255,.028) 55px 56px);
+}
+.sidebar>*{position:relative;z-index:1}
+.nav-link.active{background:linear-gradient(90deg,rgba(212,162,74,.22),rgba(255,255,255,.04))}
+
+/* ----- Hero: archive shelf watermark behind the stats ----- */
+.hero>.hero-art{
+    position:absolute;right:-8px;bottom:-18px;width:400px;max-width:46%;
+    opacity:.17;z-index:0;pointer-events:none;
+}
+.hero-date{background:rgba(240,207,138,.14);border-color:rgba(240,207,138,.35);color:#f6e6bd}
+
+/* ----- Stat cards: index-card look (dashed inner border) ----- */
+.hero-stats .stat-card{padding:16px 14px 14px}
+.stat-card::after{
+    content:"";position:absolute;inset:6px;border:1px dashed rgba(240,207,138,.28);
+    border-radius:11px;pointer-events:none;
+}
+.stat-icon{position:relative}
+.stat-info h2{font-family:var(--serif);font-weight:700;font-size:26px}
+.stat-info span{font-size:12px}
+
+/* ----- Cards: ruled heading, folder-edge on the left ----- */
+.card{border-left:4px solid var(--navy-2)}
+.search-card{border-left-color:var(--gold)}
+.results-card{border-left-color:var(--navy-2)}
+.submit-card{border-left-color:#17946a}
+.submitted-card{border-left-color:#b3414f}
+.card-heading{border-bottom:1px dashed #d9cfb8}
+.card-heading::after{width:84px}
+.section-icon{border-radius:12px 12px 12px 4px}   /* folder-corner feel */
+
+/* ----- Search form: calmer inputs ----- */
+.input-wrap{background:#fff;border-color:#d9e1ee}
+.input-wrap:hover{border-color:var(--gold)}
+.field label{font-weight:700;color:var(--navy-2)}
+.search-actions{border-top:1px dashed #d9cfb8}
+
+/* ----- Count chip: looks like a label sticker ----- */
+.count-chip{
+    background:#fff;border:1px solid #e8d9b0;border-left:4px solid var(--gold);
+    border-radius:6px;box-shadow:none;color:#6b5326;
+}
+
+/* ----- Results table: ledger style with department colour edge ----- */
+.table-wrapper{border-radius:12px;background:#fff}
+tbody tr:nth-child(even){background:#fcfaf4}
+td{border-top:1px dashed #e9e2d0}
+tbody tr[class*="dept-row-"] td:first-child{box-shadow:inset 4px 0 0 var(--row-ink,var(--gold))}
+tbody tr[class*="dept-row-"]:hover td:first-child{box-shadow:inset 7px 0 0 var(--row-ink,var(--gold))}
+.dept-row-Institutions{--row-ink:var(--ink-inst)}
+.dept-row-Councils{--row-ink:var(--ink-coun)}
+.dept-row-Accounts{--row-ink:var(--ink-acct)}
+
+/* Department pills with a dot */
+.dept-pill::before{
+    content:"";display:inline-block;width:6px;height:6px;border-radius:50%;
+    background:currentColor;margin-right:6px;vertical-align:1px;
+}
+
+/* View and Print buttons: smaller, quieter */
+.row-view-btn,.row-print-btn{border-radius:6px}
+.row-view-btn{background:#fff;border-color:#bfd2f3}
+
+/* ----- Page numbers: bookmark ribbon ----- */
+.page-numbers{
+    position:relative;overflow:visible;
+    background:linear-gradient(180deg,#fffdf6,#faf5e6);
+    border:1px solid #eadfbd;border-left:4px solid var(--gold);
+}
+.page-numbers::after{
+    content:"";position:absolute;top:-1px;right:28px;width:20px;height:40px;
+    background:linear-gradient(180deg,#b3414f,#8e2f3c);
+    clip-path:polygon(0 0,100% 0,100% 100%,50% 78%,0 100%);
+}
+.page-numbers-title{font-family:var(--serif);font-size:14px;padding-right:60px}
+.page-numbers .hint{font-style:italic}
+
+/* ----- Submit note: looks like a pinned slip ----- */
+.submit-note{
+    background:#fffaf0;border:1px solid #f0dcb0;border-left:4px solid var(--gold);
+    border-radius:6px;
+}
+
+/* ----- "Sent to Subject Officer" status as a red rubber stamp ----- */
+.status-badge{
+    font-family:var(--serif);font-size:10px;font-weight:700;
+    color:#a1303f;background:transparent;border:2px solid #b3414f;border-radius:6px;
+    padding:3px 10px;transform:rotate(-3deg);opacity:.9;
+    box-shadow:inset 0 0 0 1px rgba(179,65,79,.25);
+}
+
+/* ----- Empty states: folder icon ----- */
+.empty-note::before,.no-results i{
+    display:block;margin:0 auto 10px;color:#b9c6dc;
+}
+.empty-note::before{
+    content:"\f07c";font-family:"Font Awesome 6 Free";font-weight:400;font-size:30px;
+}
+
+/* ----- Document viewer ----- */
+.doc-head::after{height:4px}
+
+/* ----- Footer ----- */
+.footer{border-top:1px dashed #d9cfb8}
+
+/* ----- Responsive ----- */
+@media (max-width:1150px){
+    .hero>.hero-art{opacity:.1;max-width:60%}
+}
+@media (max-width:700px){
+    .hero>.hero-art{display:none}
+    .card{border-left-width:3px}
+    .page-numbers::after{right:16px;height:32px}
+    .hero h1{font-size:22px}
+}
+
+/* ----- Print: keep the output plain ----- */
+@media print{
+    body{background:#fff}
+    .card{border-left:0}
+    .hero-art,.sidebar::after{display:none!important}
+}
 </style>
 </head>
 
@@ -559,6 +720,18 @@ td:first-child{color:var(--navy-2)}
 
             <!-- HERO + STATS -->
             <section class="hero">
+                <!-- Archive shelf drawing (decorative watermark) -->
+                <svg class="hero-art" viewBox="0 0 360 200" aria-hidden="true" fill="none" stroke="#f0cf8a" stroke-width="2">
+                    <path d="M10 10H350M10 100H350M10 190H350M10 10V190M350 10V190"/>
+                    <rect x="24" y="44" width="46" height="56"/><rect x="76" y="34" width="46" height="66"/>
+                    <rect x="128" y="52" width="46" height="48"/><rect x="190" y="40" width="46" height="60"/>
+                    <rect x="242" y="48" width="46" height="52"/><rect x="294" y="36" width="40" height="64"/>
+                    <rect x="24" y="134" width="56" height="56"/><rect x="88" y="124" width="46" height="66"/>
+                    <rect x="142" y="140" width="46" height="50"/><rect x="204" y="128" width="56" height="62"/>
+                    <rect x="268" y="138" width="66" height="52"/>
+                    <path d="M34 62h26M86 54h26M138 68h26M200 58h26M252 66h26M34 152h36M98 144h26M152 156h26M214 148h36M278 154h46"/>
+                </svg>
+
                 <div>
                     <span class="hero-date"><i class="fa-regular fa-calendar"></i><span id="currentDate"></span></span>
                     <h1>User Portal</h1>
@@ -1007,6 +1180,7 @@ function renderResults() {
 
     pageFiles.forEach((file, index) => {
         const row = document.createElement("tr");
+        row.className = "dept-row-" + file.department;
 
         row.innerHTML = `
             <td>${start + index + 1}</td>
@@ -1156,7 +1330,7 @@ function renderSubmissions() {
     const table = document.getElementById("submittedTable");
 
     body.innerHTML = submissions.map((f, i) => `
-        <tr>
+        <tr class="dept-row-${escapeHTML(f.department)}">
             <td>${i + 1}</td>
             <td>${escapeHTML(f.submissionDate)}</td>
             <td><div class="file-name"><i class="fa-solid fa-file-lines file-icon doc"></i><span>${escapeHTML(f.name)}</span></div></td>
@@ -1186,7 +1360,7 @@ document.getElementById("submittedBody").addEventListener("click", function(e) {
     if (!item) return;
 
     if (!confirm('Delete "' + item.name + '" and its details? This cannot be undone.')) return;
-    
+
 
     submissions.splice(index, 1);
     saveSubmissions();
