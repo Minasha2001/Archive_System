@@ -461,7 +461,6 @@ button{cursor:pointer}
                     </div>
                 </div>
             </div>
-
             <div class="profile">
                 <div class="profile-avatar"><i class="fa-solid fa-user-tie"></i></div>
                 <div class="profile-details">
@@ -698,7 +697,6 @@ document.querySelectorAll(".toggle-password").forEach(function (icon) {
         if (/[^A-Za-z0-9]/.test(v)) s++;
         return s;
     }
-
     function updateStrength() {
         const v = pw.value;
         if (!v) {

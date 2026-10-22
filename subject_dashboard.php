@@ -178,6 +178,7 @@ section[id]{scroll-margin-top:84px}
 .search-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:20px;padding-top:18px;border-top:1px dashed var(--rule)}
 
 /* Toolbar + count chip (label sticker) */
+
 .toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px}
 .count-chip{display:inline-flex;align-items:center;gap:7px;padding:6px 14px;background:#fff;color:#6b5326;border:1px solid #e8d9b0;border-left:4px solid var(--gold);border-radius:6px;font-size:var(--fs-sm);font-weight:700}
 .mini-select{height:38px;display:inline-flex;align-items:center;gap:8px;padding:0 12px;background:#fff;border:1px solid #d9e1ee;border-radius:12px}
