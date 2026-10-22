@@ -259,6 +259,13 @@ tbody tr[class*="dept-row-"]:hover td:first-child{box-shadow:inset 7px 0 0 var(-
 .modal{position:fixed;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(7,27,55,.6);backdrop-filter:blur(3px)}
 .dialog{width:min(1000px,100%);height:min(90vh,840px);display:flex;flex-direction:column;overflow:hidden;background:#fff;border-radius:20px;box-shadow:0 24px 60px rgba(7,27,55,.4);animation:pop .25s ease both}
 .dialog.small{width:min(520px,100%);height:auto;max-height:92vh}
+/* Review dialog: wider, with the document preview inside */
+.dialog.review{width:min(760px,100%)}
+.ap-preview-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:6px}
+.ap-preview-head label{color:var(--navy-2);font-size:var(--fs-sm);font-weight:700}
+.ap-preview{height:340px;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#e9eef6;display:flex;align-items:center;justify-content:center}
+.ap-preview object,.ap-preview iframe{width:100%;height:100%;border:0;background:#fff}
+.ap-preview img{max-width:100%;max-height:100%;object-fit:contain;display:block}
 @keyframes pop{from{opacity:0;transform:translateY(14px) scale(.98)}to{opacity:1;transform:none}}
 @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
 @keyframes floatGlow{0%,100%{transform:translate(0,0)}50%{transform:translate(-18px,14px)}}
@@ -358,6 +365,7 @@ tbody tr[class*="dept-row-"]:hover td:first-child{box-shadow:inset 7px 0 0 var(-
     .dialog.small{height:auto;max-height:100%;border-radius:16px}
     .modal.center-sm{padding:12px}
     .dialog-foot .btn{flex:1;padding:0 10px}
+    .ap-preview{height:260px}
     .footer{justify-content:center;text-align:center;font-size:10px}
 }
 @media (max-width:380px){.hero-stats{grid-template-columns:1fr}}
@@ -782,9 +790,9 @@ tbody tr[class*="dept-row-"]:hover td:first-child{box-shadow:inset 7px 0 0 var(-
     </main>
 </div>
 
-<!-- APPROVAL MODAL -->
+<!-- APPROVAL MODAL (with document preview) -->
 <div class="modal center-sm" id="approvalModal" hidden>
-    <div class="dialog small" role="dialog" aria-modal="true" aria-labelledby="apTitle">
+    <div class="dialog small review" role="dialog" aria-modal="true" aria-labelledby="apTitle">
         <div class="dialog-head success">
             <div class="dialog-title">
                 <div class="section-icon success"><i class="fa-solid fa-clipboard-check"></i></div>
@@ -802,6 +810,15 @@ tbody tr[class*="dept-row-"]:hover td:first-child{box-shadow:inset 7px 0 0 var(-
             </div>
 
             <div class="doc-meta plain" id="apInfo"></div>
+
+            <!-- Document preview -->
+            <div>
+                <div class="ap-preview-head">
+                    <label>Submitted Document</label>
+                    <button type="button" class="row-btn view" id="apOpenFull"><i class="fa-solid fa-expand"></i> Full Screen</button>
+                </div>
+                <div class="ap-preview" id="apPreview"></div>
+            </div>
 
             <div class="field">
                 <label for="apReason">Reason (required only when rejecting)</label>
@@ -1046,7 +1063,7 @@ async function loadState() {
     const approvedFiles = allAp.filter(a => a.status === "approved").map(a => ({
         id: a.archive, name: a.name, department: a.department, subject: a.subject, fileNo: a.fileNo,
         archive: a.archive, start: a.start, end: a.end, pages: Number(a.pages),
-        date: a.approvedDate || localToday, fileUrl: ""
+        date: a.approvedDate || localToday, fileUrl: a.fileUrl || ""
     }));
     archiveFiles = demoFiles.concat(approvedFiles).filter(f => !delF.some(d => d.archive === f.archive));
     deletedFiles = delF;
@@ -1270,13 +1287,25 @@ function renderApprovals() {
             <td>${escapeHTML(f.rack)}</td>
             <td>${escapeHTML(f.pages)}</td>
             <td>${escapeHTML(f.sentBy || "-")}</td>
-            <td><button type="button" class="row-btn ok" data-ap="${escapeHTML(f.id)}"><i class="fa-solid fa-clipboard-check"></i> Review</button></td>
+            <td><div class="td-actions">
+                <button type="button" class="row-btn view" data-apview="${escapeHTML(f.id)}"><i class="fa-solid fa-eye"></i> View</button>
+                <button type="button" class="row-btn ok" data-ap="${escapeHTML(f.id)}"><i class="fa-solid fa-circle-check"></i> Approve</button>
+            </div></td>
         </tr>`).join("");
     refreshStats();
 }
 $("approvalFilter").addEventListener("input", renderApprovals);
 
 $("approvalBody").addEventListener("click", e => {
+    // "View" button: open the document in the full viewer
+    const viewBtn = e.target.closest("button[data-apview]");
+    if (viewBtn) {
+        const item = approvals.find(x => String(x.id) === viewBtn.dataset.apview);
+        if (item) viewApprovalDoc(item);
+        return;
+    }
+
+    // "Review" button: open the review dialog (with document preview)
     const btn = e.target.closest("button[data-ap]");
     if (!btn) return;
     fileInReview = approvals.find(f => String(f.id) === btn.dataset.ap);
@@ -1294,10 +1323,18 @@ $("approvalBody").addEventListener("click", e => {
         ["fa-solid fa-user-tie", "Sent by: " + (f.sentBy || "-")],
         ["fa-regular fa-clock", "Sent on: " + f.sentDate]
     ].map(m => `<span><i class="${m[0]}"></i>${escapeHTML(m[1])}</span>`).join("");
+
+    // Document preview inside the dialog
+    $("apPreview").innerHTML = docHTML(f.fileUrl, f.name);
+    const img = $("apPreview").querySelector("img");
+    if (img) img.onerror = () => { $("apPreview").innerHTML = docFallback("The image could not be loaded."); };
+
     $("apReason").value = "";
     $("apError").hidden = true;
     openModal("approvalModal");
 });
+
+$("apOpenFull").addEventListener("click", () => { if (fileInReview) viewApprovalDoc(fileInReview); });
 
 $("apApprove").addEventListener("click", async () => {
     if (!fileInReview) return;
@@ -1524,6 +1561,21 @@ function fileExt(name) { return name.split(".").pop().toLowerCase(); }
 function docFallback(message) {
     return `<div class="doc-fallback"><i class="fa-regular fa-file-excel"></i><p><strong>Preview not available</strong></p><p>${escapeHTML(message)}</p></div>`;
 }
+
+// Builds the preview markup for a document URL (used by the review dialog)
+function docHTML(url, name) {
+    if (!url) return docFallback("No document is attached to this file.");
+    const ext = fileExt(url), safeUrl = encodeURI(url);
+    if (ext === "pdf") return `<object data="${safeUrl}" type="application/pdf">${docFallback("The PDF could not be loaded here. Use Full Screen or download it.")}</object>`;
+    if (["jpg", "jpeg", "png"].includes(ext)) return `<img src="${safeUrl}" alt="${escapeHTML(name)}">`;
+    return docFallback("Word and Excel files cannot be previewed in the browser. Please download the file to open it.");
+}
+
+// Opens a pending-approval file in the full-screen viewer
+function viewApprovalDoc(f) {
+    openViewer({...f, date: f.sentDate, fileUrl: f.fileUrl || ""});
+}
+
 function openViewer(file) {
     const url = file.fileUrl || "";
     const ext = fileExt(url);
@@ -1557,6 +1609,7 @@ function openModal(id) { $(id).hidden = false; document.body.style.overflow = "h
 function closeModal(id) {
     $(id).hidden = true;
     if (id === "docViewer") docBody.innerHTML = "";
+    if (id === "approvalModal") $("apPreview").innerHTML = "";
     if (document.querySelectorAll(".modal:not([hidden])").length === 0) document.body.style.overflow = "";
 }
 document.querySelectorAll("[data-close]").forEach(b => b.addEventListener("click", () => closeModal(b.dataset.close)));
