@@ -358,9 +358,9 @@ tbody tr[class*="dept-row-"]:hover td:first-child{box-shadow:inset 7px 0 0 var(-
 
         <nav class="sidebar-menu">
             <a href="subject_dashboard.php" class="nav-link active"><i class="fa-solid fa-house"></i><span>Dashboard</span></a>
-            <a href="#pendingSection" class="nav-link"><i class="fa-solid fa-inbox"></i><span>Files from Users</span></a>
-            <a href="#approvalSection" class="nav-link"><i class="fa-solid fa-hourglass-half"></i><span>Waiting for Admin</span></a>
             <a href="#resultsSection" class="nav-link"><i class="fa-solid fa-box-archive"></i><span>Archive Files</span></a>
+            <a href="#approvalSection" class="nav-link"><i class="fa-solid fa-hourglass-half"></i><span>Waiting for Admin</span></a>
+            <a href="#pendingSection" class="nav-link"><i class="fa-solid fa-inbox"></i><span>Files from Users</span></a>
             <a href="#issueSection" class="nav-link"><i class="fa-solid fa-file-export"></i><span>Issue a File</span></a>
             <a href="#loansSection" class="nav-link"><i class="fa-solid fa-clipboard-list"></i><span>Issued Files List</span></a>
             <a href="subject_change_password.php" class="nav-link"><i class="fa-solid fa-key"></i><span>Change Password</span></a>
@@ -538,33 +538,37 @@ tbody tr[class*="dept-row-"]:hover td:first-child{box-shadow:inset 7px 0 0 var(-
                 </form>
             </section>
 
-            <!-- FILES SENT BY USERS -->
-            <section class="card" id="pendingSection">
+            <!-- ARCHIVE RESULTS (moved directly below Search) -->
+            <section class="card results-card" id="resultsSection">
                 <div class="card-heading">
                     <div class="card-heading-left">
-                        <div class="section-icon"><i class="fa-solid fa-inbox"></i></div>
+                        <div class="section-icon"><i class="fa-solid fa-table-list"></i></div>
                         <div>
-                            <h2>Files Sent by Users</h2>
-                            <p>Review the details, correct them if needed, then add the Archive Number and Archive Tree Number and send the file to the Admin for approval.</p>
+                            <h2>Archive Search Results</h2>
+                            <p>All files added to the archive. You can edit the details or issue a file.</p>
                         </div>
                     </div>
                 </div>
 
                 <div class="toolbar">
-                    <span class="count-chip"><i class="fa-solid fa-inbox"></i><span id="pendingCount">0 files waiting</span></span>
+                    <span class="count-chip"><i class="fa-solid fa-folder"></i><span id="resultCount">0 files found</span></span>
                 </div>
 
-                <div class="table-wrapper results-scroll">
-                    <table id="pendingTable">
+                <div class="table-wrapper results-scroll" id="resultsScroll">
+                    <table id="resultsTable">
                         <thead>
                             <tr>
-                                <th>No.</th><th>Submission Date</th><th>File Name</th><th>Department</th><th>Subject Number</th><th>File Number</th>
-                                <th>Start Date</th><th>End Date</th><th>Right Side</th><th>Left Side</th><th>Pages</th><th>Action</th>
+                                <th>No.</th><th>File Name</th><th>Department</th><th>Subject Number</th><th>File Number</th><th>Archive Number</th><th>Archive Tree Number</th>
+                                <th>Start Date</th><th>End Date</th><th>Right Side</th><th>Left Side</th><th>Pages</th><th>Added Date</th><th>Status</th><th>Action</th>
                             </tr>
                         </thead>
-                        <tbody id="pendingBody"></tbody>
+                        <tbody id="resultsBody"></tbody>
                     </table>
-                    <div class="empty-note" id="pendingEmpty">No files are waiting for review.</div>
+                    <div class="no-results" id="noResults" hidden>
+                        <i class="fa-regular fa-folder-open"></i>
+                        <p>No matching archive files found.</p>
+                        <p style="font-size:11px;margin-top:4px">Try changing your search filters.</p>
+                    </div>
                 </div>
             </section>
 
@@ -598,37 +602,33 @@ tbody tr[class*="dept-row-"]:hover td:first-child{box-shadow:inset 7px 0 0 var(-
                 </div>
             </section>
 
-            <!-- ARCHIVE RESULTS -->
-            <section class="card results-card" id="resultsSection">
+            <!-- FILES SENT BY USERS -->
+            <section class="card" id="pendingSection">
                 <div class="card-heading">
                     <div class="card-heading-left">
-                        <div class="section-icon"><i class="fa-solid fa-table-list"></i></div>
+                        <div class="section-icon"><i class="fa-solid fa-inbox"></i></div>
                         <div>
-                            <h2>Archive Search Results</h2>
-                            <p>All files added to the archive. You can edit the details or issue a file.</p>
+                            <h2>Files Sent by Users</h2>
+                            <p>Review the details, correct them if needed, then add the Archive Number and Archive Tree Number and send the file to the Admin for approval.</p>
                         </div>
                     </div>
                 </div>
 
                 <div class="toolbar">
-                    <span class="count-chip"><i class="fa-solid fa-folder"></i><span id="resultCount">0 files found</span></span>
+                    <span class="count-chip"><i class="fa-solid fa-inbox"></i><span id="pendingCount">0 files waiting</span></span>
                 </div>
 
-                <div class="table-wrapper results-scroll" id="resultsScroll">
-                    <table id="resultsTable">
+                <div class="table-wrapper results-scroll">
+                    <table id="pendingTable">
                         <thead>
                             <tr>
-                                <th>No.</th><th>File Name</th><th>Department</th><th>Subject Number</th><th>File Number</th><th>Archive Number</th><th>Archive Tree Number</th>
-                                <th>Start Date</th><th>End Date</th><th>Right Side</th><th>Left Side</th><th>Pages</th><th>Added Date</th><th>Status</th><th>Action</th>
+                                <th>No.</th><th>Submission Date</th><th>File Name</th><th>Department</th><th>Subject Number</th><th>File Number</th>
+                                <th>Start Date</th><th>End Date</th><th>Right Side</th><th>Left Side</th><th>Pages</th><th>Action</th>
                             </tr>
                         </thead>
-                        <tbody id="resultsBody"></tbody>
+                        <tbody id="pendingBody"></tbody>
                     </table>
-                    <div class="no-results" id="noResults" hidden>
-                        <i class="fa-regular fa-folder-open"></i>
-                        <p>No matching archive files found.</p>
-                        <p style="font-size:11px;margin-top:4px">Try changing your search filters.</p>
-                    </div>
+                    <div class="empty-note" id="pendingEmpty">No files are waiting for review.</div>
                 </div>
             </section>
 
