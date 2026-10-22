@@ -85,6 +85,7 @@ button{cursor:pointer}
 .nav-link.logout-link{color:#f2b8bf}
 .nav-link.logout-link i{color:#ef8a96}
 .nav-link.logout-link:hover{background:rgba(239,90,110,.14);color:#fff}
+.nav-badge{margin-left:auto;min-width:20px;padding:1px 7px;border-radius:20px;background:var(--gold);color:#1b1203;font-size:10px;font-weight:700;text-align:center}
 .sidebar-bottom{margin-top:auto;padding:12px 38px}
 .sidebar-quote{position:relative;overflow:hidden;padding:10px 10px 9px;border-radius:10px;text-align:center;background:linear-gradient(160deg,rgba(212,162,74,.18),rgba(255,255,255,.04) 55%);border:1px solid rgba(212,162,74,.35);box-shadow:0 4px 12px rgba(0,0,0,.25),inset 0 1px 0 rgba(255,255,255,.08)}
 .sidebar-quote::before{content:"";position:absolute;left:18%;right:18%;top:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
@@ -132,7 +133,7 @@ button{cursor:pointer}
 .hero-date{display:inline-flex;align-items:center;gap:8px;padding:5px 13px;border-radius:20px;background:rgba(240,207,138,.14);border:1px solid rgba(240,207,138,.35);font-size:var(--fs-xs);color:#f6e6bd;backdrop-filter:blur(6px)}
 .hero h1{font-family:var(--serif);font-size:28px;font-weight:700;line-height:1.35;margin:14px 0 4px;background:linear-gradient(90deg,#fff,var(--gold-2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
 .hero p{font-size:var(--fs-md);color:#bccbe3;max-width:520px}
-.hero-stats{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
+.hero-stats{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px}
 
 /* Stat cards: index-card look (dashed inner border) */
 .stat-card{position:relative;overflow:hidden;padding:14px 12px 12px;border-radius:16px;background:linear-gradient(160deg,rgba(255,255,255,.14),rgba(255,255,255,.05));border:1px solid rgba(255,255,255,.15);backdrop-filter:blur(6px);transition:background .2s,transform .2s}
@@ -248,10 +249,10 @@ tbody tr[class*="dept-row-"]:hover td:first-child{box-shadow:inset 7px 0 0 var(-
 .row-btn.del i{color:var(--red)}
 .row-btn.del:hover{background:var(--red);border-color:var(--red);color:#fff}
 .row-btn.del:hover i{color:#fff}
-.row-btn.restore{border-color:#c5ead9;background:#e9f8f1;color:#11704f}
-.row-btn.restore i{color:#11704f}
-.row-btn.restore:hover{background:#11704f;border-color:#11704f;color:#fff}
-.row-btn.restore:hover i{color:#fff}
+.row-btn.restore,.row-btn.ok{border-color:#c5ead9;background:#e9f8f1;color:#11704f}
+.row-btn.restore i,.row-btn.ok i{color:#11704f}
+.row-btn.restore:hover,.row-btn.ok:hover{background:#11704f;border-color:#11704f;color:#fff}
+.row-btn.restore:hover i,.row-btn.ok:hover i{color:#fff}
 .row-btn[disabled]{opacity:.45;cursor:not-allowed;pointer-events:none}
 
 /* Modals */
@@ -285,6 +286,7 @@ tbody tr[class*="dept-row-"]:hover td:first-child{box-shadow:inset 7px 0 0 var(-
 .doc-meta{display:flex;flex-wrap:wrap;gap:8px;padding:12px 20px;background:#f8fafd;border-bottom:1px solid var(--line)}
 .doc-meta span{display:inline-flex;align-items:center;gap:6px;padding:4px 11px;border-radius:20px;background:#fff;border:1px solid var(--line);color:#33466a;font-size:var(--fs-xs);font-weight:600}
 .doc-meta span i{color:var(--gold)}
+.doc-meta.plain{padding:0;background:none;border:0}
 .doc-body{flex:1;min-height:0;background:#e9eef6;display:flex;align-items:center;justify-content:center;overflow:auto}
 .doc-body object,.doc-body iframe{width:100%;height:100%;border:0;background:#fff}
 .doc-body img{max-width:100%;max-height:100%;object-fit:contain;display:block}
@@ -400,6 +402,7 @@ tbody tr[class*="dept-row-"]:hover td:first-child{box-shadow:inset 7px 0 0 var(-
 
         <nav class="sidebar-menu">
             <button type="button" class="nav-link active" data-section="files"><i class="fa-solid fa-house"></i><span>Dashboard</span></button>
+            <button type="button" class="nav-link" data-section="approvals"><i class="fa-solid fa-clipboard-check"></i><span>Pending Approvals</span><span class="nav-badge" id="approvalBadge" hidden>0</span></button>
             <button type="button" class="nav-link" data-section="deleted"><i class="fa-solid fa-trash-can-arrow-up"></i><span>Deleted Files</span></button>
             <button type="button" class="nav-link" data-section="users"><i class="fa-solid fa-users"></i><span>Manage Users</span></button>
             <button type="button" class="nav-link" data-section="delusers"><i class="fa-solid fa-user-slash"></i><span>Deleted Users</span></button>
@@ -471,7 +474,7 @@ tbody tr[class*="dept-row-"]:hover td:first-child{box-shadow:inset 7px 0 0 var(-
                 <div>
                     <span class="hero-date"><i class="fa-regular fa-calendar"></i><span id="currentDate"></span></span>
                     <h1>Administration Portal</h1>
-                    <p>Search archive records, remove or restore files with a recorded reason, and manage registered users.</p>
+                    <p>Approve files sent by the Subject Officer, search archive records, remove or restore files with a recorded reason, and manage registered users.</p>
                 </div>
                 <div class="hero-stats">
                     <div class="stat-card">
@@ -498,6 +501,15 @@ tbody tr[class*="dept-row-"]:hover td:first-child{box-shadow:inset 7px 0 0 var(-
                             <h2 id="matchingFiles">0</h2>
                             <span>Matching Results</span>
                             <small>Files matching your search</small>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fa-solid fa-clipboard-check"></i></div>
+                        <div class="stat-info">
+                            <h2 id="statApprovals">0</h2>
+                            <span>Pending Approvals</span>
+                            <small>Waiting for your decision</small>
                         </div>
                     </div>
 
@@ -601,6 +613,45 @@ tbody tr[class*="dept-row-"]:hover td:first-child{box-shadow:inset 7px 0 0 var(-
                             <i class="fa-regular fa-folder-open"></i>
                             <p>No matching archive files found.</p>
                             <p style="font-size:11px;margin-top:4px">Try changing your search filters.</p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- ===== SECTION: PENDING APPROVALS ===== -->
+            <div id="sec-approvals" hidden>
+                <section class="card search-card">
+                    <div class="card-heading">
+                        <div class="card-heading-left">
+                            <div class="section-icon"><i class="fa-solid fa-clipboard-check"></i></div>
+                            <div>
+                                <h2>Pending Approvals</h2>
+                                <p>Files saved by the Subject Officer with an Archive Number and Archive Tree Number. A file is added to the archive only after you approve it.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="toolbar">
+                        <span class="count-chip"><i class="fa-solid fa-hourglass-half"></i><span id="approvalCount">0 files waiting</span></span>
+                        <div class="input-wrap inline-search">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <input type="text" id="approvalFilter" placeholder="Search by name, archive number or subject...">
+                        </div>
+                    </div>
+
+                    <div class="table-wrapper results-scroll">
+                        <table id="approvalTable">
+                            <thead>
+                                <tr>
+                                    <th>No.</th><th>Sent Date</th><th>File Name</th><th>Department</th><th>Subject Number</th><th>File Number</th>
+                                    <th>Archive Number</th><th>Archive Tree Number</th><th>Pages</th><th>Sent By</th><th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="approvalBody"></tbody>
+                        </table>
+                        <div class="no-results" id="approvalEmpty" hidden>
+                            <i class="fa-regular fa-folder-open"></i>
+                            <p id="approvalEmptyMsg">No files are waiting for approval.</p>
                         </div>
                     </div>
                 </section>
@@ -729,6 +780,43 @@ tbody tr[class*="dept-row-"]:hover td:first-child{box-shadow:inset 7px 0 0 var(-
             </footer>
         </div>
     </main>
+</div>
+
+<!-- APPROVAL MODAL -->
+<div class="modal center-sm" id="approvalModal" hidden>
+    <div class="dialog small" role="dialog" aria-modal="true" aria-labelledby="apTitle">
+        <div class="dialog-head success">
+            <div class="dialog-title">
+                <div class="section-icon success"><i class="fa-solid fa-clipboard-check"></i></div>
+                <div>
+                    <h3 id="apTitle">Review File</h3>
+                    <p>Approve to add it to the archive, or reject with a reason.</p>
+                </div>
+            </div>
+            <button type="button" class="dialog-close" data-close="approvalModal" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="dialog-body">
+            <div class="target-box success">
+                <i class="fa-solid fa-file-circle-check" style="font-size:20px"></i>
+                <div><strong id="apName"></strong><small id="apMeta"></small></div>
+            </div>
+
+            <div class="doc-meta plain" id="apInfo"></div>
+
+            <div class="field">
+                <label for="apReason">Reason (required only when rejecting)</label>
+                <div class="input-wrap textarea"><i class="fa-regular fa-comment-dots"></i><textarea id="apReason" placeholder="Why is this file being returned to the Subject Officer?"></textarea></div>
+                <div class="err-text" id="apError" hidden></div>
+            </div>
+
+            <div class="warn-note"><i class="fa-solid fa-circle-info"></i><span>Approve: the file is added to the archive. Reject: the file goes back to the Subject Officer with your reason.</span></div>
+        </div>
+        <div class="dialog-foot">
+            <button type="button" class="btn btn-outline" data-close="approvalModal"><i class="fa-solid fa-xmark"></i> Cancel</button>
+            <button type="button" class="btn btn-danger" id="apReject"><i class="fa-solid fa-ban"></i> Reject</button>
+            <button type="button" class="btn btn-success" id="apApprove"><i class="fa-solid fa-circle-check"></i> Approve &amp; Add to Archive</button>
+        </div>
+    </div>
 </div>
 
 <!-- DELETE FILE MODAL -->
@@ -865,7 +953,7 @@ tbody tr[class*="dept-row-"]:hover td:first-child{box-shadow:inset 7px 0 0 var(-
 const API = "api.php";
 const deptLabels = {Institutions:"ආයතන(Institutions)",Councils:"සභා(Councils)",Accounts:"ගිණුම්(Accounts)"};
 const roleLabels = {user:"User",subject:"Subject Officer"};
-const LS_DELETED = "archiveDeletedFiles", LS_USERS = "archiveUsers", LS_DELUSERS = "archiveDeletedUsers", LS_PING = "archiveSyncPing";
+const LS_DELETED = "archiveDeletedFiles", LS_USERS = "archiveUsers", LS_DELUSERS = "archiveDeletedUsers", LS_PING = "archiveSyncPing", LS_APPROVALS = "archiveApprovals";
 function lsLoad(key, fallback) {
     try { const v = JSON.parse(localStorage.getItem(key)); return Array.isArray(v) ? v : fallback; }
     catch (err) { return fallback; }
@@ -903,7 +991,7 @@ const demoUsers = [
     {id:6,name:"T.L. Kasun Bandara",username:"kasun.b",role:"user",registered:"2026-05-30"}
 ];
 
-let archiveFiles = [], deletedFiles = [], users = [], deletedUsers = [], filteredFiles = [];
+let archiveFiles = [], deletedFiles = [], users = [], deletedUsers = [], filteredFiles = [], approvals = [];
 let csrfToken = "";
 let demoMode = false;
 
@@ -941,6 +1029,7 @@ async function loadState() {
             deletedFiles = s.deletedFiles || [];
             users = s.users || [];
             deletedUsers = s.deletedUsers || [];
+            approvals = s.approvals || [];
             setBadge(false);
             renderAll();
             return;
@@ -952,8 +1041,16 @@ async function loadState() {
     }
     // Demo mode: data lives in this browser
     const delF = lsLoad(LS_DELETED, []);
-    archiveFiles = demoFiles.filter(f => !delF.some(d => d.archive === f.archive));
+    const allAp = lsLoad(LS_APPROVALS, []);
+    // Files approved by the admin are added to the archive
+    const approvedFiles = allAp.filter(a => a.status === "approved").map(a => ({
+        id: a.archive, name: a.name, department: a.department, subject: a.subject, fileNo: a.fileNo,
+        archive: a.archive, start: a.start, end: a.end, pages: Number(a.pages),
+        date: a.approvedDate || localToday, fileUrl: ""
+    }));
+    archiveFiles = demoFiles.concat(approvedFiles).filter(f => !delF.some(d => d.archive === f.archive));
     deletedFiles = delF;
+    approvals = allAp.filter(a => a.status === "waiting");
     users = lsLoad(LS_USERS, demoUsers);
     deletedUsers = lsLoad(LS_DELUSERS, []);
     setBadge(true);
@@ -1013,6 +1110,42 @@ async function deleteUserOnServer(user) {
     notifyOthers();
 }
 
+async function approveOnServer(item) {
+    if (!demoMode) {
+        try {
+            await api("approve_file", {id: item.id});
+            notifyOthers();
+            return;
+        } catch (ex) {
+            if (!ex.apiDown) throw ex;
+            demoMode = true;
+        }
+    }
+    const all = lsLoad(LS_APPROVALS, []);
+    const a = all.find(x => x.id === item.id);
+    if (a) { a.status = "approved"; a.approvedDate = localToday; }
+    lsSave(LS_APPROVALS, all);
+    notifyOthers();
+}
+
+async function rejectOnServer(item, reason) {
+    if (!demoMode) {
+        try {
+            await api("reject_file", {id: item.id, reason: reason});
+            notifyOthers();
+            return;
+        } catch (ex) {
+            if (!ex.apiDown) throw ex;
+            demoMode = true;
+        }
+    }
+    const all = lsLoad(LS_APPROVALS, []);
+    const a = all.find(x => x.id === item.id);
+    if (a) { a.status = "rejected"; a.rejectReason = reason; a.rejectedDate = localToday; }
+    lsSave(LS_APPROVALS, all);
+    notifyOthers();
+}
+
 /* ===== HELPERS ===== */
 const $ = id => document.getElementById(id);
 function escapeHTML(value) {
@@ -1034,19 +1167,20 @@ const localToday = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toI
 $("currentDate").textContent = now.toLocaleDateString("en-GB", {day:"2-digit", month:"short", year:"numeric"});
 $("footerYear").textContent = now.getFullYear();
 
-/* ===== STATS (all 5 cards update automatically) ===== */
+/* ===== STATS (all cards update automatically) ===== */
 function refreshStats() {
     const active = activeFiles();
     $("totalFiles").textContent = active.length;
     $("totalDepartments").textContent = new Set(active.map(f => f.department)).size;
     $("matchingFiles").textContent = filteredFiles.length;
+    $("statApprovals").textContent = approvals.length;
     $("statDeleted").textContent = deletedFiles.length;
     $("statUsers").textContent = users.length;
 }
 
 /* ===== SECTION SWITCHING ===== */
 function showSection(name) {
-    ["files", "deleted", "users", "delusers"].forEach(s => { $("sec-" + s).hidden = (s !== name); });
+    ["files", "approvals", "deleted", "users", "delusers"].forEach(s => { $("sec-" + s).hidden = (s !== name); });
     document.querySelectorAll(".nav-link[data-section]").forEach(l => l.classList.toggle("active", l.dataset.section === name));
     if (window.innerWidth <= 700) closeSidebar();
     window.scrollTo({top: 0, behavior: "smooth"});
@@ -1106,6 +1240,91 @@ $("resultsBody").addEventListener("click", e => {
     if (btn.dataset.act === "view") openViewer(file);
     if (btn.dataset.act === "print") printFiles([file], "Printed on " + printDate() + " | Archive No: " + file.archive);
     if (btn.dataset.act === "delete") openDelete(file);
+});
+
+/* ===== PENDING APPROVALS (files sent by the Subject Officer) ===== */
+let fileInReview = null;
+
+function renderApprovals() {
+    const q = $("approvalFilter").value.trim().toLowerCase();
+    const list = approvals.filter(f => !q ||
+        String(f.name).toLowerCase().includes(q) || String(f.archive).toLowerCase().includes(q) ||
+        String(f.subject).toLowerCase().includes(q));
+
+    $("approvalCount").textContent = `${list.length} file${list.length === 1 ? "" : "s"} waiting`;
+    $("approvalEmpty").hidden = list.length > 0;
+    $("approvalEmptyMsg").textContent = approvals.length ? "No files match your search." : "No files are waiting for approval.";
+    $("approvalTable").style.display = list.length ? "table" : "none";
+    $("approvalBadge").hidden = approvals.length === 0;
+    $("approvalBadge").textContent = approvals.length;
+
+    $("approvalBody").innerHTML = list.map((f, i) => `
+        <tr class="dept-row-${escapeHTML(f.department)}">
+            <td>${i + 1}</td>
+            <td>${escapeHTML(f.sentDate)}</td>
+            <td><div class="file-name"><i class="fa-solid fa-file-lines file-icon"></i><span>${escapeHTML(f.name)}</span></div></td>
+            <td>${deptPill(f.department)}</td>
+            <td>${escapeHTML(f.subject)}</td>
+            <td>${escapeHTML(f.fileNo)}</td>
+            <td style="font-weight:700;color:var(--navy-2)">${escapeHTML(f.archive)}</td>
+            <td>${escapeHTML(f.rack)}</td>
+            <td>${escapeHTML(f.pages)}</td>
+            <td>${escapeHTML(f.sentBy || "-")}</td>
+            <td><button type="button" class="row-btn ok" data-ap="${escapeHTML(f.id)}"><i class="fa-solid fa-clipboard-check"></i> Review</button></td>
+        </tr>`).join("");
+    refreshStats();
+}
+$("approvalFilter").addEventListener("input", renderApprovals);
+
+$("approvalBody").addEventListener("click", e => {
+    const btn = e.target.closest("button[data-ap]");
+    if (!btn) return;
+    fileInReview = approvals.find(f => String(f.id) === btn.dataset.ap);
+    if (!fileInReview) return;
+    const f = fileInReview;
+
+    $("apName").textContent = f.name;
+    $("apMeta").textContent = `${deptLabels[f.department] || f.department} | ${f.subject} | ${f.archive}`;
+    $("apInfo").innerHTML = [
+        ["fa-regular fa-file", "File No: " + f.fileNo],
+        ["fa-solid fa-box-archive", "Archive No: " + f.archive],
+        ["fa-solid fa-table-cells-large", "Archive Tree No: " + f.rack],
+        ["fa-regular fa-calendar-days", f.start + " to " + f.end],
+        ["fa-solid fa-copy", f.pages + " pages (Right " + f.right + " / Left " + f.left + ")"],
+        ["fa-solid fa-user-tie", "Sent by: " + (f.sentBy || "-")],
+        ["fa-regular fa-clock", "Sent on: " + f.sentDate]
+    ].map(m => `<span><i class="${m[0]}"></i>${escapeHTML(m[1])}</span>`).join("");
+    $("apReason").value = "";
+    $("apError").hidden = true;
+    openModal("approvalModal");
+});
+
+$("apApprove").addEventListener("click", async () => {
+    if (!fileInReview) return;
+    const target = fileInReview;
+    try { await approveOnServer(target); }
+    catch (ex) { $("apError").textContent = ex.message; $("apError").hidden = false; return; }
+    closeModal("approvalModal");
+    fileInReview = null;
+    toast('"' + target.name + '" was approved and added to the archive.');
+    loadState();
+});
+
+$("apReject").addEventListener("click", async () => {
+    if (!fileInReview) return;
+    const reason = $("apReason").value.trim();
+    if (reason.length < 5) {
+        $("apError").textContent = "Enter the reason for rejecting this file (at least 5 characters).";
+        $("apError").hidden = false;
+        return;
+    }
+    const target = fileInReview;
+    try { await rejectOnServer(target, reason); }
+    catch (ex) { $("apError").textContent = ex.message; $("apError").hidden = false; return; }
+    closeModal("approvalModal");
+    fileInReview = null;
+    toast('"' + target.name + '" was rejected and sent back to the Subject Officer.');
+    loadState();
 });
 
 /* ===== DELETE A FILE (reason + date required) ===== */
@@ -1390,6 +1609,7 @@ window.addEventListener("resize", () => {
 /* ===== INITIAL DISPLAY + AUTO SYNC ===== */
 function renderAll() {
     runSearch();          // also refreshes the stat cards
+    renderApprovals();
     renderDeleted();
     renderUsers();
     renderDeletedUsers();
@@ -1400,7 +1620,7 @@ refresh();
 
 // 1) Instant: another dashboard in this browser changed something
 window.addEventListener("storage", e => {
-    if (e.key === null || [LS_PING, LS_DELETED, LS_USERS, LS_DELUSERS].includes(e.key)) refresh();
+    if (e.key === null || [LS_PING, LS_DELETED, LS_USERS, LS_DELUSERS, LS_APPROVALS].includes(e.key)) refresh();
 });
 // 2) Every 5 seconds from the database (other computers), and when this tab is shown again
 setInterval(() => { if (!document.hidden) loadState().catch(() => {}); }, 5000);

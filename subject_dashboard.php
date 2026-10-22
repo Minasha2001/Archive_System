@@ -126,7 +126,7 @@ section[id]{scroll-margin-top:84px}
 .hero-date{display:inline-flex;align-items:center;gap:8px;padding:5px 13px;border-radius:20px;background:rgba(240,207,138,.14);border:1px solid rgba(240,207,138,.35);font-size:var(--fs-xs);color:#f6e6bd;backdrop-filter:blur(6px)}
 .hero h1{font-family:var(--serif);font-size:28px;font-weight:700;line-height:1.35;margin:14px 0 4px;background:linear-gradient(90deg,#fff,var(--gold-2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
 .hero p{font-size:var(--fs-md);color:#bccbe3;max-width:520px}
-.hero-stats{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
+.hero-stats{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px}
 
 /* Stat cards: index-card look (dashed inner border) */
 .stat-card{position:relative;overflow:hidden;padding:14px 12px 12px;border-radius:16px;background:linear-gradient(160deg,rgba(255,255,255,.14),rgba(255,255,255,.05));border:1px solid rgba(255,255,255,.15);backdrop-filter:blur(6px);transition:background .2s,transform .2s}
@@ -206,6 +206,7 @@ tbody tr[class*="dept-row-"]:hover td:first-child{box-shadow:inset 7px 0 0 var(-
 .file-name{display:flex;align-items:center;gap:10px;color:var(--ink);font-weight:600}
 .file-icon{font-size:13px;color:#2f6fe0;background:#eaf1fd;border-radius:8px;width:28px;height:28px;display:inline-grid;place-items:center;flex-shrink:0}
 .strong-cell{font-weight:700;color:var(--navy-2)}
+.reject-note{margin-top:4px;white-space:normal;max-width:300px;font-size:11px;font-weight:500;line-height:1.5;color:var(--red)}
 .no-results,.empty-note{padding:36px 15px;text-align:center;color:var(--muted)}
 .no-results i{display:block;margin:0 auto 10px;font-size:32px;color:#b9c6dc}
 .dept-pill{display:inline-block;padding:3px 11px;border-radius:20px;font-size:11px;font-weight:600;border:1px solid transparent}
@@ -358,6 +359,7 @@ tbody tr[class*="dept-row-"]:hover td:first-child{box-shadow:inset 7px 0 0 var(-
         <nav class="sidebar-menu">
             <a href="subject_dashboard.php" class="nav-link active"><i class="fa-solid fa-house"></i><span>Dashboard</span></a>
             <a href="#pendingSection" class="nav-link"><i class="fa-solid fa-inbox"></i><span>Files from Users</span></a>
+            <a href="#approvalSection" class="nav-link"><i class="fa-solid fa-hourglass-half"></i><span>Waiting for Admin</span></a>
             <a href="#resultsSection" class="nav-link"><i class="fa-solid fa-box-archive"></i><span>Archive Files</span></a>
             <a href="#issueSection" class="nav-link"><i class="fa-solid fa-file-export"></i><span>Issue a File</span></a>
             <a href="#loansSection" class="nav-link"><i class="fa-solid fa-clipboard-list"></i><span>Issued Files List</span></a>
@@ -434,7 +436,7 @@ tbody tr[class*="dept-row-"]:hover td:first-child{box-shadow:inset 7px 0 0 var(-
                 <div>
                     <span class="hero-date"><i class="fa-regular fa-calendar"></i><span id="currentDate"></span></span>
                     <h1>Subject Officer Portal</h1>
-                    <p>Review submitted files, add them to the archive and keep track of issued files.</p>
+                    <p>Review submitted files, send them to the Admin for approval and keep track of issued files.</p>
                 </div>
 
                 <div class="hero-stats">
@@ -468,6 +470,14 @@ tbody tr[class*="dept-row-"]:hover td:first-child{box-shadow:inset 7px 0 0 var(-
                             <h2 id="statPending">0</h2>
                             <span>Waiting for Review</span>
                             <small>Files sent by users</small>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fa-solid fa-hourglass-half"></i></div>
+                        <div class="stat-info">
+                            <h2 id="statWaiting">0</h2>
+                            <span>Waiting for Admin</span>
+                            <small>Sent for approval</small>
                         </div>
                     </div>
                     <div class="stat-card">
@@ -535,7 +545,7 @@ tbody tr[class*="dept-row-"]:hover td:first-child{box-shadow:inset 7px 0 0 var(-
                         <div class="section-icon"><i class="fa-solid fa-inbox"></i></div>
                         <div>
                             <h2>Files Sent by Users</h2>
-                            <p>Review the details, correct them if needed, then add the Archive Number and Archive Tree Number to add the file to the archive.</p>
+                            <p>Review the details, correct them if needed, then add the Archive Number and Archive Tree Number and send the file to the Admin for approval.</p>
                         </div>
                     </div>
                 </div>
@@ -555,6 +565,36 @@ tbody tr[class*="dept-row-"]:hover td:first-child{box-shadow:inset 7px 0 0 var(-
                         <tbody id="pendingBody"></tbody>
                     </table>
                     <div class="empty-note" id="pendingEmpty">No files are waiting for review.</div>
+                </div>
+            </section>
+
+            <!-- SENT TO ADMIN FOR APPROVAL -->
+            <section class="card" id="approvalSection">
+                <div class="card-heading">
+                    <div class="card-heading-left">
+                        <div class="section-icon"><i class="fa-solid fa-hourglass-half"></i></div>
+                        <div>
+                            <h2>Waiting for Admin Approval</h2>
+                            <p>These files were sent to the Admin. They are added to the archive only after the Admin approves them.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="toolbar">
+                    <span class="count-chip"><i class="fa-solid fa-hourglass-half"></i><span id="waitingCount">0 files waiting</span></span>
+                </div>
+
+                <div class="table-wrapper results-scroll">
+                    <table id="waitingTable">
+                        <thead>
+                            <tr>
+                                <th>No.</th><th>Sent Date</th><th>File Name</th><th>Department</th><th>Subject Number</th>
+                                <th>Archive Number</th><th>Archive Tree Number</th><th>Pages</th><th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="waitingBody"></tbody>
+                    </table>
+                    <div class="empty-note" id="waitingEmpty">No files are waiting for admin approval.</div>
                 </div>
             </section>
 
@@ -682,7 +722,7 @@ tbody tr[class*="dept-row-"]:hover td:first-child{box-shadow:inset 7px 0 0 var(-
     </main>
 </div>
 
-<!-- EDIT / ADD TO ARCHIVE DIALOG -->
+<!-- EDIT / SEND FOR APPROVAL DIALOG -->
 <div class="modal" id="editModal" hidden>
     <div class="dialog wide" role="dialog" aria-modal="true" aria-labelledby="editTitle">
         <div class="dialog-head">
@@ -698,6 +738,11 @@ tbody tr[class*="dept-row-"]:hover td:first-child{box-shadow:inset 7px 0 0 var(-
 
         <form id="editForm" novalidate>
             <div class="dialog-body">
+                <div class="alert alert-error" id="rejectBox" hidden style="margin-bottom:0">
+                    <i class="fa-solid fa-circle-exclamation"></i>
+                    <span id="rejectText"></span>
+                </div>
+
                 <div class="edit-grid">
                     <div class="field full">
                         <label for="eName">File Name</label>
@@ -805,13 +850,23 @@ tbody tr[class*="dept-row-"]:hover td:first-child{box-shadow:inset 7px 0 0 var(-
    SUBJECT OFFICER DASHBOARD  (demonstration data)
    Data is kept in this browser (localStorage) until the database is connected.
    Replace the load()/save() calls with your PHP / database code later.
-   Files saved on the User Dashboard ("archiveSubmissions") are imported
-   automatically into the "Files Sent by Users" list.
+
+   WORKFLOW
+   1. Files saved on the User Dashboard ("archiveSubmissions") are imported
+      into "Files Sent by Users".
+   2. The Subject Officer adds the Archive Number + Archive Tree Number and
+      saves. The file is NOT added to the archive. It goes to the Admin
+      Dashboard for approval ("archiveApprovals", status "waiting").
+   3. Admin approves  -> status "approved" -> the file is added to the archive.
+      Admin rejects   -> status "rejected" -> the file returns to
+      "Files Sent by Users" with the Admin's reason.
    ===================================================================== */
-const KEY_RECORDS = "subjectArchiveRecords";
-const KEY_PENDING = "subjectPending";
-const KEY_LOANS   = "subjectLoans";
-const KEY_USERSUB = "archiveSubmissions";
+const KEY_RECORDS  = "subjectArchiveRecords";
+const KEY_PENDING  = "subjectPending";
+const KEY_LOANS    = "subjectLoans";
+const KEY_USERSUB  = "archiveSubmissions";
+const KEY_APPROVAL = "archiveApprovals";
+const OFFICER_NAME = <?= json_encode((string)$officerName, JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP) ?>;
 
 const deptLabels = {
     Institutions:"ආයතන(Institutions)",
@@ -852,9 +907,10 @@ function save(key, value) {
 }
 function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 7); }
 
-let records = load(KEY_RECORDS, JSON.parse(JSON.stringify(seedRecords)));
-let pending = load(KEY_PENDING, JSON.parse(JSON.stringify(seedPending)));
-let loans   = load(KEY_LOANS,   JSON.parse(JSON.stringify(seedLoans)));
+let records   = load(KEY_RECORDS, JSON.parse(JSON.stringify(seedRecords)));
+let pending   = load(KEY_PENDING, JSON.parse(JSON.stringify(seedPending)));
+let loans     = load(KEY_LOANS,   JSON.parse(JSON.stringify(seedLoans)));
+let approvals = load(KEY_APPROVAL, []);
 let filteredRecords = [];
 
 /* ----- import files saved on the User Dashboard ----- */
@@ -919,14 +975,55 @@ function flash(message) {
     $("pageAlertText").textContent = message;
     $("pageAlert").hidden = false;
     clearTimeout(flashTimer);
-    flashTimer = setTimeout(() => { $("pageAlert").hidden = true; }, 6000);
+    flashTimer = setTimeout(() => { $("pageAlert").hidden = true; }, 8000);
     window.scrollTo({top: 0, behavior: "smooth"});
+}
+
+/* ===== ADMIN DECISIONS (approved -> archive, rejected -> back to review) ===== */
+function syncApprovals() {
+    approvals = load(KEY_APPROVAL, []);
+    let changed = false;
+
+    approvals.forEach(a => {
+        if (a.imported) return;
+
+        if (a.status === "approved") {
+            if (!records.some(r => r.id === a.id)) {
+                records.unshift({
+                    id: a.id, name: a.name, department: a.department, subject: a.subject, fileNo: a.fileNo,
+                    archive: a.archive, rack: a.rack, start: a.start, end: a.end,
+                    right: a.right, left: a.left, pages: a.pages,
+                    date: a.approvedDate || localToday
+                });
+            }
+            a.imported = true;
+            changed = true;
+        } else if (a.status === "rejected") {
+            if (!pending.some(p => p.id === a.id)) {
+                pending.unshift({
+                    id: a.id, submissionDate: a.submissionDate, name: a.name, department: a.department,
+                    subject: a.subject, fileNo: a.fileNo, start: a.start, end: a.end,
+                    right: a.right, left: a.left, pages: a.pages,
+                    archive: a.archive, rack: a.rack, rejectReason: a.rejectReason || ""
+                });
+            }
+            a.imported = true;
+            changed = true;
+        }
+    });
+
+    if (changed) {
+        save(KEY_APPROVAL, approvals);
+        save(KEY_RECORDS, records);
+        save(KEY_PENDING, pending);
+    }
 }
 
 /* ===== STATS ===== */
 function renderStats() {
     const issued = loans.filter(l => !l.returnDate).length;
     $("statPending").textContent = pending.length;
+    $("statWaiting").textContent = approvals.filter(a => a.status === "waiting").length;
     $("statIssued").textContent = issued;
     $("totalFiles").textContent = records.length;
     $("totalDepartments").textContent = new Set(records.map(r => r.department)).size;
@@ -938,7 +1035,7 @@ function renderPending() {
         <tr class="dept-row-${escapeHTML(f.department)}">
             <td>${i + 1}</td>
             <td>${escapeHTML(f.submissionDate)}</td>
-            <td>${fileCell(f.name)}</td>
+            <td>${fileCell(f.name)}${f.rejectReason ? `<div class="reject-note"><i class="fa-solid fa-circle-exclamation"></i> Returned by Admin: ${escapeHTML(f.rejectReason)}</div>` : ""}</td>
             <td>${deptPill(f.department)}</td>
             <td>${escapeHTML(f.subject)}</td>
             <td>${escapeHTML(f.fileNo)}</td>
@@ -947,12 +1044,34 @@ function renderPending() {
             <td>${escapeHTML(f.right ?? "-")}</td>
             <td>${escapeHTML(f.left ?? "-")}</td>
             <td>${escapeHTML(f.pages ?? "-")}</td>
-            <td><button type="button" class="row-btn view" data-review="${escapeHTML(f.id)}"><i class="fa-solid fa-pen-to-square"></i> Review / Add</button></td>
+            <td><button type="button" class="row-btn view" data-review="${escapeHTML(f.id)}"><i class="fa-solid fa-pen-to-square"></i> Review / Send</button></td>
         </tr>`).join("");
 
     $("pendingCount").textContent = `${pending.length} file${pending.length === 1 ? "" : "s"} waiting`;
     $("pendingEmpty").hidden = pending.length > 0;
     $("pendingTable").style.display = pending.length ? "table" : "none";
+}
+
+/* ===== WAITING FOR ADMIN APPROVAL ===== */
+function renderWaiting() {
+    const list = approvals.filter(a => a.status === "waiting");
+
+    $("waitingBody").innerHTML = list.map((f, i) => `
+        <tr class="dept-row-${escapeHTML(f.department)}">
+            <td>${i + 1}</td>
+            <td>${escapeHTML(f.sentDate)}</td>
+            <td>${fileCell(f.name)}</td>
+            <td>${deptPill(f.department)}</td>
+            <td>${escapeHTML(f.subject)}</td>
+            <td class="strong-cell">${escapeHTML(f.archive)}</td>
+            <td>${escapeHTML(f.rack)}</td>
+            <td>${escapeHTML(f.pages)}</td>
+            <td><span class="badge badge-out"><i class="fa-regular fa-clock"></i> Waiting for Admin</span></td>
+        </tr>`).join("");
+
+    $("waitingCount").textContent = `${list.length} file${list.length === 1 ? "" : "s"} waiting`;
+    $("waitingEmpty").hidden = list.length > 0;
+    $("waitingTable").style.display = list.length ? "table" : "none";
 }
 
 /* ===== ARCHIVE RESULTS ===== */
@@ -1125,7 +1244,7 @@ $("returnForm").addEventListener("submit", function(e) {
     flash("File returned and saved. It is available in the archive again.");
 });
 
-/* ===== EDIT / ADD TO ARCHIVE DIALOG ===== */
+/* ===== EDIT / SEND FOR APPROVAL DIALOG ===== */
 function openEdit(mode, item) {
     const form = $("editForm");
     form.dataset.mode = mode;
@@ -1143,10 +1262,15 @@ function openEdit(mode, item) {
     $("eArchive").value = item.archive || "";
     $("eRack").value = item.rack || "";
 
+    // reason shown when the Admin sent the file back
+    const hasReject = mode === "pending" && !!item.rejectReason;
+    $("rejectBox").hidden = !hasReject;
+    $("rejectText").textContent = hasReject ? "The Admin returned this file. Reason: " + item.rejectReason : "";
+
     if (mode === "pending") {
-        $("editTitle").textContent = "Review & Add to Archive";
-        $("editSub").textContent = "Submitted on " + item.submissionDate + ". Check the details, then enter the Archive Number and Archive Tree Number.";
-        $("editSaveText").textContent = "Save & Add to Archive";
+        $("editTitle").textContent = "Review & Send for Approval";
+        $("editSub").textContent = "Submitted on " + item.submissionDate + ". Check the details, then enter the Archive Number and Archive Tree Number. The file is sent to the Admin for approval.";
+        $("editSaveText").textContent = "Save & Send for Approval";
     } else {
         $("editTitle").textContent = "Edit Archive File";
         $("editSub").textContent = (item.archive || "") + " | Added on " + item.date;
@@ -1176,6 +1300,10 @@ $("editForm").addEventListener("submit", function(e) {
         rack: $("eRack").value.trim()
     };
 
+    const archiveKey = d.archive.toLowerCase();
+    const usedInArchive = records.some(r => r.id !== id && String(r.archive).toLowerCase() === archiveKey);
+    const usedInApproval = approvals.some(a => a.status === "waiting" && a.id !== id && String(a.archive).toLowerCase() === archiveKey);
+
     let problem = "";
     if (!d.name) problem = "Please enter the file name.";
     else if (!d.subject) problem = "Please enter the subject number.";
@@ -1187,8 +1315,8 @@ $("editForm").addEventListener("submit", function(e) {
     else if (!Number.isInteger(d.pages) || d.pages < 1) problem = "Please enter a valid Total Pages number (1 or more).";
     else if (!d.archive) problem = "Please enter the Archive Number.";
     else if (!d.rack) problem = "Please enter the Archive Tree Number.";
-    else if (records.some(r => r.id !== id && String(r.archive).toLowerCase() === d.archive.toLowerCase())) {
-        problem = "This Archive Number is already used by another file.";
+    else if (usedInArchive || usedInApproval) {
+        problem = "This Archive Number is already used by another file (or is waiting for admin approval).";
     }
 
     if (problem) {
@@ -1201,13 +1329,21 @@ $("editForm").addEventListener("submit", function(e) {
         const item = pending.find(p => p.id === id);
         if (!item) { closeModals(); return; }
 
-        records.unshift({id: uid(), ...d, submissionDate: item.submissionDate, date: localToday});
+        // NOT added to the archive yet. It is sent to the Admin for approval.
+        approvals.unshift({
+            id: uid(),
+            ...d,
+            submissionDate: item.submissionDate,
+            sentDate: localToday,
+            sentBy: OFFICER_NAME,
+            status: "waiting"
+        });
         pending = pending.filter(p => p.id !== id);
+        save(KEY_APPROVAL, approvals);
         save(KEY_PENDING, pending);
-        save(KEY_RECORDS, records);
         closeModals();
         renderAll();
-        flash("File saved and added to the archive (Archive No: " + d.archive + ", Archive Tree No: " + d.rack + ").");
+        flash("File sent to the Admin for approval (Archive No: " + d.archive + ", Archive Tree No: " + d.rack + "). It is added to the archive after the Admin approves it.");
     } else {
         const rec = recordById(id);
         if (!rec) { closeModals(); return; }
@@ -1277,12 +1413,23 @@ $("clearSearch").addEventListener("click", function() {
 /* ===== RENDER EVERYTHING ===== */
 function renderAll() {
     const keep = $("issueFile").value;
+    syncApprovals();
     renderStats();
     renderPending();
+    renderWaiting();
     renderResults();
     renderIssueSelect(keep);
     renderLoans();
 }
+
+/* The Admin approved or rejected a file in another tab: refresh right away */
+window.addEventListener("storage", function(e) {
+    if (e.key === KEY_APPROVAL) {
+        records = load(KEY_RECORDS, records);
+        pending = load(KEY_PENDING, pending);
+        renderAll();
+    }
+});
 
 /* ===== SIDEBAR ===== */
 const app = $("app"), sidebar = $("sidebar"), menuToggle = $("menuToggle"), sidebarOverlay = $("sidebarOverlay");
