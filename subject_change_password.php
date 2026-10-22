@@ -304,7 +304,7 @@ button{cursor:pointer}
 /* Forms */
 .field{min-width:0}
 .field label{display:block;color:var(--navy-2);font-size:var(--fs-sm);font-weight:700;margin-bottom:6px;letter-spacing:.2px}
-.input-wrap{height:42px;display:flex;align-items:center;gap:10px;padding:0 6px 0 13px;min-width:0;background:#fff;border:1px solid #d9e1ee;border-radius:12px;transition:.2s;box-shadow:inset 0 1px 2px rgba(16,37,71,.04)}
+.input-wrap{height:42px;display:flex;align-items:center;gap:10px;padding:0 13px;min-width:0;background:#fff;border:1px solid #d9e1ee;border-radius:12px;transition:.2s;box-shadow:inset 0 1px 2px rgba(16,37,71,.04)}
 .input-wrap:hover{border-color:var(--gold)}
 .input-wrap:focus-within{border-color:var(--blue);background:#fff;box-shadow:0 0 0 4px rgba(37,99,208,.12),0 6px 16px rgba(37,99,208,.08)}
 .input-wrap>i{color:#7a8ca8;font-size:12px;flex-shrink:0}
@@ -313,6 +313,7 @@ button{cursor:pointer}
 .input-wrap input::placeholder{color:#9aa8bf}
 .input-wrap input:disabled{cursor:not-allowed;color:#9aa8bf}
 .input-wrap.invalid{border-color:#d9776c;background:#fff8f7}
+.input-wrap.invalid:focus-within{border-color:#d32f2f;box-shadow:0 0 0 3px rgba(211,47,47,.12)}
 .btn{position:relative;overflow:hidden;min-height:42px;padding:0 20px;border:1px solid transparent;border-radius:12px;display:inline-flex;align-items:center;justify-content:center;gap:8px;font-size:var(--fs-md);font-weight:600;text-decoration:none;transition:.2s}
 .btn:active{transform:scale(.98)}
 .btn:disabled{opacity:.5;cursor:not-allowed}
@@ -336,8 +337,13 @@ button{cursor:pointer}
 .pw-layout .card{margin-bottom:24px}
 .pw-form{max-width:520px}
 .pw-form .field{margin-bottom:18px}
-.eye{border:0;background:transparent;color:#6b86a3;width:34px;height:34px;border-radius:8px;font-size:14px;flex-shrink:0;display:grid;place-items:center;transition:.2s}
-.eye:hover{color:var(--navy);background:rgba(11,33,70,.07)}
+/* Eye icon: same as register.php (eye-slash = hidden, eye = visible) */
+.toggle-password{color:#507092;cursor:pointer;font-size:13px;flex-shrink:0;padding:4px;transition:.2s}
+.toggle-password:hover{color:#315f8c}
+/* Red message under the new-password box */
+.field-error{display:block;margin-top:5px;font-size:var(--fs-xs);line-height:1.4;font-weight:500;color:#d32f2f}
+.field-error[hidden]{display:none}
+.field-error i{margin-right:4px;font-size:10.5px}
 .strength{margin-top:8px}
 .strength-bar{height:5px;border-radius:5px;background:#e1e8f2;overflow:hidden}
 .strength-bar span{display:block;height:100%;width:0;border-radius:5px;transition:width .3s,background .3s}
@@ -528,20 +534,21 @@ button{cursor:pointer}
 
                         <div class="field">
                             <label for="current_password">Current Password</label>
-                            <div class="input-wrap">
+                            <div class="input-wrap" id="current_passwordWrap">
                                 <i class="fa-solid fa-lock"></i>
                                 <input type="password" id="current_password" name="current_password" placeholder="Enter current password" autocomplete="current-password" required <?= $locked ? 'disabled' : '' ?>>
-                                <button type="button" class="eye" data-target="current_password" aria-label="Show password" title="Show password"><i class="fa-regular fa-eye"></i></button>
+                                <i class="fa-solid fa-eye-slash toggle-password" role="button" tabindex="0" aria-label="Show password" data-target="current_password"></i>
                             </div>
                         </div>
 
                         <div class="field">
                             <label for="password">New Password</label>
-                            <div class="input-wrap">
+                            <div class="input-wrap" id="passwordWrap">
                                 <i class="fa-solid fa-key"></i>
-                                <input type="password" id="password" name="password" placeholder="Enter new password" autocomplete="new-password" required minlength="6" maxlength="72" <?= $locked ? 'disabled' : '' ?>>
-                                <button type="button" class="eye" data-target="password" aria-label="Show password" title="Show password"><i class="fa-regular fa-eye"></i></button>
+                                <input type="password" id="password" name="password" placeholder="Enter new password" autocomplete="new-password" aria-describedby="passwordError" required minlength="6" maxlength="72" <?= $locked ? 'disabled' : '' ?>>
+                                <i class="fa-solid fa-eye-slash toggle-password" role="button" tabindex="0" aria-label="Show password" data-target="password"></i>
                             </div>
+                            <small class="field-error" id="passwordError" role="alert" hidden><i class="fa-solid fa-circle-exclamation"></i>Password must contain at least 6 characters.</small>
                             <div class="strength">
                                 <div class="strength-bar"><span id="strengthFill"></span></div>
                                 <div class="strength-text"><span id="strengthLabel">Password strength</span><span>Minimum 6 characters</span></div>
@@ -553,7 +560,7 @@ button{cursor:pointer}
                             <div class="input-wrap" id="confirm_passwordWrap">
                                 <i class="fa-solid fa-key"></i>
                                 <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm new password" autocomplete="new-password" required <?= $locked ? 'disabled' : '' ?>>
-                                <button type="button" class="eye" data-target="confirm_password" aria-label="Show password" title="Show password"><i class="fa-regular fa-eye"></i></button>
+                                <i class="fa-solid fa-eye-slash toggle-password" role="button" tabindex="0" aria-label="Show password" data-target="confirm_password"></i>
                             </div>
                             <div class="match-text" id="matchText"></div>
                         </div>
@@ -651,26 +658,27 @@ window.addEventListener("resize", function () {
     else app.classList.remove("sidebar-collapsed");
 });
 
-/* ===== SHOW / HIDE PASSWORD ===== */
-/* Passwords are hidden by default. Click the eye to show/hide. */
-document.querySelectorAll(".eye").forEach(function (btn) {
-    btn.addEventListener("click", function () {
-        const input = document.getElementById(btn.dataset.target);
-        const icon = btn.querySelector("i");
-        if (!input || !icon) return;
-
-        const isHidden = input.type === "password";
-        input.type = isHidden ? "text" : "password";
-
-        icon.classList.toggle("fa-eye", !isHidden);
-        icon.classList.toggle("fa-eye-slash", isHidden);
-
-        btn.setAttribute("aria-label", isHidden ? "Hide password" : "Show password");
-        btn.title = isHidden ? "Hide password" : "Show password";
+/* ===== SHOW / HIDE PASSWORD (same as register.php: eye-slash = hidden, eye = visible) ===== */
+function togglePassword(inputId, icon) {
+    const input = document.getElementById(inputId);
+    if (input.type === "password") {
+        input.type = "text";
+        icon.classList.replace("fa-eye-slash", "fa-eye");
+        icon.setAttribute("aria-label", "Hide password");
+    } else {
+        input.type = "password";
+        icon.classList.replace("fa-eye", "fa-eye-slash");
+        icon.setAttribute("aria-label", "Show password");
+    }
+}
+document.querySelectorAll(".toggle-password").forEach(function (icon) {
+    icon.addEventListener("click", function () { togglePassword(icon.dataset.target, icon); });
+    icon.addEventListener("keydown", function (e) {
+        if (e.key === "Enter" || e.key === " ") { e.preventDefault(); togglePassword(icon.dataset.target, icon); }
     });
 });
 
-/* ===== PASSWORD STRENGTH + MATCH CHECK ===== */
+/* ===== PASSWORD STRENGTH + LENGTH ERROR + MATCH CHECK ===== */
 (function () {
     const pw = document.getElementById("password");
     const cf = document.getElementById("confirm_password");
@@ -678,6 +686,8 @@ document.querySelectorAll(".eye").forEach(function (btn) {
     const label = document.getElementById("strengthLabel");
     const matchText = document.getElementById("matchText");
     const cfWrap = document.getElementById("confirm_passwordWrap");
+    const pwWrap = document.getElementById("passwordWrap");
+    const pwError = document.getElementById("passwordError");
 
     function score(v) {
         let s = 0;
@@ -710,6 +720,12 @@ document.querySelectorAll(".eye").forEach(function (btn) {
         label.textContent = level.t;
     }
 
+    // Red message right under the new-password box (same as register.php)
+    function showPwError(show) {
+        pwError.hidden = !show;
+        pwWrap.classList.toggle("invalid", show);
+    }
+
     function updateMatch() {
         if (!cf.value) {
             matchText.textContent = "";
@@ -723,29 +739,37 @@ document.querySelectorAll(".eye").forEach(function (btn) {
         cfWrap.classList.toggle("invalid", !ok);
     }
 
-    pw.addEventListener("input", function () { updateStrength(); updateMatch(); });
+    pw.addEventListener("input", function () {
+        showPwError(pw.value.length > 0 && pw.value.length < 6);
+        updateStrength();
+        updateMatch();
+    });
     cf.addEventListener("input", updateMatch);
 
     /* Clear form and restore hidden password fields */
     document.getElementById("cpReset").addEventListener("click", function () {
         setTimeout(function () {
-            document.querySelectorAll(".eye").forEach(function (btn) {
-                const input = document.getElementById(btn.dataset.target);
-                const icon = btn.querySelector("i");
-                if (!input || !icon) return;
-
-                input.type = "password";
-                icon.classList.remove("fa-eye-slash");
-                icon.classList.add("fa-eye");
-                btn.setAttribute("aria-label", "Show password");
-                btn.title = "Show password";
+            ["current_password", "password", "confirm_password"].forEach(function (id) {
+                document.getElementById(id).type = "password";
             });
+            document.querySelectorAll(".toggle-password").forEach(function (i) {
+                i.classList.remove("fa-eye");
+                i.classList.add("fa-eye-slash");
+                i.setAttribute("aria-label", "Show password");
+            });
+            showPwError(false);
             updateStrength();
             updateMatch();
         }, 0);
     });
 
     document.getElementById("cpForm").addEventListener("submit", function (e) {
+        if (pw.value.length < 6) {
+            e.preventDefault();
+            showPwError(true);
+            pw.focus();
+            return;
+        }
         if (pw.value !== cf.value) {
             e.preventDefault();
             updateMatch();
