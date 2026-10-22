@@ -290,7 +290,6 @@ body{font-family:"Poppins",sans-serif;min-height:100vh;overflow:hidden;backgroun
         <button type="button" class="register-button" onclick="window.location.href='register.php'">
             <i class="fa-solid fa-user-plus"></i><span>Register New Account</span>
         </button>
-    </div>
 
     <div class="bottom-curve"></div>
 
