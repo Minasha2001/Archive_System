@@ -192,8 +192,8 @@ body{font-family:"Poppins",sans-serif;min-height:100vh;overflow:hidden;backgroun
 .footer{position:absolute;right:9.6%;bottom:18px;color:#fff;display:flex;align-items:center;gap:14px;font-size:8px;z-index:8}
 .footer-divider{width:1px;height:14px;background:rgba(255,255,255,.6)}
 
-/* BOTTOM CURVE */
-.bottom-curve{position:absolute;left:-5%;bottom:-116px;width:64%;height:190px;background:linear-gradient(135deg,#073861,#031f3d);border-radius:50% 50% 0 0;transform:rotate(-2deg);z-index:4}
+/* BOTTOM CURVE (page eke wama pahala koneta) */
+.bottom-curve{position:absolute;left:-5%;bottom:-116px;width:64%;height:190px;background:linear-gradient(135deg,#073861,#031f3d);border-radius:50% 50% 0 0;transform:rotate(-2deg);z-index:4;pointer-events:none}
 
 /* RESPONSIVE */
 @media (max-width:1200px){
@@ -290,6 +290,7 @@ body{font-family:"Poppins",sans-serif;min-height:100vh;overflow:hidden;backgroun
         <button type="button" class="register-button" onclick="window.location.href='register.php'">
             <i class="fa-solid fa-user-plus"></i><span>Register New Account</span>
         </button>
+    </div><!-- /.login-card -->
 
     <div class="bottom-curve"></div>
 
@@ -306,6 +307,8 @@ body{font-family:"Poppins",sans-serif;min-height:100vh;overflow:hidden;backgroun
         <div class="footer-divider"></div>
         <span>Archive Management System</span>
     </div>
+</div><!-- /.page -->
+
 <script>
 function selectUser(button) {
     document.querySelectorAll(".user-type").forEach(function (b) { b.classList.remove("active"); });
