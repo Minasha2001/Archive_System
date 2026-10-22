@@ -595,7 +595,6 @@ document.querySelectorAll(".eye").forEach(function (btn) {
         btn.setAttribute("aria-label", show ? "Hide password" : "Show password");
     });
 });
-
 /* ===== STRENGTH METER + MATCH CHECK ===== */
 (function () {
     var pw = document.getElementById("password");
